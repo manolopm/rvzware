@@ -1,0 +1,70 @@
+Capaware Versión RC1 0.1
+
+Antes de comenzar unas puntualizaciones:
+
+1.- Para poder compilar correctamente esta versión de Capaware debería tener instalada la versión 2005 de Microsoft Visual Studio Professional con SP1.
+
+2.- Esta versión incial de Capaware funciona perfectamente con tarjetas de video NVIDIA. Se han detectado ciertos problemas de visualización con algunos modelos de tarjetas ATI.
+
+
+Instrucciones:
+
+*** Antes de compilar:
+
+- Instale, preferentemente, en c:\wxWidgets-2.8.4 las librerías wxWidgets v2.8.4 que podrá encontrar en el repositorio de www.capaware.org donde descargó Capaware. No hemos probado con nuevas versiones de WxWidgets, por lo que no 
+  podemos asegurar que todo funcione igual de bien con ellas. Compile las librerías para MSW siguiendo las instrucciones del INSTALL_MSW cambiando antes el valor de la variable WXUSE_GLCANVAS a 1 en los archivos setup.h situados en:
+	-- c:\wxWidgets-2.8.4\include\wx\msw
+	-- c:\wxWidgets-2.8.4\lib\vc_lib\msw\wx
+	-- c:\wxWidgets-2.8.4\lib\vc_lib\mswd\wx
+
+	- Cree la variable de entorno de Sistema WXWIDGET_ROOT dándole el valor del directorio de instalación de las librerías wxWidgets, preferentemente c:\wxWidgets-2.8.4.  
+
+- Descarge y descomprima, preferentemente, en C:\Capaware el archivo comprimido Capaware_src_rc1_0.1.rar.
+- Descarge y descomprima en <directorio_instalación>\extern el archivo de dependencias externas Capaware_dep_bin_rc1_0.1.rar 
+- Descarge y descomprima en <directorio_instalación>\extern el archivo de dependencias externas Capaware_dep_include_rc1_0.1.rar 
+- Descarge y descomprima en <directorio_instalación>\extern el archivo de dependencias externas Capaware_dep_lib_rc1_0.1.rar
+- Incluya en el path de su sistema la ruta <directorio_instalación>\extern\bin
+- Incluya en el path de su sistema la ruta <directorio_instalación>\extern\bin\osg
+
+
+*** Compilación automática con MVS2005 (recomendada):
+
+1.- Abrir <directorio_instalación>\apps\capaware\capaware.sln y compilar la solución en el modo deseado (Release o Debug).
+
+A modo demostrativo, en <directorio_instalación>\src\plugins podrá encontrar unos ejemplos de plugins muy sencillos desarrollados sobre Capaware de forma que sirvan de ejemplo para cualquier otro plugin que usted necesite desarrollar.
+
+*** Notas:
+
+* En <directorio_instalación>\doc\user_guide podrá encontrar un breve documento inicial sobre Capaware.
+
+Gracias por su interés en Capaware.
+
+Saludos,
+
+Capaware Team
+
+
+
+Para cualquier información añadida, contacte:
+
+ Instituto Tecnológico de Canarias (ITC)
+ Playa de Pozo Izquierdo s/n
+ Santa Lucía - Las Palmas
+ 35119 Gran Canaria
+ España
+ 
+ +34 928727503 - Fax +34 928727517
+ software@itccanarias.org
+ www.itccanarias.org
+
+     o
+
+ Universidad de Las Palmas de Gran Canaria (ULPGC)
+ Dpto. de Informática y Sistemas
+ Campus de Tafira 
+ 35017 Las Palmas
+ España
+ 
+ +34 928458710/708 - Fax +34 9288711
+ atrujillo@dis.ulpgc.es
+ www.dis.ulpgc.es

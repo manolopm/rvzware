@@ -1,0 +1,15 @@
+The Capaware proyect is an initiative from the Instituto Tecnológico de Canarias(ITC) with the collaboration of 
+the Universidad de Las Palmas de Gran Canaria (ULPGC). The Capaware development team consists of:
+
+Izzat Sabbagh Rodríguez (ITC) ...... Original project leader and ITC's project coordinator.
+Agustín Trujillo Pino (ULPGC) ...... ULPGC's project coordinator
+Javier Sánchez Pérez (ULPGC)  ...... Development Process Chief 
+Modesto Castrillón Pérez (ULPGC).... Developer
+Jose Pablo Suárez Rivero (ULPGC).... Documentation and Speaker of the team
+Ignacio J. López Rodríguez (ITC).... Developer
+Pedro Jorge González (ULPGC)  ...... Developer
+Francisco M. Quintana Trujillo(ITC). Developer
+David Martín Zerpa (ULPGC)    ...... Developer
+Antonio J. Sánchez López (ULPGC).... Developer
+Rafael J. Nebot Medina (ITC)  ...... Developer
+
