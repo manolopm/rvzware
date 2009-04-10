@@ -252,10 +252,10 @@ namespace cpw
 
 				osg::Node * GetRootNode() { return root_node.get(); }
 
-				void AddLine(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible);
-				void UpdateLine(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible, const int &update_point);
-				void AddLine2(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible);
-				void AddLine3(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible);
+				void AddLine(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible);
+				void UpdateLine(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible, const int &update_point);
+				void AddLine2(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible);
+				void AddLine3(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible);
 				void AddObject(const std::string &name, const std::string &model, const cpw::Point3d<float> &pos);
 
 
@@ -310,8 +310,8 @@ namespace cpw
 				
 				virtual std::string GetRequestURL() {return request_url;}
 				virtual std::vector<std::string> GetOsgdemParam() {return scene_builder.GetOsgdemParam();}
-				virtual void SetRequestMap(std::map<int, std::vector<unsigned long int>> _rm);
-				virtual void SetRequestDEMMap(std::map<int, std::vector<unsigned long int>> _rdm);
+				virtual void SetRequestMap(std::map<int, std::vector<unsigned long int> > _rm);
+				virtual void SetRequestDEMMap(std::map<int, std::vector<unsigned long int> > _rdm);
 
 
 
@@ -337,7 +337,7 @@ namespace cpw
 															//,
 															//const int tiles = 1);
 
-				osg::MatrixTransform * OsgScene::CreateTransformationMatrix(cpw::Point3d<float> pos, 
+				osg::MatrixTransform * CreateTransformationMatrix(cpw::Point3d<float> pos, 
 											  cpw::Point3d<float> orientation,
 											  cpw::Point3d<float> scale);
 

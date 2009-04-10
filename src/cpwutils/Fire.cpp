@@ -197,7 +197,7 @@ cpw::Point3d<float> * Fire::GetLastIgnitionPoint()
 
 void Fire::DeleteIgnitionPoint(const int &index)
 {
-	std::vector<cpw::Point3d<float>>::iterator ignition_pos = ignition_points.begin();
+	std::vector<cpw::Point3d<float> >::iterator ignition_pos = ignition_points.begin();
 	int i = index;
 
 	while(i && ignition_pos != ignition_points.end()) 
@@ -410,7 +410,7 @@ int Fire::CreatePersistence()
 	//memcopy(data, ignition_points.begin(), size);
 	//*/
 
-	std::vector<cpw::Point3d<float>>::iterator ip_iter = ignition_points.begin();
+	std::vector<cpw::Point3d<float> >::iterator ip_iter = ignition_points.begin();
 	std::ostringstream ip_map(std::ostringstream::binary);
 
 	ip_map << ignition_points.size() << std::endl;
@@ -621,7 +621,7 @@ int Fire::CreateProperties()
 
 	// Ignition points vector
 	AddPersistenceLevel("Ignition points");
-	std::vector<cpw::Point3d<float>>::iterator ip_iter = ignition_points.begin();
+	std::vector<cpw::Point3d<float> >::iterator ip_iter = ignition_points.begin();
 	for( ; ip_iter != ignition_points.end() ; ip_iter++)
 	{
 		std::map<std::string, std::string> ip_map;

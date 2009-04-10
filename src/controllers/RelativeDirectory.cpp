@@ -37,7 +37,7 @@ RelativeDirectory::RelativeDirectory(const std::string &url)
 
 	if(boost::filesystem::exists(actual_path))
 	{
-		boost::filesystem::current_path(actual_path);
+		actual_path = boost::filesystem::current_path();
 
 		filename = actual_path / path.leaf();
 
@@ -55,7 +55,7 @@ RelativeDirectory::~RelativeDirectory(void)
 {
 	if(boost::filesystem::exists(previous_path))
 	
-		boost::filesystem::current_path(previous_path);
+		previous_path = boost::filesystem::current_path();
 
 }
 

@@ -65,8 +65,8 @@ namespace cpw
 				bool Generate() {return generate;}
 				void SetCoordsMinMax(double _xmin, double _ymin, double _xmax, double _ymax) {xmin = _xmin; ymin = _ymin; xmax = _xmax; ymax = _ymax;}
 				cpw::Point2d<double> GetCoordsMin() {return cpw::Point2d<double>(xmin, ymin);}
-				void SetRequestMap(std::map<int, std::vector<unsigned long int>> _rm);
-				void SetRequestDEMMap(std::map<int, std::vector<unsigned long int>> _rdm);
+				void SetRequestMap(std::map<int, std::vector<unsigned long int> > _rm);
+				void SetRequestDEMMap(std::map<int, std::vector<unsigned long int> > _rdm);
 				std::vector<std::string> GetOsgdemParam() {return osgdem_param;}
 
 				//void SetCoordsMinMax(double _xmin, double _ymin, double _xmax, double _ymax) {xmin = _xmin; ymin = _ymin; xmax = _xmax; ymax = _ymax;}
@@ -105,10 +105,10 @@ namespace cpw
 				float CalculateV(cpw::Request &request, double &x, double &y);
 				bool GenerateImageFromRAW(cpw::Request &request);
 				bool CheckRAW(cpw::Request &request);
-				std::map<int, std::vector<unsigned long int>> request_map;
-				std::map<int, std::vector<unsigned long int>> request_dem;
-				std::map<int, std::vector<std::string>> request_file_map;
-				std::map<int, std::vector<cpw::Request>> request_mapp;
+				std::map<int, std::vector<unsigned long int> > request_map;
+				std::map<int, std::vector<unsigned long int> > request_dem;
+				std::map<int, std::vector<std::string> > request_file_map;
+				std::map<int, std::vector<cpw::Request> > request_mapp;
 				std::vector<cpw::Request> backup;
 				std::vector<cpw::Request> backup_height;
 				std::vector<unsigned long int> wcs_petitions;

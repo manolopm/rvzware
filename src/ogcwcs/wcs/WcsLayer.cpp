@@ -259,14 +259,14 @@ int WcsLayer::AdaptPersistence(cpw::Node *root)
 	wcs_image_format =  (root->GetChildValue("WCS_ImageFormat"));
 	wcs_version =  (root->GetChildValue("WCS_Version"));
 
-	std::vector<cpw::Node *> &root_children = root->GetChildren();
+	std::vector<cpw::Node *> root_children = root->GetChildren();
 	std::vector<cpw::Node *>::iterator i;
 
 	for(i = root_children.begin(); i != root_children.end(); i++)
 	{
 		if ((*i)->GetName() == "WCS_ImageFormats")
 		{
-			std::vector<cpw::Node *> &format_children = (*i)->GetChildren();
+			std::vector<cpw::Node *> format_children = (*i)->GetChildren();
 			std::vector<cpw::Node *>::iterator j;
 			for(j = format_children.begin(); j != format_children.end(); j++)
 			{

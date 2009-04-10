@@ -34,6 +34,15 @@
 
 #include <wxremote/WxSocketEvent.h>
 #include <wxremote/WxClientSocketThread.h>
+#ifndef TCP_NODELAY
+#define TCP_NODELAY 1
+#endif
+#ifndef IPPROTO_TCP
+#define IPPROTO_TCP 6
+#endif
+#ifndef CLK_TCK
+#   define CLK_TCK	CLOCKS_PER_SEC
+#endif
 
 
 using namespace cpw::wxremote;

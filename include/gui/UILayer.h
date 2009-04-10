@@ -59,15 +59,15 @@ namespace cpw
 				virtual ~UILayer();
 
 				void SetAttributes(std::vector<cpw::Attribute> &attr){attributes = attr;}
-				std::string GetName(){return std::string(tc_name->GetValue());}
-				std::string GetHTML(){return std::string(tc_html->GetValue());}
+				std::string GetName(){return std::string(tc_name->GetValue().ToAscii());}
+				std::string GetHTML(){return std::string(tc_html->GetValue().ToAscii());}
 				std::vector<cpw::Attribute> &GetAttributes(){ return attributes;}		
-				std::string GetDescription(){return std::string(tc_description->GetValue());}
+				std::string GetDescription(){return std::string(tc_description->GetValue().ToAscii());}
 				bool IsDynamic() {return false;}
-				void RePaint(){OnMove(wxMoveEvent());}
-				void SetLayerName(const std::string &name) {tc_name->SetValue(name);}
-				void SetHtml(const std::string &html) {tc_html->SetValue(html);}
-				void SetDescription(const std::string &desc) {tc_description->SetValue(desc);}
+				void RePaint(){wxMoveEvent tmp = wxMoveEvent(); OnMove(tmp);}
+				void SetLayerName(const std::string &name) {tc_name->SetValue((wxString &)name);}
+				void SetHtml(const std::string &html) {tc_html->SetValue((wxString &)html);}
+				void SetDescription(const std::string &desc) {tc_description->SetValue((wxString &)desc);}
 				void Modify(const bool &value) {modify = value; tc_name->Enable(false); primitiveChoice->Enable(false); primitiveBrowseButton->Enable(false); button_ok->Enable(true);}
 				void SetPrimitivesUrl(const std::map<std::string, cpw::TypeId> &vec_url);
 				void DisableNonEditable() {};

@@ -181,7 +181,7 @@ namespace cpw
 
 			std::string cu;
 
-			std::map<std::string, std::vector<std::string>> wcs_crs;
+			std::map<std::string, std::vector<std::string> > wcs_crs;
 
 		};
 

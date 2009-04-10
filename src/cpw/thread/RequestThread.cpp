@@ -43,7 +43,7 @@ RequestThread::RequestThread(IRequestReceiver *in, int npet, IStatusController *
 	{
 		status_id = status_controller->Attach();
 		status_value = 100;
-		status_controller->SetValue(status_id, status_value);
+		status_controller->SetValue(status_id,(const int &)status_value);
 	}
 }
 
@@ -153,7 +153,7 @@ int RequestThread::ProcessRequest(cpw::Request &request)
 		requests++;
 		status_value = 100 - ((requests - 1)*WHEEL_FACTOR);
 		if (status_value < 1) status_value = 1;
-		status_controller->SetValue(status_id, status_value);
+		status_controller->SetValue(status_id,(const int &)status_value);
 		status_controller->SetLabel(status_id, "Downloading data...");
 	}
 
@@ -201,7 +201,7 @@ int RequestThread::ReturnRequest(cpw::Request &request)
 				requests--;
 				if (requests <1) requests = 1;
 				status_value = 100 - ((requests - 1)*WHEEL_FACTOR);
-				status_controller->SetValue(status_id, status_value);
+				status_controller->SetValue(status_id, (const int &)status_value);
 				status_controller->SetLabel(status_id, "Data received");
 				if(status_value > 100)
 					status_controller->SetValue(status_id, 100);

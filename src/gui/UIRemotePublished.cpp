@@ -249,7 +249,7 @@ std::vector<cpw::TypeId> UIRemotePublished::GetSelectedEntities()
 	std::vector<cpw::TypeId> v;
 	for (unsigned int i=0; i<WxListBox1->GetCount(); i++)
 	{
-		v.push_back(node_id[std::string((char*)WxListBox1->GetString(i).To8BitData())]);
+	  v.push_back(node_id[std::string(WxListBox1->GetString(i).mb_str())]);
 	}
 	return v;
 }
@@ -277,10 +277,10 @@ void UIRemotePublished::render(wxDC& dc)
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
+	  wxColour c_brush = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	  dc.SetTextForeground(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8)));
 		dc.SetPen(wxPen(c_pen));
 		dc.SetBrush(wxBrush(c_brush));
 		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);

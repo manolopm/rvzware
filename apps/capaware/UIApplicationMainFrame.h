@@ -223,7 +223,7 @@ namespace cpw
 					cpw::INavigatorManager *navigator_manager = NULL);	
 				void InitShortCuts();
 				void Update();
-				void RePaint() {OnSize(wxSizeEvent());}
+				void RePaint() {wxSizeEvent q = wxSizeEvent(); OnSize( q);}
 				void ShowSplash(){load_splash->Center(); load_splash->Show(true);load_splash->Refresh();load_splash->Update();};
 				void HideSplash(){load_splash->Show(false); load_splash->Destroy();};
 

@@ -61,7 +61,7 @@
 
 #include <osgParticle/FluidFrictionOperator>
 #include <osgUtil/IntersectVisitor>
-#include <osgutil/LineSegmentIntersector>
+#include <osgUtil/LineSegmentIntersector>
 #include <osgText/Font>
 #include <osgText/Text>
 #include <osgText/FadeText>
@@ -2222,7 +2222,7 @@ void OsgScene::UpdateTextures(int cx, int cy, const cpw::Point3d<float> &eye, co
 {
 	static bool first = false;
 
-	//std::vector<osg::ref_ptr<osg::Node>>::iterator i = islands.begin();
+	//std::vector<osg::ref_ptr<osg::Node> >::iterator i = islands.begin();
 	//std::vector<osg::Node *>::iterator i = islands.begin();
 	//std::vector<osg::Node *>::iterator i = islands.end()-1; //solo para la palma
 
@@ -2416,7 +2416,7 @@ float OsgScene::ComputeLODDistance(const osg::BoundingSphere &bsphere, const osg
 }
 
 
-void OsgScene::AddLine(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color,const int &r, const int &g, const int &b, const int &width, const bool &visible)
+void OsgScene::AddLine(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color,const int &r, const int &g, const int &b, const int &width, const bool &visible)
 {
 	//const unsigned char * version = glGetString (GL_VERSION);
 	//printf ("VERSION OPENGL: %s\n", version);
@@ -2431,9 +2431,9 @@ void OsgScene::AddLine(const std::string &object_id, const std::vector<cpw::Poin
 	{
 		Remove(object_id);
 	}
-	std::vector<cpw::Point3d<float>>::const_iterator iter;
-	std::vector<cpw::Point3d<float>>::const_iterator f_iter;
-	std::vector<cpw::Point3d<float>> v_aux, final_vec;
+	std::vector<cpw::Point3d<float> >::const_iterator iter;
+	std::vector<cpw::Point3d<float> >::const_iterator f_iter;
+	std::vector<cpw::Point3d<float> > v_aux, final_vec;
 
 	cpw::Point3d<float> aux;
 	for(iter = draw_array.begin(); iter != draw_array.end(); iter++)
@@ -2507,7 +2507,7 @@ void OsgScene::AddLine(const std::string &object_id, const std::vector<cpw::Poin
 /**************************************************************************************************************/
 
 	//Create the groups
-	std::vector<osg::ref_ptr<osg::Group>> groups;
+	std::vector<osg::ref_ptr<osg::Group> > groups;
 	osg::ref_ptr<osg::Group> last_group;
 	for (unsigned int i=0; i<MAX_LINE_LODS; i++)
 	{
@@ -2581,7 +2581,7 @@ void OsgScene::AddLine(const std::string &object_id, const std::vector<cpw::Poin
 
 	//new_LOD_node->addChild(geode.get(), 0.0f, LOD_0_VALUE);
 
-	std::vector<cpw::Point3d<float>>::iterator iter_center;
+	std::vector<cpw::Point3d<float> >::iterator iter_center;
 	iter_center = v_aux.begin();
 	float xmin(iter_center->x), xmax(iter_center->x), ymin(iter_center->y), ymax(iter_center->y),zmax(0.0f);
 	for(; iter_center != v_aux.end(); iter_center++)
@@ -2604,13 +2604,13 @@ void OsgScene::AddLine(const std::string &object_id, const std::vector<cpw::Poin
 	return;
 }
 
-void OsgScene::UpdateLine(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color,const int &r, const int &g, const int &b, const int &width, const bool &visible, const int &update_point)
+void OsgScene::UpdateLine(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color,const int &r, const int &g, const int &b, const int &width, const bool &visible, const int &update_point)
 {
 	if(draw_array.size()<=1) return;
 		
 	if(ObjectExistsInScene(object_id))  
 	{
-		std::vector<cpw::Point3d<float>> v_aux, final_vec;
+		std::vector<cpw::Point3d<float> > v_aux, final_vec;
 		int type = -1;
 		if(update_point==-1)
 		{
@@ -2664,7 +2664,7 @@ void OsgScene::UpdateLine(const std::string &object_id, const std::vector<cpw::P
 			return;
 
 
-		std::vector<cpw::Point3d<float>> aux1;
+		std::vector<cpw::Point3d<float> > aux1;
 		for(unsigned int i=0; i<draw_array.size(); i++)
 			aux1.push_back(UTMToSceneCoords(draw_array[i]));
 
@@ -2700,7 +2700,7 @@ void OsgScene::UpdateLine(const std::string &object_id, const std::vector<cpw::P
 			geom->addPrimitiveSet(new osg::DrawArrays(GL_LINE_STRIP ,0,tam_vertex + tam_final_vec));
 			//geom->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::TRIANGLES ,0,tam_vertex + tam_final_vec));
 			int i=tam_vertex;
-			std::vector<cpw::Point3d<float>>::const_iterator f_iter;
+			std::vector<cpw::Point3d<float> >::const_iterator f_iter;
 			for(f_iter = final_vec.begin(); f_iter != final_vec.end(); f_iter++)
 			{
 				(*vertex)[i] = osg::Vec3d(f_iter->x,f_iter->y,f_iter->z+1);
@@ -2758,7 +2758,7 @@ void OsgScene::UpdateLine(const std::string &object_id, const std::vector<cpw::P
 			}
 
 			if(final_vec.empty()) return;
-			std::vector<cpw::Point3d<float>>::const_iterator f_iter=final_vec.begin();
+			std::vector<cpw::Point3d<float> >::const_iterator f_iter=final_vec.begin();
 			i=ind_inf;
 			for(;f_iter!=final_vec.end();f_iter++)
 			{
@@ -2814,7 +2814,7 @@ void OsgScene::UpdateLine(const std::string &object_id, const std::vector<cpw::P
 
 		//new_LOD_node->setChild(0,geode);
 
-		//std::vector<cpw::Point3d<float>>::iterator iter_center;
+		//std::vector<cpw::Point3d<float> >::iterator iter_center;
 		//int tam2 = vertex->getNumElements();
 		////iter_center = v_aux.begin();
 
@@ -2868,7 +2868,7 @@ void OsgScene::UpdateLine(const std::string &object_id, const std::vector<cpw::P
 	return;
 }
 
-void OsgScene::AddLine2(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color,const int &r, const int &g, const int &b, const int &width, const bool &visible)
+void OsgScene::AddLine2(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color,const int &r, const int &g, const int &b, const int &width, const bool &visible)
 {
 	if(ObjectExistsInScene(object_id))  
 	{
@@ -2878,9 +2878,9 @@ void OsgScene::AddLine2(const std::string &object_id, const std::vector<cpw::Poi
 	if(draw_array.size()<=1) return;
 	
 
-	std::vector<cpw::Point3d<float>>::const_iterator iter;
-	std::vector<cpw::Point3d<float>>::const_iterator f_iter;
-	std::vector<cpw::Point3d<float>> v_aux, final_vec;
+	std::vector<cpw::Point3d<float> >::const_iterator iter;
+	std::vector<cpw::Point3d<float> >::const_iterator f_iter;
+	std::vector<cpw::Point3d<float> > v_aux, final_vec;
 
 	cpw::Point3d<float> aux;
 	for(iter = draw_array.begin(); iter != draw_array.end(); iter++)
@@ -2942,7 +2942,7 @@ void OsgScene::AddLine2(const std::string &object_id, const std::vector<cpw::Poi
 /**************************************************************************************************************/
 
 	//Create the groups
-	std::vector<osg::ref_ptr<osg::Group>> groups;
+	std::vector<osg::ref_ptr<osg::Group> > groups;
 	osg::ref_ptr<osg::Group> last_group;
 	for (unsigned int i=0; i<MAX_LINE_LODS; i++)
 	{
@@ -2998,7 +2998,7 @@ void OsgScene::AddLine2(const std::string &object_id, const std::vector<cpw::Poi
 	new_LOD_node->addChild(last_group.get(), LOD_0_VALUE, LOD_0_VALUE+1000);
 /**************************************************************************************************************/
 
-	std::vector<cpw::Point3d<float>>::iterator iter_center;
+	std::vector<cpw::Point3d<float> >::iterator iter_center;
 	iter_center = v_aux.begin();
 	float xmin(iter_center->x), xmax(iter_center->x), ymin(iter_center->y), ymax(iter_center->y),zmax(0.0f);
 	for(; iter_center != v_aux.end(); iter_center++)
@@ -3943,18 +3943,18 @@ void OsgScene::SetWCSRequestManager(cpw::IRequestReceiver *rm)
 	scene_builder.SetWCSRequestManager(rm);
 }
 
-void OsgScene::SetRequestMap(std::map<int, std::vector<unsigned long int>> _rm)
+void OsgScene::SetRequestMap(std::map<int, std::vector<unsigned long int> > _rm)
 {
 	scene_builder.SetRequestMap(_rm);
 }
 
-void OsgScene::SetRequestDEMMap(std::map<int, std::vector<unsigned long int>> _rdm)
+void OsgScene::SetRequestDEMMap(std::map<int, std::vector<unsigned long int> > _rdm)
 {
 	scene_builder.SetRequestDEMMap(_rdm);
 }
 
 
-void OsgScene::AddLine3(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color,const int &r, const int &g, const int &b, const int &width, const bool &visible)
+void OsgScene::AddLine3(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color,const int &r, const int &g, const int &b, const int &width, const bool &visible)
 {
 
 	if(draw_array.size()<=1) return;
@@ -3964,9 +3964,9 @@ void OsgScene::AddLine3(const std::string &object_id, const std::vector<cpw::Poi
 	{
 		Remove(object_id);
 	}
-	std::vector<cpw::Point3d<float>>::const_iterator iter;
-	std::vector<cpw::Point3d<float>>::const_iterator f_iter;
-	std::vector<cpw::Point3d<float>> v_aux, final_vec;
+	std::vector<cpw::Point3d<float> >::const_iterator iter;
+	std::vector<cpw::Point3d<float> >::const_iterator f_iter;
+	std::vector<cpw::Point3d<float> > v_aux, final_vec;
 
 	cpw::Point3d<float> aux;
 	for(iter = draw_array.begin(); iter != draw_array.end(); iter++)

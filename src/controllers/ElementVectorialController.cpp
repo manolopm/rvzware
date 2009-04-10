@@ -349,7 +349,7 @@ void ElementVectorialController::Remove(const int &index)
 	if(ElementVectorial_array.empty()) return;
 	if((index <0)||(index > (int)(ElementVectorial_array.size()-1))) return;
 
-	std::vector<cpw::Point3d<float>>::iterator iter=ElementVectorial_array.begin();
+	std::vector<cpw::Point3d<float> >::iterator iter=ElementVectorial_array.begin();
 	int i=0;
 	while(i!=index){i++; iter++;}
 
@@ -380,8 +380,9 @@ void ElementVectorialController::ModifyProperties(cpw::Entity *ent)
 
 	ElementVectorial_entity = ElementVectorial;
 	ElementVectorial_array = ElementVectorial->GetPoints();
-
-	ui_ElementVectorial->SetElementVectorialType(ElementVectorial_entity->GetVectorialType());
+	
+	std::string str = ElementVectorial_entity->GetVectorialType();
+	ui_ElementVectorial->SetElementVectorialType((std::string &)str);
 	std::string vicon1, vicon2;
 	ElementVectorial_entity->GetVectorialIcons(vicon1, vicon2);
 	ui_ElementVectorial->SetElementVectorialIcon(vicon1, vicon2);

@@ -58,20 +58,20 @@ UIVideoController::UIVideoController(wxAuiManager *m_mgr_,wxWindow* parent, wxWi
 {
 	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
 
-	AddTool(ANIMATION_CURRENTTIME, _T("CURRET DATE & TIME"),  wxBitmap(wxImage(wxT(icon_path + "date_next.png"))), _T("CURRENTTIME"));
+	AddTool(ANIMATION_CURRENTTIME, _T("CURRET DATE & TIME"),  wxBitmap(wxImage(wxString((icon_path + "date_next.png").c_str(),wxConvUTF8))), _T("CURRENTTIME"));
 	app_Time.Date = new wxDatePickerCtrl(this, APPLICATION_DATE, wxDefaultDateTime, wxDefaultPosition, wxSize(80,19), wxDP_DEFAULT | wxDP_SHOWCENTURY | wxDP_DROPDOWN);
 	AddControl(app_Time.Date);
 	wxString dt = MyTimeCtrl::GetCurrentTime();
 	app_Time.Hour = new MyTimeCtrl(this, APPLICATION_HOUR, dt, wxDefaultPosition, wxSize(50,19));
 	AddControl(app_Time.Hour);
 	AddSeparator();
-	AddTool(ANIMATION_START, _T("START"),  wxBitmap(wxImage(wxT(icon_path + "control_start_blue.png"))), _T("START"));
-	AddTool(ANIMATION_REWIND, _T("REWIND"), wxBitmap(wxImage(wxT(icon_path + "control_rewind_blue.png"))), _T("REWIND"));
-	AddTool(ANIMATION_PLAY, _T("PLAY"), wxBitmap(wxImage(wxT(icon_path + "control_play_blue.png"))), _T("PLAY"));
-	AddTool(ANIMATION_STOP, _T("STOP"), wxBitmap(wxImage(wxT(icon_path + "control_stop_blue.png"))), _T("STOP"));
-	AddTool(ANIMATION_FORWARD, _T("FORWARD"), wxBitmap(wxImage(wxT(icon_path + "control_fastforward_blue.png"))), _T("FORWARD"));
-	AddTool(ANIMATION_END, _T("END"), wxBitmap(wxImage(wxT(icon_path + "control_end_blue.png"))), _T("END"));
-	AddTool(ANIMATION_REPEAT, _T("REPEAT"), wxBitmap(wxImage(wxT(icon_path + "control_repeat_blue.png"))), _T("REPEAT"),wxITEM_CHECK);
+	AddTool(ANIMATION_START, _T("START"),  wxBitmap(wxImage(wxString((icon_path + "control_start_blue.png").c_str(),wxConvUTF8))), _T("START"));
+	AddTool(ANIMATION_REWIND, _T("REWIND"), wxBitmap(wxImage(wxString((icon_path + "control_rewind_blue.png").c_str(),wxConvUTF8))), _T("REWIND"));
+	AddTool(ANIMATION_PLAY, _T("PLAY"), wxBitmap(wxImage(wxString((icon_path + "control_play_blue.png").c_str(),wxConvUTF8))), _T("PLAY"));
+	AddTool(ANIMATION_STOP, _T("STOP"), wxBitmap(wxImage(wxString((icon_path + "control_stop_blue.png").c_str(),wxConvUTF8))), _T("STOP"));
+	AddTool(ANIMATION_FORWARD, _T("FORWARD"), wxBitmap(wxImage(wxString((icon_path + "control_fastforward_blue.png").c_str(),wxConvUTF8))), _T("FORWARD"));
+	AddTool(ANIMATION_END, _T("END"), wxBitmap(wxImage(wxString((icon_path + "control_end_blue.png").c_str(),wxConvUTF8))), _T("END"));
+	AddTool(ANIMATION_REPEAT, _T("REPEAT"), wxBitmap(wxImage(wxString((icon_path + "control_repeat_blue.png").c_str(),wxConvUTF8))), _T("REPEAT"),wxITEM_CHECK);
 	AddSeparator();
 	multiplier = new wxTextCtrl(this, ANIMATION_MULTIPLIER, _T("1"), wxDefaultPosition, wxSize(70,19)); // min = invalid
 	AddControl(multiplier);
@@ -81,15 +81,15 @@ UIVideoController::UIVideoController(wxAuiManager *m_mgr_,wxWindow* parent, wxWi
 	timeSlider->SetLineSize(2);
 	AddControl(timeSlider);
 	AddSeparator();
-	AddTool(ANIMATION_VIEW_ANIMABLE, _T("View Animations"), wxBitmap(wxImage(wxT(icon_path + "view_animable.png"))), _T("view Animation"));
-	AddTool(ANIMATION_FIRE_VIEWMODE, _T("Fire View Mode"), wxBitmap(wxImage(wxT(icon_path + "fire_view_mode.png"))), _T("Fire view mode"),wxITEM_CHECK);
+	AddTool(ANIMATION_VIEW_ANIMABLE, _T("View Animations"), wxBitmap(wxImage(wxString((icon_path + "view_animable.png").c_str(),wxConvUTF8))), _T("view Animation"));
+	AddTool(ANIMATION_FIRE_VIEWMODE, _T("Fire View Mode"), wxBitmap(wxImage(wxString((icon_path + "fire_view_mode.png").c_str(),wxConvUTF8))), _T("Fire view mode"),wxITEM_CHECK);
 
 	this->Connect(APPLICATION_HOUR, MyEVT_TIMECHANGE, (wxObjectEventFunction)(wxEventFunction)(wxCommandEventFunction) &UIVideoController::SetHourChanges);
 
 	playing = false;
 
-	play_bitmap  = wxBitmap(wxImage(wxT(icon_path + "control_play_blue.png")));
-	pause_bitmap = wxBitmap(wxImage(wxT(icon_path + "control_pause_blue.png")));
+	play_bitmap  = wxBitmap(wxImage(wxString((icon_path + "control_play_blue.png").c_str(),wxConvUTF8)));
+	pause_bitmap = wxBitmap(wxImage(wxString((icon_path + "control_pause_blue.png").c_str(),wxConvUTF8)));
 
 }
 
@@ -105,7 +105,7 @@ void UIVideoController::Update(bool subject_deleted)
 	if (subject_deleted)
 		return;
 	ApplicationTime *time = ApplicationTime::GetInstance();
-	int imultiplier = atoi(multiplier->GetValue());
+	int imultiplier = atoi(((std::string)multiplier->GetValue().mb_str()).c_str());
 	if ((imultiplier <= SPINMAX) && (imultiplier >= SPINMIN+1))
 		time->SetMultiplier(imultiplier);
 	else 
@@ -150,34 +150,34 @@ void UIVideoController::Update(bool subject_deleted)
 
 void UIVideoController::OnButtonRewind(wxCommandEvent& WXUNUSED(event))
 {
-	int value = atoi(multiplier->GetValue());
+  int value = atoi(((std::string)multiplier->GetValue().mb_str()).c_str());
 	value-=20;
 	std::stringstream aux;
 	if (value <= SPINMAX && (value >= SPINMIN+1))
 	{
 		aux << value;
-		multiplier->SetValue(aux.str());
+		multiplier->SetValue(wxString(aux.str().c_str(),wxConvUTF8));
 	}
 	else
 	{
 		aux << SPINMIN+1;
-		multiplier->SetValue(aux.str());
+		multiplier->SetValue(wxString(aux.str().c_str(),wxConvUTF8));
 	}
 }
 
 void UIVideoController::OnButtonForward(wxCommandEvent& WXUNUSED(event))
 {
-	int value = atoi(multiplier->GetValue());
+  int value = atoi(((std::string)multiplier->GetValue().mb_str()).c_str());
 	value+=20;
 	std::stringstream aux;
 	if (value <= SPINMAX && (value >= SPINMIN+1))
 	{
 		aux << value;
-		multiplier->SetValue(aux.str());
+		multiplier->SetValue(wxString(aux.str().c_str(),wxConvUTF8));
 	}
 	else
 		aux << SPINMAX;
-		multiplier->SetValue(aux.str());
+	multiplier->SetValue(wxString(aux.str().c_str(),wxConvUTF8));
 }
 
 void UIVideoController::OnButtonPlay(wxCommandEvent& WXUNUSED(event))
@@ -335,26 +335,26 @@ void UIVideoController::OnMultiplierChanged(wxCommandEvent& WXUNUSED(event))
 				{
 					mult = SPINMIN;
 					aux2 << mult;
-					multiplier->ChangeValue(aux2.str());
+					multiplier->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 					return;
 				}
 				if (f > SPINMAX)
 				{
 					mult = SPINMAX;
 					aux2 << mult;
-					multiplier->ChangeValue(aux2.str());
+					multiplier->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 					return;
 				}
-				int aux = atoi(multiplier->GetValue());
+				int aux = atoi(((std::string)multiplier->GetValue().mb_str()).c_str());
 				aux2 << aux;
-				multiplier->ChangeValue(aux2.str());
-				mult = atoi(multiplier->GetValue());
+				multiplier->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
+				mult = atoi(((std::string)multiplier->GetValue().mb_str()).c_str());
 		}
 		else
 		{
 			std::stringstream aux;
 			aux << mult;
-			multiplier->ChangeValue(aux.str());
+			multiplier->ChangeValue(wxString(aux.str().c_str(),wxConvUTF8));
 		}
 	}
 }
@@ -385,7 +385,7 @@ void UIVideoController::OnMultiplierSpinUp(wxSpinEvent& event)
 	multiplier->GetValue().ToDouble(&f);
 	int value = f+1;
 	wop << value;  
-	multiplier->SetValue(wop.str()); 
+	multiplier->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 }
 void UIVideoController::OnMultiplierSpinDown(wxSpinEvent& event)
 {
@@ -394,5 +394,5 @@ void UIVideoController::OnMultiplierSpinDown(wxSpinEvent& event)
 	multiplier->GetValue().ToDouble(&f);
 	int value = f-1;
 	wop << value;  
-	multiplier->SetValue(wop.str()); 
+	multiplier->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 }

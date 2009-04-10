@@ -246,11 +246,13 @@ void GraphicFireCallBack::Insert(const cpw::Callable* callable)
 			id = strid.str();
 
 			IScene *scene = ApplicationScene::GetInstance()->GetScene();
-
+			
+			Point3d<float> pA(0.0f, 0.0f, 0.0f);
+			Point3d<float> pB(1.0f, 1.0f, 1.0f);
 			scene->AddObjectToGroup(id, group_name, entity->GetIgnitionPointUrl(),
 				*entity->GetIgnitionPoint(i),
-				Point3d<float>(0.0f, 0.0f, 0.0f),
-				Point3d<float>(1.0f, 1.0f, 1.0f));
+						(Point3d<float> &)pA,
+						(Point3d<float> &)pB);
 
 			
 		}
@@ -363,11 +365,13 @@ void GraphicFireCallBack::Update(cpw::Callable* callable)
 							Point3d<float>(1.0f, 1.0f, 1.0f));
 			}
 			else
-			{
+			  {
+			    Point3d<float> pA(0.0f, 0.0f, 0.0f);
+			    Point3d<float> pB(1.0f, 1.0f, 1.0f);
 				scene->AddObjectToGroup(id, group_name, fire_entity->GetIgnitionPointUrl(),
-									*point,
-									Point3d<float>(0.0f, 0.0f, 0.0f),
-									Point3d<float>(1.0f, 1.0f, 1.0f), fire_entity->isVisible());
+							*point,
+							(Point3d<float> &)pA,
+				  (Point3d<float> &)pB,fire_entity->isVisible());
 			}
 		}
 	}

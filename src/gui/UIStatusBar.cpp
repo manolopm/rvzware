@@ -52,7 +52,7 @@ void UIStatusBar::InitGUI()
 
 	statusLabel = new wxStaticText(this,ID_MEDIACTRL, wxT("Ready"), wxPoint(200,0), wxSize(150,16),wxST_NO_AUTORESIZE);
 
-	animationGauge.LoadFile(_T( icon_path + "loader.gif" ));
+	animationGauge.LoadFile(wxString(( icon_path + "loader.gif" ).c_str(),wxConvUTF8));
 	frameImage = animationGauge.GetFrame(0);
 	animGauge = new wxStaticBitmap(this, wxID_ANY, wxBitmap(frameImage));
 	m_bmp = wxBitmap(frameImage);
@@ -88,8 +88,9 @@ void UIStatusBar::Update(bool subject_deleted)
 				/*animGauge->SetBitmap(frameImage);
 				*/
 				m_bmp = wxBitmap(animationGauge.GetFrame(frame));
-				m_label = _T(sc->GetLabel());
-				OnPaint();
+				m_label = wxString(sc->GetLabel().c_str(),wxConvUTF8);
+			wxPaintEvent tmp = wxPaintEvent();
+			OnPaint((wxPaintEvent &)tmp);
 			}
 		//statusLabel->SetLabel(_T(sc->GetLabel()));
 	}
@@ -109,17 +110,13 @@ void UIStatusBar::render(wxDC& dc)
 	dc.DrawBitmap(m_bmp, 0, 5, true);
 	if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_page_font = ApplicationConfiguration::GetInstance()->GetPageFontColour();
+	  wxColour c_page_font = wxString(ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8);
 		dc.SetTextForeground(c_page_font);
 	}
 	dc.DrawRotatedText(m_label,25,5, 0);
 }
 
-void UIStatusBar::OnPaint()
-{ 
-	wxClientDC dc(this);
-	render(dc);
-}
+
 
 //void UIStatusBar::OnEraseBackground(wxEraseEvent& event)
 //{

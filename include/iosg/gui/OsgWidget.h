@@ -30,38 +30,35 @@
 #include <osg/Switch>
 #include <wx/wx.h>
 
-
 #include <cpw/callback/IEventReceiver.h>
 #include <cpw/common/Math.h>
 #include <cpw/common/types.h>
 #include <cpw/IApplication.h>
 
 #include <iosg/OsgVisitorFirstGeode.h>
-
 #include <iosg/Export.h>
 
+namespace cpw{
+  namespace iosg
+	{	  class OsgNavigator;
 
-namespace cpw 
-{ 
-	namespace iosg 
-	{
-		struct TAnchor 
+	  struct TAnchor
 		{
-			float h, w;
-			int x, y;
-		};
+		  float h, w;
+		  int x, y;
+	  };
 
-		class OsgNavigator;
+	  
 
 
-		/** 
-			\brief 
+		/**
+			\brief
 			\ingroup iosg
 			\todo Intentar quita la referencia a Application desde el iosg
 		*/
-		class IOSGEXPORT OsgIWidget : public cpw::IEventReceiver
+	  class IOSGEXPORT OsgIWidget : public cpw::IEventReceiver
 		{
-			public:	
+			public:
 
 				OsgIWidget(const std::string &url, const cpw::Point3d<float> &_position, const cpw::Point3d<float> &_size, const cpw::Point3d<float> &_rotation, const TAnchor &_anchor);
 				virtual ~OsgIWidget(void);
@@ -94,8 +91,8 @@ namespace cpw
 
 				virtual cpw::Point3d<float> & GetPosition()	{ return position; };
 				virtual cpw::Point3d<float> & GetSize()		{ return size; }
-				virtual cpw::Point3d<float> & GetRotation()	{ return rot; }			
-				virtual iosg::TAnchor		& GetAnchor()	{ return anchor; }	
+				virtual cpw::Point3d<float> & GetRotation()	{ return rot; }
+				virtual iosg::TAnchor		& GetAnchor()	{ return anchor; }
 				virtual float GetRadius()		{ return radius; }
 				virtual cpw::Point3d<float> & GetScale()		{ return scale; }
 				virtual void SetPosition(const cpw::Point3d<float> &_position);
@@ -112,7 +109,7 @@ namespace cpw
 
 				virtual void RotateX(const float &angle);
 				virtual void RotateY(const float &angle);
-				virtual void RotateZ(const float &angle);			
+				virtual void RotateZ(const float &angle);
 
 				virtual void Move(const int &x = 0, const int &y = 0, const int &z = 0);
 				virtual void Rotate(const int &x = 0, const int &y = 0, const int &z = 0);
@@ -162,7 +159,7 @@ namespace cpw
 				
 				
 
-			private:	
+			private:
 
 				std::string default_directory;
 				osg::ref_ptr<osg::MatrixTransform> mt;

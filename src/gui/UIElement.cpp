@@ -105,7 +105,7 @@ UIElement::UIElement(cpw::controllers::ElementController *ec, wxWindow* parent, 
 	Center();
 
 	std::string &primitive_path = ApplicationConfiguration::GetInstance()->GetPrimitiveDirectory();
-	open_primitive =  new wxFileDialog(this, wxT("Choose a file"), wxT(primitive_path), wxT(""), wxT("Element Primitive(*.cel)|*.cel"), wxOPEN);
+	open_primitive =  new wxFileDialog(this, wxT("Choose a file"), wxString(primitive_path.c_str(),wxConvUTF8), wxT(""), wxT("Element Primitive(*.cel)|*.cel"), wxOPEN);
 
 	//Choice
 	primitiveChoice = new wxChoice(this, ID_PRIMITIVE_CHOICE, wxDefaultPosition, wxSize(270,19), arrayStringFor_formatChoice, 0, wxDefaultValidator, wxT("WxChoice1"));
@@ -196,13 +196,13 @@ void UIElement::SetPrimitivesUrl(const std::map<std::string, cpw::TypeId> &vec_u
 	primitiveChoice->Clear();
 	for(i; i!=vec_url.end();i++)
 	{
-		wxString* url = new wxString((wxString)(i->first));
+	  wxString* url = new wxString(wxString((i->first).c_str(),wxConvUTF8));
 		primitiveChoice->Insert(*url,0);
 		delete url;
 	}
 
 	if(selected_primitive != "") 
-		primitiveChoice->SetSelection(primitiveChoice->FindString(selected_primitive));
+	  primitiveChoice->SetSelection(primitiveChoice->FindString(wxString(selected_primitive.c_str(),wxConvUTF8)));
 }
 
 void UIElement::OnChoiceChanged(wxCommandEvent& WXUNUSED(event))
@@ -210,7 +210,7 @@ void UIElement::OnChoiceChanged(wxCommandEvent& WXUNUSED(event))
 
 	if (primitiveChoice->GetSelection() != wxNOT_FOUND)
 	{		
-		std::string pname = primitiveChoice->GetString(primitiveChoice->GetSelection());
+	  std::string pname = std::string(primitiveChoice->GetString(primitiveChoice->GetSelection()).mb_str());
 		std::map<std::string, cpw::TypeId>::iterator i = v_url.find(pname);
 		if (i!= v_url.end())
 		{
@@ -227,7 +227,7 @@ void UIElement::OnBrowsePrimitivesButton(wxCommandEvent& event)
 	if(open_primitive->ShowModal() == wxID_OK ) 
     {
 
-		if(element_controller->ChangePrimitive((std::string) open_primitive->GetPath()))
+      if(element_controller->ChangePrimitive(std::string( open_primitive->GetPath().mb_str())))
 
 			button_ok->Enable(true);
 	}
@@ -284,8 +284,8 @@ void UIElement::do_layout()
 	vert6_sizer->Add(tc_3, 0, wxALIGN_LEFT);
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		tc_3->SetBackgroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageColour()));
-		tc_3->SetForegroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour()));
+	  tc_3->SetBackgroundColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8));
+	  tc_3->SetForegroundColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8));
 	}
 
 	//orientation
@@ -411,10 +411,10 @@ void UIElement::OnButtonOK(wxCommandEvent& WXUNUSED(event))
 
 void UIElement::ButtonOK()
 {
-	std::string p = std::string(tc_1->GetValue());
+  std::string p = std::string(tc_1->GetValue().mb_str());
 	if(((primitiveChoice->GetSelection() == wxNOT_FOUND) && primitiveChoice->IsEnabled()) || (tc_1->IsEmpty()) || (p.at(0) == ' ' ) )
 	{
-		wxMessageDialog message(this,wxString("The element needs a template and a name."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+		wxMessageDialog message(this,wxT("The element needs a template and a name."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 		message.ShowModal();
 	}
 	else
@@ -423,15 +423,15 @@ void UIElement::ButtonOK()
 		float orientation[3]={orientationx, orientationy, orientationz};
 		float scale[3]={scalex, scaley, scalez};
 		 		
-		if(element_controller->CreateElement(std::string(tc_1->GetValue()), // name 										
-										std::string(tc_13->GetValue()), // text
-										std::string(tc_14->GetValue()), // html, 
-										std::string(tc_3->GetValue()), // description,
-										utm, 
-										orientation, 
-										scale, 
-										dynamic_check->GetValue(), 
-										attributes, modify))
+		if(element_controller->CreateElement(std::string(tc_1->GetValue().mb_str()), // name 				      
+						     std::string(tc_13->GetValue().mb_str()), // text
+						     std::string(tc_14->GetValue().mb_str()), // html, 
+						     std::string(tc_3->GetValue().mb_str()), // description,
+						     utm, 
+						     orientation, 
+						     scale, 
+						     dynamic_check->GetValue(), 
+						     attributes, modify))
 										
 		{		
 			EndDialog(wxID_OK);
@@ -443,8 +443,8 @@ void UIElement::ButtonOK()
 void UIElement::OnButtonHtml(wxCommandEvent& WXUNUSED(event))
 {
 	std::string root_path = ApplicationConfiguration::GetInstance()->GetRootDirectory();
-	wxFileDialog dialog(this,_T("Open HTML file"),_T(root_path),wxEmptyString,
-						   _T("File html(*.html)|*.html|All files(*.*)|*.*") );
+	wxFileDialog dialog(this,wxT("Open HTML file"),wxString(root_path.c_str(),wxConvUTF8),wxEmptyString,
+						   wxT("File html(*.html)|*.html|All files(*.*)|*.*") );
 	if(dialog.ShowModal() == wxID_OK)
 	{		
 		tc_14->SetValue(dialog.GetPath());
@@ -460,7 +460,7 @@ void UIElement::OnButtonCancel(wxCommandEvent& WXUNUSED(event))
 {
 	if((!tc_1->IsEmpty())||(!tc_13->IsEmpty())||(!tc_14->IsEmpty()))
 	{
-		wxMessageDialog message(this,wxString("Save changes before quit?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+		wxMessageDialog message(this,wxT("Save changes before quit?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
 		{		
@@ -486,7 +486,7 @@ void UIElement::OnButtonCancel(wxCommandEvent& WXUNUSED(event))
 
 void UIElement::OnButtonAttributes(wxCommandEvent& WXUNUSED(event))
 {
-	UIEAttributes new_attr_dlg(1,this,1, wxString("Element attributes"),wxDefaultPosition);
+	UIEAttributes new_attr_dlg(1,this,1, wxT("Element attributes"),wxDefaultPosition);
 	if(!attributes.empty())
 		new_attr_dlg.SetAttributes(attributes);
 
@@ -496,13 +496,13 @@ void UIElement::OnButtonAttributes(wxCommandEvent& WXUNUSED(event))
 
 void UIElement::CheckName(wxCommandEvent& WXUNUSED(event))
 {
-	std::string aux_name = tc_1->GetValue();
+  std::string aux_name = std::string(tc_1->GetValue().mb_str());
 	element_controller->SetName(aux_name);
 }
 
 void UIElement::SetEntityName(const std::string &name) 
 {
-	tc_1->SetValue(name);
+  tc_1->SetValue(wxString(name.c_str(),wxConvUTF8));
 }
 
 void UIElement::CheckCoords(wxCommandEvent& WXUNUSED(event))
@@ -532,7 +532,7 @@ void UIElement::CheckCoords(wxCommandEvent& WXUNUSED(event))
 
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << orientationx;
-		tc_4->ChangeValue(aux2.str());
+		tc_4->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 
@@ -542,7 +542,7 @@ void UIElement::CheckCoords(wxCommandEvent& WXUNUSED(event))
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << orientationy;
-		tc_5->ChangeValue(aux2.str());
+		tc_5->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 
@@ -552,7 +552,7 @@ void UIElement::CheckCoords(wxCommandEvent& WXUNUSED(event))
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << orientationz;
-		tc_6->ChangeValue(aux2.str());
+		tc_6->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (tc_7->GetValue().Trim().ToDouble(&aux))
@@ -561,7 +561,7 @@ void UIElement::CheckCoords(wxCommandEvent& WXUNUSED(event))
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << utm1;
-		tc_7->ChangeValue(aux2.str());
+		tc_7->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (tc_8->GetValue().Trim().ToDouble(&aux))
@@ -570,7 +570,7 @@ void UIElement::CheckCoords(wxCommandEvent& WXUNUSED(event))
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << utm2;
-		tc_8->ChangeValue(aux2.str());
+		tc_8->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (tc_9->GetValue().Trim().ToDouble(&aux))
@@ -579,7 +579,7 @@ void UIElement::CheckCoords(wxCommandEvent& WXUNUSED(event))
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << utm3;
-		tc_9->ChangeValue(aux2.str());
+		tc_9->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (tc_10->GetValue().Trim().ToDouble(&aux))
@@ -588,7 +588,7 @@ void UIElement::CheckCoords(wxCommandEvent& WXUNUSED(event))
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << scalex;
-		tc_10->ChangeValue(aux2.str());
+		tc_10->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (tc_11->GetValue().Trim().ToDouble(&aux))
@@ -597,7 +597,7 @@ void UIElement::CheckCoords(wxCommandEvent& WXUNUSED(event))
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << scaley;
-		tc_11->ChangeValue(aux2.str());
+		tc_11->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (tc_12->GetValue().Trim().ToDouble(&aux))
@@ -606,7 +606,7 @@ void UIElement::CheckCoords(wxCommandEvent& WXUNUSED(event))
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << scalez;
-		tc_12->ChangeValue(aux2.str());
+		tc_12->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	element_controller->SetPositionOrientationScale((float)utm1, (float)utm2, (float)utm3, 
@@ -626,9 +626,9 @@ void UIElement::CheckCoords(wxCommandEvent& WXUNUSED(event))
 
 void UIElement::SetPos(float x, float y, float z)
 {
-	tc_7->ChangeValue(wxString::Format("%f",x));
-	tc_8->ChangeValue(wxString::Format("%f",y));
-	tc_9->ChangeValue(wxString::Format("%f",z));
+  tc_7->ChangeValue(wxString::Format(wxT("%f"),x));
+  tc_8->ChangeValue(wxString::Format(wxT("%f"),y));
+  tc_9->ChangeValue(wxString::Format(wxT("%f"),z));
 
 	utm1 = x;
 	utm2 = y;
@@ -638,24 +638,24 @@ void UIElement::SetPos(float x, float y, float z)
 
 void UIElement::SetOrientation(float x, float y, float z)
 {
-	tc_4->ChangeValue(wxString::Format("%f",x));
-	tc_5->ChangeValue(wxString::Format("%f",y));
-	tc_6->ChangeValue(wxString::Format("%f",z));
+  tc_4->ChangeValue(wxString::Format(wxT("%f"),x));
+  tc_5->ChangeValue(wxString::Format(wxT("%f"),y));
+  tc_6->ChangeValue(wxString::Format(wxT("%f"),z));
 	
-	orientationx = x;
-	orientationy = y;
-	orientationz = z;
+  orientationx = x;
+  orientationy = y;
+  orientationz = z;
 }
 
 void UIElement::SetScale (float x, float y, float z)
 {
-	tc_10->ChangeValue(wxString::Format("%f",x));
-	tc_11->ChangeValue(wxString::Format("%f",y));
-	tc_12->ChangeValue(wxString::Format("%f",z));
-	
-	scalex = x;
-	scaley = y;
-	scalez = z;
+  tc_10->ChangeValue(wxString::Format(wxT("%f"),x));
+  tc_11->ChangeValue(wxString::Format(wxT("%f"),y));
+  tc_12->ChangeValue(wxString::Format(wxT("%f"),z));
+  
+  scalex = x;
+  scaley = y;
+  scalez = z;
 }
 
 
@@ -666,7 +666,7 @@ void UIElement::OnOXSpinUp(wxSpinEvent& event)
 	tc_4->GetValue().ToDouble(&f);
 	f+=5.0f;
 	wop << std::fixed << std::setprecision(5) << f; 
-	tc_4->SetValue(wop.str());
+	tc_4->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	orientationx = f;
 }
 
@@ -677,7 +677,7 @@ void UIElement::OnOXSpinDown(wxSpinEvent& event)
 	tc_4->GetValue().ToDouble(&f);
 	f-=5.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_4->SetValue(wop.str());
+	tc_4->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	orientationx = f;
 }
 
@@ -688,7 +688,7 @@ void UIElement::OnOYSpinUp(wxSpinEvent& event)
 	tc_5->GetValue().ToDouble(&f);
 	f+=5.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_5->SetValue(wop.str());
+	tc_5->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	orientationy = f;
 }
 void UIElement::OnOYSpinDown(wxSpinEvent& event)
@@ -698,7 +698,7 @@ void UIElement::OnOYSpinDown(wxSpinEvent& event)
 	tc_5->GetValue().ToDouble(&f);
 	f-=5.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_5->SetValue(wop.str());
+	tc_5->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	orientationy = f;
 }
 void UIElement::OnOZSpinUp(wxSpinEvent& event)
@@ -708,7 +708,7 @@ void UIElement::OnOZSpinUp(wxSpinEvent& event)
 	tc_6->GetValue().ToDouble(&f);
 	f+=5.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_6->SetValue(wop.str());
+	tc_6->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	orientationz = f;
 }
 void UIElement::OnOZSpinDown(wxSpinEvent& event)
@@ -718,7 +718,7 @@ void UIElement::OnOZSpinDown(wxSpinEvent& event)
 	tc_6->GetValue().ToDouble(&f);
 	f-=5.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_6->SetValue(wop.str());
+	tc_6->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	orientationz = f;
 }
 void UIElement::OnSXSpinUp(wxSpinEvent& event)
@@ -728,7 +728,7 @@ void UIElement::OnSXSpinUp(wxSpinEvent& event)
 	tc_10->GetValue().ToDouble(&f);
 	f+=0.5f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_10->SetValue(wop.str());
+	tc_10->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	scalex = f;
 }
 void UIElement::OnSXSpinDown(wxSpinEvent& event)
@@ -738,7 +738,7 @@ void UIElement::OnSXSpinDown(wxSpinEvent& event)
 	tc_10->GetValue().ToDouble(&f);
 	f-=0.5f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_10->SetValue(wop.str());
+	tc_10->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	scalex = f;
 }
 void UIElement::OnSYSpinUp(wxSpinEvent& event)
@@ -748,7 +748,7 @@ void UIElement::OnSYSpinUp(wxSpinEvent& event)
 	tc_11->GetValue().ToDouble(&f);
 	f+=0.5f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_11->SetValue(wop.str());
+	tc_11->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	scaley = f;
 }
 void UIElement::OnSYSpinDown(wxSpinEvent& event)
@@ -758,7 +758,7 @@ void UIElement::OnSYSpinDown(wxSpinEvent& event)
 	tc_11->GetValue().ToDouble(&f);
 	f-=0.5f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_11->SetValue(wop.str());
+	tc_11->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	scaley = f;
 }
 void UIElement::OnSZSpinUp(wxSpinEvent& event)
@@ -768,7 +768,7 @@ void UIElement::OnSZSpinUp(wxSpinEvent& event)
 	tc_12->GetValue().ToDouble(&f);
 	f+=0.5f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_12->SetValue(wop.str());
+	tc_12->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	scalez = f;
 }
 void UIElement::OnSZSpinDown(wxSpinEvent& event)
@@ -778,7 +778,7 @@ void UIElement::OnSZSpinDown(wxSpinEvent& event)
 	tc_12->GetValue().ToDouble(&f);
 	f-=0.5f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_12->SetValue(wop.str());
+	tc_12->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	scalez = f;
 }
 void UIElement::OnUTMLonSpinUp(wxSpinEvent& event)
@@ -789,7 +789,7 @@ void UIElement::OnUTMLonSpinUp(wxSpinEvent& event)
 	tc_7->GetValue().ToDouble(&f);
 	f+=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_7->SetValue(wop.str());
+	tc_7->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	utm1 = f;
 }
 void UIElement::OnUTMLonSpinDown(wxSpinEvent& event)
@@ -800,7 +800,7 @@ void UIElement::OnUTMLonSpinDown(wxSpinEvent& event)
 	tc_7->GetValue().ToDouble(&f);
 	f-=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_7->SetValue(wop.str());
+	tc_7->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	utm1 = f;
 }
 void UIElement::OnUTMLatSpinUp(wxSpinEvent& event)
@@ -811,7 +811,7 @@ void UIElement::OnUTMLatSpinUp(wxSpinEvent& event)
 	tc_8->GetValue().ToDouble(&f);
 	f+=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_8->SetValue(wop.str());
+	tc_8->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	utm2 = f;
 }
 void UIElement::OnUTMLatSpinDown(wxSpinEvent& event)
@@ -822,7 +822,7 @@ void UIElement::OnUTMLatSpinDown(wxSpinEvent& event)
 	tc_8->GetValue().ToDouble(&f);
 	f-=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_8->SetValue(wop.str());
+	tc_8->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	utm2 = f;
 }
 void UIElement::OnUTMHeiSpinUp(wxSpinEvent& event)
@@ -833,7 +833,7 @@ void UIElement::OnUTMHeiSpinUp(wxSpinEvent& event)
 	tc_9->GetValue().ToDouble(&f);
 	f+=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	tc_9->SetValue(wop.str());
+	tc_9->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	utm3 = f;
 }
 void UIElement::OnUTMHeiSpinDown(wxSpinEvent& event)
@@ -845,7 +845,7 @@ void UIElement::OnUTMHeiSpinDown(wxSpinEvent& event)
 	f-=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
 
-	tc_9->SetValue(wop.str());
+	tc_9->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	utm3 = f;
 }
 
@@ -880,10 +880,10 @@ void UIElement::render(wxDC& dc)
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
+	  wxColour c_brush = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	  dc.SetTextForeground(wxString(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8));
 		dc.SetPen(wxPen(c_pen));
 		dc.SetBrush(wxBrush(c_brush));
 		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);

@@ -97,15 +97,15 @@ namespace cpw
 				/** 
 					\brief Sets the Text value in the window
 				*/
-				void SetText(const std::string &text) {tc_13->SetValue(text);}
+				void SetText(const std::string &text) {tc_13->SetValue((const wxString &)text);}
 				/** 
 					\brief Sets the HTML value in the window
 				*/
-				void SetHtml(const std::string &html) {tc_14->SetValue(html);}
+				void SetHtml(const std::string &html) {tc_14->SetValue((const wxString &)html);}
 				/** 
 					\brief Sets Description content in the window
 				*/
-				void SetDescription(const std::string &desc) {tc_3->SetValue(desc);}
+				void SetDescription(const std::string &desc) {tc_3->SetValue((const wxString &)desc);}
 				/** 
 					\brief Sets the entity name value in the window
 				*/
@@ -113,7 +113,7 @@ namespace cpw
 				/** 
 					\brief Gets the entity name value in the window
 				*/
-				std::string GetEntityName() {return std::string(tc_1->GetValue());};
+				std::string GetEntityName() {return std::string( tc_1->GetValue().ToAscii());};
 				
 				//
 				

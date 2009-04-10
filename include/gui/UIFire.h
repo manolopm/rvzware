@@ -71,8 +71,8 @@ namespace cpw
 				
 			public:
 				UIFire(controllers::FireController *fc,wxWindow *parent, wxWindowID id = 1, const wxString &title = wxT("Fire"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = UIFire_STYLE);
-				void SetFireTexture(std::string &_fire_texture)   { Fire_texture_Ed->SetValue(_fire_texture); fire_texture = _fire_texture;}
-				void SetSmokeTexture(std::string &_smoke_texture) { Smoke_texture_Button->SetValue(_smoke_texture); smoke_texture = _smoke_texture;}
+				void SetFireTexture(std::string &_fire_texture)   { Fire_texture_Ed->SetValue((wxString&)_fire_texture); fire_texture = _fire_texture;}
+				void SetSmokeTexture(std::string &_smoke_texture) { Smoke_texture_Button->SetValue((wxString&)_smoke_texture); smoke_texture = _smoke_texture;}
 				void AddFlame();
 				virtual ~UIFire();
 
@@ -86,17 +86,20 @@ namespace cpw
 
 				bool GetCoordsFromEditControls(cpw::Point3d<float> &position, float &smoke_life, float &smoke_size, float &fire_life, float &fire_size, float &fire_intensity, float &smoke_intensity);
 
-				void SetPositionX(std::string &position_x) { std::stringstream aux; aux.precision(15); aux << position_x; Position_x_Edit->SetValue(aux.str()); }
-				void SetPositionY(std::string &position_y) { std::stringstream aux; aux.precision(15); aux << position_y; Position_y_Edit->SetValue(aux.str()); }
-				void SetPositionZ(std::string &position_z) { std::stringstream aux; aux.precision(15); aux << position_z; Position_z_Edit->SetValue(aux.str()); }
-				void SetSmokeLife(std::string &smoke_life) { Smoke_particles_life_Edit->SetValue(smoke_life);  }
-				void SetSmokeSize(std::string &smoke_size) { Smoke_particles_seize_Edit->SetValue(smoke_size); }
-				void SetFireLife(std::string &fire_life)   { Fire_particles_life_Edit->SetValue(fire_life);    }
-				void SetFireSize(std::string &fire_size)   { Fire_particles_size_Edit->SetValue(fire_size);    }
-				void SetFireIntensity(std::string &intensity)  { Fire_Intesity_Edit->SetValue(intensity);               }
-				void SetSmokeIntensity(std::string &intensity)  { smoke_Intesity_Edit->SetValue(intensity);               }
+				void SetPositionX(std::string &position_x) { std::stringstream aux; aux.precision(15); aux << position_x; 
+                                                                             std::string tmp = aux.str();Position_x_Edit->SetValue((wxString&)tmp); }
+				void SetPositionY(std::string &position_y) { std::stringstream aux; aux.precision(15); aux << position_y; 
+                                                                             std::string tmp = aux.str();Position_y_Edit->SetValue((wxString&)tmp); }
+				void SetPositionZ(std::string &position_z) { std::stringstream aux; aux.precision(15); aux << position_z; 
+                                                                             std::string tmp = aux.str();Position_z_Edit->SetValue((wxString&)tmp); }
+				void SetSmokeLife(std::string &smoke_life) { Smoke_particles_life_Edit->SetValue((wxString&)smoke_life);  }
+				void SetSmokeSize(std::string &smoke_size) { Smoke_particles_seize_Edit->SetValue((wxString&)smoke_size); }
+				void SetFireLife(std::string &fire_life)   { Fire_particles_life_Edit->SetValue((wxString&)fire_life);    }
+				void SetFireSize(std::string &fire_size)   { Fire_particles_size_Edit->SetValue((wxString&)fire_size);    }
+				void SetFireIntensity(std::string &intensity)  { Fire_Intesity_Edit->SetValue((wxString&)intensity);               }
+				void SetSmokeIntensity(std::string &intensity)  { smoke_Intesity_Edit->SetValue((wxString&)intensity);               }
 
-				void SetFireName(std::string &name)		   { Fire_name_Ed->SetLabel(_T(name));                 }
+				void SetFireName(std::string &name)		   { Fire_name_Ed->SetLabel((wxString&)( name));                 }
 
 				void DisableEditControls();
 				void EnableEditControls();
@@ -113,7 +116,7 @@ namespace cpw
 
 				void AddPerimeter(const bool &new_p=false);
 				void AddFlame(int perimeter);
-				void CheckFlamesValues();
+				void CheckFlamesValuesInt();
 
 				void UpdateTimeLine(const std::vector<wxDateTime> date_times);
 				void UpdateOnChanges();
@@ -249,7 +252,7 @@ namespace cpw
 				void OnItemCollapsed(wxTreeEvent& wxevent);
 				void OnHourChanges(wxCommandEvent& WXUNUSED(event));
 				void OnPaint(wxPaintEvent& event);
-				void OnPaint();
+				//				void OnPaint();
 				void OnMouseLeftDrag(wxMouseEvent &event);
 				void OnMouseLeftDown(wxMouseEvent &event);
 				void OnMouseLeftUp(wxMouseEvent &event);

@@ -30,7 +30,7 @@
 #include <osg/Node>
 #include <osg/ref_ptr>
 #include <osg/Image>
-#include <osg/Texture2d>
+#include <osg/Texture2D>
 #include <osg/Camera>
 
 #include <iosg/Export.h>

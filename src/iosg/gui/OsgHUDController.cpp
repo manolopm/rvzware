@@ -20,7 +20,7 @@
  *
  * The CAPAWARE development team
 */
-#include "stdafx.h"
+#include "../stdafx.h"
 
 #include <iosg/gui/OsgHUDController.h>
 #include <iosg/OsgNavigator.h>

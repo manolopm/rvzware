@@ -165,8 +165,8 @@ class Application :	public wxApp, public cpw::IApplication
 		void Duplicate(const cpw::TypeId &id);
 		void Cut(const cpw::TypeId &id);
 		void Paste(const cpw::TypeId &id_orig, const cpw::TypeId &id_dest, const cpw::TypeId &parent_id_orig, const cpw::TypeId &parent_id_dest, const bool &cut, const bool &copy, const bool &duplicate);
-		void Application::SaveAll();
-		void Application::Save();
+		void SaveAll();
+		void Save();
 
 
 		/** \todo Al borrar entidad preguntar si realmente quiere borrarla */

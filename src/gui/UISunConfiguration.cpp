@@ -40,10 +40,10 @@ UISunConfiguration::UISunConfiguration(wxAuiManager *m_mgr_, wxWindow* parent, w
 {
 	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
 
-	AddTool(SUN_CONFIG, _T("View Animations"), wxBitmap(wxImage(wxT(icon_path + "sun.png"))), _T("Sun"), wxITEM_CHECK);
+	AddTool(SUN_CONFIG, wxT("View Animations"), wxBitmap(wxImage(wxString((icon_path + "sun.png").c_str(),wxConvUTF8))), wxT("Sun"), wxITEM_CHECK);
 
-	bitmap_active = wxBitmap(wxImage(wxT(icon_path + "sun.png")));
-	bitmap_inactive = wxBitmap(wxImage(wxT(icon_path + "sun_cross.png")));
+	bitmap_active = wxBitmap(wxImage(wxString((icon_path + "sun.png").c_str(),wxConvUTF8)));
+	bitmap_inactive = wxBitmap(wxImage(wxString((icon_path + "sun_cross.png").c_str(),wxConvUTF8)));
 	slider = new wxSlider(this, SUN_SLIDER, 1000 , 0, 2000, wxDefaultPosition, wxSize(150,19), wxSL_HORIZONTAL);
 	slider->SetLineSize(2);
 	AddControl(slider);

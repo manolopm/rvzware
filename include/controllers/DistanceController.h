@@ -125,7 +125,7 @@ namespace cpw
 
 			private:
 
-				std::vector<cpw::Point3d<float>> Distance_array;
+				std::vector<cpw::Point3d<float> > Distance_array;
 
 				cpw::ElementVectorial *ElementVectorial_entity;
 

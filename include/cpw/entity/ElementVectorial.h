@@ -48,21 +48,21 @@ namespace cpw {
 
 		std::string &GetColor();
 		int GetWidth();
-		std::vector<cpw::Point3d<float>> &GetPoints();
+		std::vector<cpw::Point3d<float> > &GetPoints();
 		int GetNumPoints() {return points.size();}
 		cpw::Point3d<float>* GetPoint(const int &index) {return index<(int)points.size()? new cpw::Point3d<float>(points[index]):NULL;}
 		bool IsAdapted() {return terrain_adapt;}
 
 		const std::string &GetColor() const ;
 		const int GetWidth() const;
-		const std::vector<cpw::Point3d<float>> &GetPoints() const;
+		const std::vector<cpw::Point3d<float> > &GetPoints() const;
 		const int GetNumPoints() const {return points.size();}
 		const cpw::Point3d<float>* GetPoint(const int &index) const {return index<(int)points.size()? new cpw::Point3d<float>(points[index]):NULL;}
 		const bool IsAdapted() const {return terrain_adapt;}
 
 		void SetColor(const std::string &color);
 		void SetWidth(const int width);
-		void SetPoints(const std::vector<cpw::Point3d<float>> &points);
+		void SetPoints(const std::vector<cpw::Point3d<float> > &points);
 		void SetTerrainAdapt(const bool &adapt) {terrain_adapt = adapt;}
 
 		void SetRGBColour(const int &r, const int &g, const int &b);
@@ -92,7 +92,7 @@ namespace cpw {
 		std::string color;
 		int width;
 		bool terrain_adapt;
-		std::vector<cpw::Point3d<float>> points;
+		std::vector<cpw::Point3d<float> > points;
 		bool isline;
 
 		int red, green, blue; //0-255 values

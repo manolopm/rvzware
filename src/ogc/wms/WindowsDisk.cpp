@@ -21,9 +21,16 @@
  * The CAPAWARE development team
 */
 #include <ogc/WindowsDisk.h>
-
+#ifdef WIN32
 #include <windows.h>
+
 #include <direct.h>
+#else
+#include <sys/types.h>
+ 
+#include <dirent.h>
+
+#endif
 //#include <cpw/debugger.h>
 #include <boost/filesystem.hpp>
 
@@ -36,12 +43,14 @@ WindowsDisk::~WindowsDisk(){}
 
 int WindowsDisk::Dir(const std::string &dir, std::vector<std::string> &files)
 {
-   WIN32_FIND_DATA f;
+
    const std::string dir1 = dir + "/*.*";
    std::string fich(dir1.begin(), dir1.end());
+#ifdef WIN32
+   WIN32_FIND_DATA f;
    HANDLE h = FindFirstFile(fich.c_str(), &f);
 	if(h != INVALID_HANDLE_VALUE)
-	{
+	  {
 		do
 		{
 			int filesize = (f.nFileSizeHigh * (MAXDWORD+1)) + f.nFileSizeLow;
@@ -54,6 +63,31 @@ int WindowsDisk::Dir(const std::string &dir, std::vector<std::string> &files)
 		} while(FindNextFile(h, &f));
 	}
 	return 0;
+#else
+	DIR * direct = opendir (fich.c_str());
+
+	if (direct == NULL){
+	  return 0;
+	}
+
+
+	struct dirent *d = readdir (direct);
+	while (d != NULL){
+	  int filesize = d->d_reclen;
+	  if (filesize>100)
+	    {
+	      std::string file(d->d_name);
+	      files.push_back(file);
+	    }
+	  d = readdir (direct);
+	}
+
+	// Now, close the directory.
+
+	closedir (direct);
+	return 0;
+	
+#endif
 }
 
 

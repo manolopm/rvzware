@@ -40,11 +40,7 @@
 using namespace cpw::iosg;
 
 
-OsgNavigator::OsgNavigator(wxWindow *parent_frame, cpw::IApplication *_application, bool lite_version_) : debug_text(NULL), camera_controller(NULL), application(_application),
-																				init_position(421429.0, 189000.0, 1083880.0),
-																				init_view(0.0, 0.0, -1.0),
-																				init_up(0.0, 1.0, 0.0),
-																				lite_version(lite_version_)
+OsgNavigator::OsgNavigator(wxWindow *parent_frame, cpw::IApplication *_application, bool lite_version_) : debug_text(NULL), camera_controller(NULL), application(_application),	init_position(421429.0, 189000.0, 1083880.0),init_view(0.0, 0.0, -1.0),	init_up(0.0, 1.0, 0.0),	lite_version(lite_version_)
 {
 	
 	

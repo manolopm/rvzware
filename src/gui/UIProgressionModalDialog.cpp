@@ -54,7 +54,7 @@ void UIProgressionModalDialog::InitGUI()
 	statusGauge = new wxGauge(this, wxID_ANY, 50, wxPoint(22,30), wxSize(250,20), wxGA_HORIZONTAL);
 
 	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
-	animationGauge.LoadFile(_T( icon_path + "loader.gif" ));
+	animationGauge.LoadFile(wxString((icon_path + "loader.gif").c_str(),wxConvUTF8));
 }
 
 void UIProgressionModalDialog::Update(bool subject_deleted)
@@ -68,13 +68,13 @@ void UIProgressionModalDialog::Update(bool subject_deleted)
 	}
 	if (sc->GetModalTraceableItem().valid)
 	{
-		statusLabel->SetLabel(sc->GetModalTraceableItem().label);
+	  statusLabel->SetLabel(wxString(sc->GetModalTraceableItem().label.c_str(),wxConvUTF8));
 		statusGauge->SetRange(sc->GetModalTraceableItem().range);
 		statusGauge->SetValue(sc->GetModalTraceableItem().value);
 
 		float gifpercent = sc->GetModalTraceableItem().value / (float)(sc->GetModalTraceableItem().range);
 		if (gifpercent > 1) gifpercent = 1.0f;
-		int frame = gifpercent*(animationGauge.GetFrameCount()-1);
+		int frame = (int)(gifpercent*(animationGauge.GetFrameCount()-1));
 		frameImage = animationGauge.GetFrame(frame);
 
 		if (!IsShown()) 

@@ -58,7 +58,7 @@ namespace cpw
 
 				void ModifyProperties(cpw::Entity* ent);
 
-				void ServerConnectionController::FillLayerTree();
+				void FillLayerTree();
 
 			private:
 				ogc::WmsLayerController* controller;

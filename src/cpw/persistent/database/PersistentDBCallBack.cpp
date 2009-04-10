@@ -85,7 +85,7 @@ PersistentError PersistentDBCallBack::Save(cpw::Persistent *persistent, bool ove
 			std::string	table_name=parent->GetName();
 
 			//element descriptor
-			std::vector<cpw::Node *> &root_children = root->GetChildren();
+			std::vector<cpw::Node *> root_children = root->GetChildren();
 			std::vector<cpw::Node *>::iterator i;
 
 			//If the tabel is empty, it must be managed differently creating the columns

@@ -44,7 +44,7 @@ void Model3DCallBack::Insert(const cpw::Callable* callable)
 {
 	cpw::Element3D *element = (cpw::Element3D *) callable;
 
-	std::string &model_url = element->GetModelUrl();
+	std::string model_url = element->GetModelUrl();
 
 	/** \todo Quitar la comprobación element->GetLastParent() !=NULL al insertar un Elemento3D */
 
@@ -63,10 +63,15 @@ void Model3DCallBack::Insert(const cpw::Callable* callable)
 
 		cpw::IScene *app_scene = cpw::ApplicationScene::GetInstance()->GetScene();
 
-		app_scene->AddObjectToGroup(entity_id,"", model_url,
-			cpw::Point3d<float>(element->GetUtm(0), element->GetUtm(1), element->GetUtm(2)),
-			cpw::Point3d<float>(element->GetOrientation(0), element->GetOrientation(1), element->GetOrientation(2)),
-			cpw::Point3d<float>(element->GetScale(0), element->GetScale(1), element->GetScale(2)),
+		std::string str = "";
+		cpw::Point3d<float> p1(element->GetUtm(0), element->GetUtm(1), element->GetUtm(2));
+		cpw::Point3d<float> p2(element->GetOrientation(0), element->GetOrientation(1), element->GetOrientation(2));
+		cpw::Point3d<float> p3(element->GetScale(0), element->GetScale(1), element->GetScale(2));
+		app_scene->AddObjectToGroup(entity_id,(const std::string &)str,
+					    model_url,
+					    (cpw::Point3d<float> &)p1,
+					    (cpw::Point3d<float> &)p2,
+					    (cpw::Point3d<float> &)p3,
 			element->isVisible(),
 			element->GetName());
 		

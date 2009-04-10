@@ -168,10 +168,10 @@ UIApplicationMainFrame::UIApplicationMainFrame(Application *app, const wxChar *t
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
 		wxAuiDockArt* auiArtProvider = m_mgr.GetArtProvider();
-		wxColour backgroundColor = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		wxColour inactiveColor   = cpw::ApplicationConfiguration::GetInstance()->GetTitleBarGradient1Colour();
-		wxColour gradientColor2  = cpw::ApplicationConfiguration::GetInstance()->GetTitleBarGradient2Colour();
-		wxColour fontColor       = cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour();
+		wxColour backgroundColor = (wxString &)cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
+		wxColour inactiveColor   = (wxString &)cpw::ApplicationConfiguration::GetInstance()->GetTitleBarGradient1Colour();
+		wxColour gradientColor2  = (wxString &)cpw::ApplicationConfiguration::GetInstance()->GetTitleBarGradient2Colour();
+		wxColour fontColor       = (wxString &)cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour();
 		
 		SetBackgroundColour(backgroundColor);
 		SetForegroundColour(fontColor);
@@ -190,12 +190,15 @@ UIApplicationMainFrame::UIApplicationMainFrame(Application *app, const wxChar *t
 		auiArtProvider->SetMetric(16,1);				//gradient type
 	}
 
+	  
 
-	load_splash = new UILoadSplash(this, wxID_ANY, "Capaware", "resources/application_splash.png");
+	  load_splash = new UILoadSplash(this, wxID_ANY, (wxString &)"Capaware", (wxString &)"resources/application_splash.png");
 	//load_splash->Show(true);
-	InitMenus();
+	  InitMenus();
+
 	InitGUI();
-    m_mgr.Update();
+	  m_mgr.Update();
+
 	//this->Show(true);
 	//load_splash->Show(false);
 	////pasar a application
@@ -339,8 +342,9 @@ wxMenuItem *UIApplicationMainFrame::GetMenuItem(const int id, wxMenu *parent, co
 
 	if(i != menus.end())
 	{
-		wxMenuItem *menu_item = new wxMenuItem(parent, i->first, wxString(_T(i->second.c_str())), helpString, wxITEM_NORMAL, subMenu);
-		if (bitmapUrl!="")
+		std::string tmp = i->second.c_str();
+		wxMenuItem *menu_item = new wxMenuItem(parent, i->first, (const wxString&)tmp, helpString, wxITEM_NORMAL, subMenu);
+		if (bitmapUrl!=(wxString &)"")
 		{
 			menu_item->SetBitmap(wxBitmap(wxImage(bitmapUrl)));
 		}
@@ -353,7 +357,8 @@ wxMenuItem *UIApplicationMainFrame::GetMenuItem(const int id, wxMenu *parent, co
 
 void UIApplicationMainFrame::Update() 
 {
-	OnSize(wxSizeEvent()); 
+	wxSizeEvent tmp = wxSizeEvent();
+	OnSize(tmp); 
 	wxFrame::Update(); 
 	ui_layer_tree_tb->Update();
 	ui_entity_properties_grid->Update(); 
@@ -370,7 +375,8 @@ void UIApplicationMainFrame::InitGUI () {
 	int ic_size = cpw::ApplicationConfiguration::GetInstance()->GetIconSize();
 	int bic_size = cpw::ApplicationConfiguration::GetInstance()->GetBigIconSize();
 
-	this->SetIcon(wxIcon(_T(icon_path + "geviemer3.ico"), wxBITMAP_TYPE_ICO));
+	std::string tmp=icon_path + "geviemer3.ico";
+	this->SetIcon((wxIcon &)(wxIconLocation &)(wxString &)tmp);
 	this->SetMinSize(wxSize(800,600));
 	
 	wxMenuBar *menu_bar = new wxMenuBar();
@@ -378,72 +384,124 @@ void UIApplicationMainFrame::InitGUI () {
 	//file menu
 	file_menu = new wxMenu;
 	//file_menu->Append(GetMenuItem(FILE_NEW, file_menu,_T("Ctrl+N"), _T(icon_path + "page_white_add.png")));
-	file_menu->Append(GetMenuItem(FILE_OPEN, file_menu,_T("Ctrl+O"), _T(icon_path + "folder.png")));
-	file_menu->Append(GetMenuItem(FILE_CLOSE, file_menu,_T(""), _T(icon_path + "close_doc.png")));
+	tmp = "Ctrl+O";
+        std::string tmp2 = icon_path + "folder.png";
+	file_menu->Append(GetMenuItem(FILE_OPEN, file_menu,(const wxString &)tmp, (const wxString &)tmp2));
+        tmp = "";
+        tmp2 = icon_path + "clode_doc.png";
+	file_menu->Append(GetMenuItem(FILE_CLOSE, file_menu,(const wxString &)tmp, (const wxString &)tmp2));
 	//file_menu->Append(GetMenuItem(FILE_CLOSE, file_menu,_T(""), _T(icon_path + "folder_delete.png")));
 	//file_menu->AppendSeparator();
-	file_menu->Append(GetMenuItem(FILE_SAVE, file_menu,_T("Ctrl+S"), _T(icon_path + "disk.png")));
+	tmp = "Ctrl+S";
+        tmp2 = icon_path + "disk.png";
+	file_menu->Append(GetMenuItem(FILE_SAVE, file_menu,(const wxString &)tmp,(const wxString &) tmp2));
 	//file_menu->Append(GetMenuItem(FILE_SAVE_ALL, file_menu,_T("Ctrl+Mayús+S"), _T(icon_path + "disk_multiple.png")));
 	file_menu->AppendSeparator();
-	file_menu->Append(GetMenuItem(FILE_EXIT, file_menu,_T(""), _T(icon_path + "cross.png")));
-	menu_bar->Append(file_menu, _T("File"));
+	tmp = "";
+	tmp2 = icon_path + "cross.png";
+	file_menu->Append(GetMenuItem(FILE_EXIT, file_menu,(const wxString &)tmp, (const wxString &)tmp2));
+        tmp = "File";
+	menu_bar->Append(file_menu, (const wxString &)tmp);
 
 	//edit menu
 	edit_menu = new wxMenu;
-	edit_menu->Append(GetMenuItem(EDIT_CUT, edit_menu,_T("Ctrl+X"), _T(icon_path + "cut.png")));
-	edit_menu->Append(GetMenuItem(EDIT_COPY, edit_menu,_T("Ctrl+C"), _T(icon_path + "page_white_copy.png")));
-	edit_menu->Append(GetMenuItem(EDIT_PASTE, edit_menu,_T("Ctrl+V"), _T(icon_path + "page_white_paste.png")));
-	edit_menu->Append(GetMenuItem(EDIT_DELETE, edit_menu,_T(""), _T(icon_path + "page_white_delete.png")));
+	tmp = "Ctrl+X";
+	tmp2 = icon_path + "cut.png";
+	edit_menu->Append(GetMenuItem(EDIT_CUT, edit_menu,(const wxString &)tmp,(const wxString &)tmp2 ));
+	tmp = "Ctrl+C";
+	tmp2 = icon_path + "page_white_copy.png";
+	edit_menu->Append(GetMenuItem(EDIT_COPY, edit_menu,(const wxString &)tmp,(const wxString &)tmp2));
+	tmp = "Ctrl+V";
+	tmp2 = icon_path + "page_white_paste.png";
+	edit_menu->Append(GetMenuItem(EDIT_PASTE, edit_menu,(const wxString &)tmp,(const wxString &)tmp2));
+	tmp = "";
+	tmp2 = icon_path + "page_white_delete.png";
+	edit_menu->Append(GetMenuItem(EDIT_DELETE, edit_menu,(const wxString &)tmp, (const wxString &)tmp2));
 	//edit_menu->AppendSeparator();
 	//edit_menu->Append(GetMenuItem(EDIT_SELECT_ALL, edit_menu,_T(""), _T(icon_path + "page_white_stack.png")));
 	//edit_menu->Append(GetMenuItem(EDIT_FIND, edit_menu,_T("Ctrl+F"), _T(icon_path + "page_white_magnify.png")));
-	menu_bar->Append(edit_menu, _T("Edit"));
+	tmp = "Edit";
+	menu_bar->Append(edit_menu, (const wxString &)tmp);
 
 	//navigation mode submenu
 	navigation_mode_menu = new wxMenu;
-	navigation_mode_menu->AppendRadioItem(THREE_DIMENSION_NAVIGATION_MODE, _T("3D"), _T("Sets the navigation mode to 3d"));
-	navigation_mode_menu->AppendRadioItem(TWO_DIMENSION_NAVIGATION_MODE, _T("2D"), _T("Sets the navigation mode to 2d"));
+	tmp = "3D";
+	tmp2 = "Sets the navigation mode to 3d";
+	navigation_mode_menu->AppendRadioItem(THREE_DIMENSION_NAVIGATION_MODE,(const wxString &) tmp, (const wxString &)tmp2);
+	tmp = "2D";
+	tmp2 = "Sets the navigation mode to 2d";
+	navigation_mode_menu->AppendRadioItem(TWO_DIMENSION_NAVIGATION_MODE, (const wxString &)tmp, (const wxString &)tmp2);
 
 	//view menu
 	view_menu = new wxMenu;
-	view_menu->Append(GetMenuItem(VIEW_NAVIGATION_MODE, view_menu,_T(""), _T(icon_path + "navigate.png"),navigation_mode_menu));
+	tmp = "";
+	tmp2 = icon_path + "navigate.png";
+	view_menu->Append(GetMenuItem(VIEW_NAVIGATION_MODE, view_menu,(const wxString &)tmp, (const wxString &)tmp2,navigation_mode_menu));
 	//view_menu->Append(GetMenuItem(VIEW_SELECTVIEWMODE, view_menu,_T(""), _T(icon_path + "image.png")));
 	view_menu->AppendSeparator();
-	view_menu->Append(GetMenuItem(VIEW_WIREFRAME, view_menu,_T(""), _T(icon_path + "chart_line.png")));
-	view_menu->Append(GetMenuItem(VIEW_SOLID, view_menu,_T(""), _T(icon_path + "chart_bar.png")));
+	tmp = "";
+	tmp2 = icon_path + "chart_line.png";
+	view_menu->Append(GetMenuItem(VIEW_WIREFRAME, view_menu,(const wxString &)tmp, (const wxString &)tmp2));
+	tmp = "";
+	tmp2 = icon_path + "chart_bar.png";
+	view_menu->Append(GetMenuItem(VIEW_SOLID, view_menu,(const wxString &)tmp, (const wxString &)tmp2));
 	view_menu->AppendSeparator();
-	view_menu->AppendCheckItem(VIEW_FILE, _T("File"))->Check(); 
-	view_menu->AppendCheckItem(VIEW_EDIT, _T("Edit"))->Check();
-	view_menu->AppendCheckItem(VIEW_VIEW, _T("View"))->Check();
-	view_menu->AppendCheckItem(VIEW_PROJECT, _T("Project"))->Check();
-	view_menu->AppendCheckItem(VIEW_ELEMENT, _T("Element"))->Check();
-	view_menu->AppendCheckItem(VIEW_TOOLS, _T("Tools"))->Check();
-	view_menu->AppendCheckItem(VIEW_SUN_CONFIG, _T("Sun Configuration"))->Check();
-	view_menu->AppendCheckItem(VIEW_LAYERTREE, _T("Layer Tree"))->Check();
+	tmp = "File";
+	view_menu->AppendCheckItem(VIEW_FILE, (const wxString &)tmp)->Check(); 
+	tmp = "Edit";
+	view_menu->AppendCheckItem(VIEW_EDIT, (const wxString &)tmp)->Check();
+	tmp = "View";
+	view_menu->AppendCheckItem(VIEW_VIEW, (const wxString &)tmp)->Check();
+	tmp = "Project";
+	view_menu->AppendCheckItem(VIEW_PROJECT, (const wxString &)tmp)->Check();
+	tmp = "Element";
+	view_menu->AppendCheckItem(VIEW_ELEMENT, (const wxString &)tmp)->Check();
+	tmp = "Tools";
+	view_menu->AppendCheckItem(VIEW_TOOLS, (const wxString &)tmp)->Check();
+	tmp = "Sun Configuration";
+	view_menu->AppendCheckItem(VIEW_SUN_CONFIG, (const wxString &)tmp)->Check();
+	tmp = "Layer Tree";
+	view_menu->AppendCheckItem(VIEW_LAYERTREE, (const wxString &)tmp)->Check();
+	
+	tmp = "Connection Tree";
+	if (SHOW_ADDITIONAL_WINDOWS)
+		view_menu->AppendCheckItem(VIEW_CONNECTIONTREE, (const wxString &)tmp)->Check();
+	else
+		view_menu->AppendCheckItem(VIEW_CONNECTIONTREE, (const wxString &)tmp)->Check(false);
+	
+	tmp = "Properties";
+	view_menu->AppendCheckItem(VIEW_PROPERTIES, (const wxString &)tmp)->Check();
+	tmp = "Animation Controls";
+	view_menu->AppendCheckItem(VIEW_ANIMATION_CONTROLS, (const wxString &)tmp)->Check();
+	tmp = "Animation Entity Scheme";
+	view_menu->AppendCheckItem(VIEW_ANIMATION_SCHEME, (const wxString &)tmp)->Check();
+	tmp = "Application Status";
+	view_menu->AppendCheckItem(VIEW_APPLICATION_STATUS, (const wxString &)tmp)->Check();
+	tmp = "Log";
 	
 	if (SHOW_ADDITIONAL_WINDOWS)
-		view_menu->AppendCheckItem(VIEW_CONNECTIONTREE, _T("Connection Tree"))->Check();
+		view_menu->AppendCheckItem(VIEW_LOG, (const wxString &)tmp)->Check();
 	else
-		view_menu->AppendCheckItem(VIEW_CONNECTIONTREE, _T("Connection Tree"))->Check(false);
+		view_menu->AppendCheckItem(VIEW_LOG, (const wxString &)tmp)->Check(false);
 	
-	view_menu->AppendCheckItem(VIEW_PROPERTIES, _T("Properties"))->Check();
-	view_menu->AppendCheckItem(VIEW_ANIMATION_CONTROLS, _T("Animation Controls"))->Check();
-	view_menu->AppendCheckItem(VIEW_ANIMATION_SCHEME, _T("Animation Entity Scheme"))->Check();
-	view_menu->AppendCheckItem(VIEW_APPLICATION_STATUS, _T("Application Status"))->Check();
-	
-	if (SHOW_ADDITIONAL_WINDOWS)
-		view_menu->AppendCheckItem(VIEW_LOG, _T("Log"))->Check();
-	else
-		view_menu->AppendCheckItem(VIEW_LOG, _T("Log"))->Check(false);
-	
-	view_menu->AppendCheckItem(VIEW_HELP, _T("Help"))->Check();
-	view_menu->Append(GetMenuItem(VIEW_SHOWALL, view_menu,_T(""), _T(icon_path + "eye.png")));
-	view_menu->Append(GetMenuItem(VIEW_HIDEALL, view_menu,_T(""), _T(icon_path + "eye_crossed.png")));
+	tmp = "Help";
+	view_menu->AppendCheckItem(VIEW_HELP, (const wxString &) tmp)->Check();
+	tmp = "";
+	tmp2 = icon_path + "eye.png";
+	view_menu->Append(GetMenuItem(VIEW_SHOWALL, view_menu,(const wxString &)tmp, (const wxString &)tmp2));
+	tmp = "";
+	tmp2 = icon_path + "eye_crossed.png";
+	view_menu->Append(GetMenuItem(VIEW_HIDEALL, view_menu,(const wxString &)tmp,(const wxString &)tmp2));
 	view_menu->AppendSeparator();
-	view_menu->Append(GetMenuItem(VIEW_FULLSCREEN, view_menu,_T("F11"), _T(icon_path + "arrow_out.png")));
+	tmp = "F11";
+	tmp2 = icon_path + "arrow_out.png";
+	view_menu->Append(GetMenuItem(VIEW_FULLSCREEN, view_menu,(const wxString &)tmp, (const wxString &)tmp2));
 	view_menu->AppendSeparator();
-	view_menu->Append(GetMenuItem(VIEW_DEFAULT_CONFIG, view_menu,_T(""), _T(icon_path + "default_ui_config.png")));
-	menu_bar->Append(view_menu, _T("View"));
+	tmp = "";
+	tmp2 = icon_path + "default_ui_config.png";
+	view_menu->Append(GetMenuItem(VIEW_DEFAULT_CONFIG, view_menu,(const wxString &)tmp, (const wxString &)tmp2));
+	tmp = "View";
+	menu_bar->Append(view_menu, (const wxString &)tmp);
 	view_menu->UpdateUI();
 
 	//Project menu
@@ -455,62 +513,115 @@ void UIApplicationMainFrame::InitGUI () {
 	//project_submenu_add_remote->Append(GetMenuItem(ADD_ENTITY, project_submenu_add_template,_T("Add remote entity"), _T(icon_path + "import_from_disk.png")));
 	//project_submenu_add_remote->Append(GetMenuItem(ADD_REMOTE_ENTITY, project_submenu_add_template,_T("Add remote entity"), _T(icon_path + "import_remote.png")));
 
-	project_submenu_add_template->Append(GetMenuItem(NEW_CONTAINER_LAYER_PRIMITIVE, project_submenu_add_template,_T("Adds a new container layer primitive"), _T(icon_path + "folder_brick_template.png")));
-	project_submenu_add_template->Append(GetMenuItem(NEW_ELEMPRIMITIVE, project_submenu_add_template,_T("Adds a new element primitive"), _T(icon_path + "brick_p.png")));
+	tmp =  "Adds a new container layer primitive";
+	tmp2 = icon_path + "folder_brick_template.png";
+	project_submenu_add_template->Append(GetMenuItem(NEW_CONTAINER_LAYER_PRIMITIVE, project_submenu_add_template,(const wxString &)tmp, (const wxString &)tmp2));
+	tmp = "Adds a new element primitive";
+	tmp2 = icon_path + "brick_p.png";
+	project_submenu_add_template->Append(GetMenuItem(NEW_ELEMPRIMITIVE, project_submenu_add_template,(const wxString &)tmp, (const wxString &)tmp2));
 
-	project_submenu_add_new->Append(GetMenuItem(NEW_LAYER, project_submenu_add_new, _T("Adds a new layer"), _T(icon_path + "folder_brick.png")));
+	tmp = "Adds a new layer";
+	tmp2 = icon_path + "folder_brick.png";
+	project_submenu_add_new->Append(GetMenuItem(NEW_LAYER, project_submenu_add_new, (const wxString &)tmp, (const wxString &)tmp2));
 	project_submenu_add_new->AppendSeparator();
-	project_submenu_add_new->Append(GetMenuItem(NEW_ELEMENT, project_submenu_add_new,_T("Adds a new element"), _T(icon_path + "brick.png")));
-	project_submenu_add_new->Append(GetMenuItem(NEW_WMSLAYER, project_submenu_add_new, _T("Adds a new WMS Layer"), _T(icon_path + "wms.png")));
-	project_submenu_add_new->Append(GetMenuItem(NEW_REMOTE_ENTITY, project_submenu_add_new, _T("Adds a new Remote Entity"), _T(icon_path + "entity_remote.png")));
-	project_submenu_add_new->Append(GetMenuItem(NEW_FIRE, project_submenu_add_new, _T("Adds a new Fire"), _T(icon_path + "flame.png")));
-	project_submenu_add_new->Append(GetMenuItem(NEW_FIREWALL, project_submenu_add_new, _T("Adds a new Firewall"), _T(icon_path + "firewall.png")));
+	tmp = "Adds a new element";
+	tmp2 = icon_path + "brick.png";
+	project_submenu_add_new->Append(GetMenuItem(NEW_ELEMENT, project_submenu_add_new,(const wxString &)tmp, (const wxString &)tmp2));
+	tmp = "Adds a new WMS Layer";
+	tmp2 = icon_path + "wms.png";
+	project_submenu_add_new->Append(GetMenuItem(NEW_WMSLAYER, project_submenu_add_new, (const wxString &)tmp, (const wxString &)tmp2));
+	tmp = "Adds a new Remote Entity";
+	tmp2 = icon_path + "entity_remote.png";
+	project_submenu_add_new->Append(GetMenuItem(NEW_REMOTE_ENTITY, project_submenu_add_new, (const wxString &)tmp, (const wxString &)tmp2));
+	tmp = "Adds a new Fire";
+	tmp2 = icon_path + "flame.png";
+	project_submenu_add_new->Append(GetMenuItem(NEW_FIRE, project_submenu_add_new, (const wxString &)tmp, (const wxString &)tmp2));
+	tmp = "Adds a new Firewall";
+	tmp2 = icon_path + "firewall.png";
+	project_submenu_add_new->Append(GetMenuItem(NEW_FIREWALL, project_submenu_add_new, (const wxString &)tmp, (const wxString &)tmp2));
 
-	project_menu->Append(GetMenuItem(ADD_ENTITY, project_menu,_T(""), _T(icon_path + "import.png")));
+	tmp = "";
+	tmp2 = icon_path + "import.png";
+	project_menu->Append(GetMenuItem(ADD_ENTITY, project_menu,(const wxString &)tmp, (const wxString &)tmp2));
 	//project_menu->Append(GetMenuItem(ADD_IMPORT, project_menu,_T(""), _T(icon_path + "import.png"),project_submenu_add_remote));
-	project_menu->Append(GetMenuItem(ADD_TEMPLATE, project_menu,_T(""), _T(icon_path + "template.png"),project_submenu_add_template));
-	project_menu->Append(GetMenuItem(ADD_NEW, project_menu,_T(""), _T(icon_path + "add_new.png"),project_submenu_add_new));
-	menu_bar->Append(project_menu, _T("Project"));
+	tmp = "";
+	tmp2 = icon_path + "template.png";
+	project_menu->Append(GetMenuItem(ADD_TEMPLATE, project_menu,(const wxString &)tmp, (const wxString &)tmp2,project_submenu_add_template));
+	tmp = "";
+	tmp2 = icon_path + "add_new.png";
+	project_menu->Append(GetMenuItem(ADD_NEW, project_menu,(const wxString &)tmp, (const wxString &)tmp2,project_submenu_add_new));
+	tmp2 =  "Project";
+	menu_bar->Append(project_menu, (const wxString &)tmp2);
 
 	//Element menu	
 	element_menu = new wxMenu;
 	element_submenu_transform = new wxMenu();
 
-	element_submenu_transform->Append(GetMenuItem(TRANSFORM_TRANSLATION, element_submenu_transform, _T("Translate element"), _T(icon_path + "translation.png")));
-	element_submenu_transform->Append(GetMenuItem(TRANSFORM_ROTATION, element_submenu_transform, _T("Rotate element"), _T(icon_path + "rotation.png")));
-	element_submenu_transform->Append(GetMenuItem(TRANSFORM_SCALE, element_submenu_transform, _T("Scale element"), _T(icon_path + "scale.png")));
+	tmp = "Translate element";
+	tmp2 = icon_path + "translation.png";
+	element_submenu_transform->Append(GetMenuItem(TRANSFORM_TRANSLATION, element_submenu_transform, (const wxString &)tmp, (const wxString &)tmp2));
+	tmp = "Rotate element";
+	tmp2 = icon_path + "rotate.png";
+	element_submenu_transform->Append(GetMenuItem(TRANSFORM_ROTATION, element_submenu_transform, (const wxString &)tmp, (const wxString &)tmp2));
+	tmp = "Scale element";
+	tmp2 = icon_path + "scale.png";
+	element_submenu_transform->Append(GetMenuItem(TRANSFORM_SCALE, element_submenu_transform, (const wxString &)tmp, (const wxString &)tmp2));
 
-	element_menu->Append(GetMenuItem(ELEMENT_TRANSFORM, project_menu,_T("Transform element"), _T(icon_path + "transform.png"),element_submenu_transform));
-	element_menu->Append(GetMenuItem(ELEMENT_PROPERTIES, project_menu, _T("Edit properties"), _T(icon_path + "properties.png")));
-	menu_bar->Append(element_menu, _T("Element"));
+	tmp = "Transform element";
+	tmp2 = icon_path + "transform.png";
+	element_menu->Append(GetMenuItem(ELEMENT_TRANSFORM, project_menu,(const wxString &)tmp, (const wxString &)tmp2,element_submenu_transform));
+	tmp = "Edit properties";
+	tmp2 = icon_path + "properties.png";
+	element_menu->Append(GetMenuItem(ELEMENT_PROPERTIES, project_menu, (const wxString &)tmp, (const wxString &)tmp2));
+	tmp2 = "Element";
+	menu_bar->Append(element_menu, (const wxString &)tmp2);
 
 	//Tools menu
 	tools_menu = new wxMenu;
 	tools_submenu_calculate = new wxMenu(); 
-	tools_submenu_calculate->Append(GetMenuItem(CALCULATE_DISTANCE, tools_submenu_calculate,_T("Measure"), _T(icon_path + "distance.png")));
-	tools_menu->Append(GetMenuItem(TOOLS_CALCULATE, project_menu,_T(""), _T(icon_path + "calculator.png"),tools_submenu_calculate));
-	menu_bar->Append(tools_menu, _T("Tools"));
+	tmp = "Measure";
+	tmp2 = icon_path + "distance.png";
+	tools_submenu_calculate->Append(GetMenuItem(CALCULATE_DISTANCE, tools_submenu_calculate,(const wxString &)tmp, (const wxString&)tmp2));
+	tmp = "";
+	tmp2 = icon_path + "calculator.png";
+	tools_menu->Append(GetMenuItem(TOOLS_CALCULATE, project_menu,(const wxString &)tmp, (const wxString &)tmp2,tools_submenu_calculate));
+	tmp2 = "Tools";
+	menu_bar->Append(tools_menu, (const wxString &)tmp2);
 
 	//plugins menu
 	plugins_menu = new wxMenu;
-	menu_bar->Append(plugins_menu, _T("Plugins"));
+	tmp2 = "Plugins";
+	menu_bar->Append(plugins_menu, (const wxString &)tmp2);
 
 	//Help menu
 	wxMenu *help_menu = new wxMenu;
-	help_menu->Append(GetMenuItem(HELP, help_menu,_T(""), _T(icon_path + "help.png")));
-	menu_bar->Append(help_menu, _T("Help"));
+	tmp = "";
+	tmp2 = icon_path + "help.png";
+	help_menu->Append(GetMenuItem(HELP, help_menu,(const wxString &)tmp, (const wxString &)tmp2));
+	tmp2 = "Help";
+	menu_bar->Append(help_menu, (const wxString &)tmp2);
 
 	//////ToolBars
-	tool_bar_file = new wxToolBar(this, PANE_FILE, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, _T("File")); 
-	tool_bar_edit = new wxToolBar(this, PANE_EDIT, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, _T("Edit")); 
-	tool_bar_vis  = new wxToolBar(this, PANE_VIEW, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER,_T("View"));
-	tool_bar_element = new wxToolBar(this, PANE_ELEMENT, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER,_T("Element"));
-	tool_bar_help    = new wxToolBar(this, PANE_HELP, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER,_T("Help"));
-	tool_bar_status  = new UIStatusBar(application, this, PANE_STATUS, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER,_T("Application Status")); //*
-	tool_bar_sim = new UIVideoController(&m_mgr, this, PANE_ANIMATION_CONTROLS, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER,_T("Animation Controls"));
-	tool_bar_sun = new UISunConfiguration(&m_mgr, this, PANE_SUN_CONFIG, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER,_T("Sun Configuration"));
-	tool_bar_project = new wxToolBar(this, PANE_PROJECT, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER,_T("Project"));
-	tool_bar_tools = new wxToolBar(this, PANE_TOOLS, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER,_T("Tools"));
+	tmp = "File";
+	tool_bar_file = new wxToolBar(this, PANE_FILE, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp); 
+	tmp = "Edit";
+	tool_bar_edit = new wxToolBar(this, PANE_EDIT, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp); 
+	tmp = "View";
+	tool_bar_vis  = new wxToolBar(this, PANE_VIEW, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
+	tmp = "Element";
+	tool_bar_element = new wxToolBar(this, PANE_ELEMENT, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
+	tmp = "Help";
+	tool_bar_help    = new wxToolBar(this, PANE_HELP, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
+	tmp = "Application Status";
+	tool_bar_status  = new UIStatusBar(application, this, PANE_STATUS, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp); //*
+	tmp = "Animation Controls";
+	tool_bar_sim = new UIVideoController(&m_mgr, this, PANE_ANIMATION_CONTROLS, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
+	tmp = "Sun Configuration";
+	tool_bar_sun = new UISunConfiguration(&m_mgr, this, PANE_SUN_CONFIG, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
+	tmp = "Project";
+	tool_bar_project = new wxToolBar(this, PANE_PROJECT, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
+	tmp = "Tools";
+	tool_bar_tools = new wxToolBar(this, PANE_TOOLS, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
 	tool_bar_file->SetToolBitmapSize(wxSize(bic_size,bic_size));
 	tool_bar_edit->SetToolBitmapSize(wxSize(bic_size,bic_size));
 	tool_bar_project->SetToolBitmapSize(wxSize(bic_size,bic_size));
@@ -543,46 +654,101 @@ void UIApplicationMainFrame::InitGUI () {
 	//tool_bar_file
 	//tool_bar->AddSeparator();
 	//tool_bar_file->AddTool(FILE_NEW, _T("New File"), wxBitmap(wxImage(wxT(icon_path + "page_white_add.png"))), _T("New File"));
-	tool_bar_file->AddTool(FILE_OPEN, _T("Open"), wxBitmap(wxImage(wxT(icon_path + "folder.png"))), _T("Open"));
-	tool_bar_file->AddTool(FILE_SAVE, _T("Save"), wxBitmap(wxImage(wxT(icon_path + "disk.png"))), _T("Save"));
+	tmp2 = icon_path + "folder.png";
+	tmp = "Open";
+	tool_bar_file->AddTool(FILE_OPEN, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2 )), (const wxString &)tmp);
+	tmp2 = icon_path + "disk.png";
+	tmp = "Save";
+	tool_bar_file->AddTool(FILE_SAVE, (const wxString &)tmp, wxBitmap(wxImage(((const wxString &)tmp2 ))), (const wxString &)tmp);
 	//tool_bar_file->AddTool(FILE_SAVE_ALL, _T("Save All"), wxBitmap(wxImage(wxT(icon_path + "disk_multiple.png"))), _T("Save All"));
 	
 	//tool_bar_edit
-	tool_bar_edit->AddTool(EDIT_CUT, _T("Cut"), wxBitmap(wxImage(wxT(icon_path + "cut.png"))), _T("Cut"));
-	tool_bar_edit->AddTool(EDIT_COPY, _T("Copy"), wxBitmap(wxImage(wxT(icon_path + "page_white_copy.png"))), _T("Copy"));
-	tool_bar_edit->AddTool(EDIT_PASTE, _T("Paste"), wxBitmap(wxImage(wxT(icon_path + "page_white_paste.png"))), _T("Paste"));
-	tool_bar_edit->AddTool(EDIT_DELETE, _T("Delete"), wxBitmap(wxImage(wxT(icon_path + "page_white_delete.png"))), _T("Delete"));
+	tmp2 = icon_path + "cut.png";
+	tmp = "Cut";
+	tool_bar_edit->AddTool(EDIT_CUT, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp);
+	tmp2 = icon_path + "page_white_copy.png";
+	tmp = "Copy";
+	tool_bar_edit->AddTool(EDIT_COPY, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp);
+	tmp2 = icon_path + "page_white_paste.png";
+	tmp = "Paste";
+	tool_bar_edit->AddTool(EDIT_PASTE, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp);
+	tmp2 = icon_path + "page_white_delete.png";
+	tmp = "Delete";
+	tool_bar_edit->AddTool(EDIT_DELETE, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp);
 	//tool_bar_edit->AddTool(EDIT_FIND, _T("Find"),  wxBitmap(wxImage(wxT(icon_path + "page_white_magnify.png"))), _T("Find"));
 	
 	//tool_bar_project
-	tool_bar_project->AddTool(NEW_LAYER, _T("New Layer"), wxBitmap(wxImage(wxT(icon_path + "folder_brick.png"))), _T("Add container layer"));
-	tool_bar_project->AddTool(NEW_ELEMENT, _T("New Element"), wxBitmap(wxImage(wxT(icon_path + "brick.png"))), _T("Add element"));
-	tool_bar_project->AddTool(NEW_WMSLAYER, _T("New WMS Layer"), wxBitmap(wxImage(wxT(icon_path + "wms.png"))), _T("Add WMS layer"));
-	tool_bar_project->AddTool(NEW_REMOTE_ENTITY, _T("New Remote Entity"), wxBitmap(wxImage(wxT(icon_path + "entity_remote.png"))), _T("Add remote entity"));
-	tool_bar_project->AddTool(NEW_FIRE, _T("New Fire"), wxBitmap(wxImage(wxT(icon_path + "flame.png"))), _T("Add fire"));
-	tool_bar_project->AddTool(NEW_FIREWALL, _T("New Firewall"), wxBitmap(wxImage(wxT(icon_path + "firewall.png"))), _T("Add firewall"));
+
+	tmp2 = icon_path + "folder_brick.png";
+	tmp = "New Layer";
+	std::string tmp3 = "Add container layer";
+	tool_bar_project->AddTool(NEW_LAYER, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
+	tmp2 = icon_path + "brick.png";
+	tmp = "New Element";
+	tmp3 = "Add element";
+	tool_bar_project->AddTool(NEW_ELEMENT, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)),(const wxString &)tmp3);
+	tmp2 = icon_path + "wms.png";
+	tmp = "New WMS Layer";
+	tmp3 = "Add WMS layer";	  
+	tool_bar_project->AddTool(NEW_WMSLAYER,(const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
+	tmp2 = icon_path + "entity_remote.png";
+	tmp = "New Remote Entity";
+	tmp3 = "Add remote entity";	  
+	tool_bar_project->AddTool(NEW_REMOTE_ENTITY, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
+	tmp2 = icon_path + "flame.png";
+	tmp = "New fire";
+	tmp3 = "Add fire";	  
+	tool_bar_project->AddTool(NEW_FIRE, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
+	tmp2 = icon_path + "firewall.png";
+	tmp = "New Firewall";
+	tmp3 = "Add firewall";	  
+	tool_bar_project->AddTool(NEW_FIREWALL, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
 
 	
 	//tool_bar_vis
 	//tool_bar_vis->AddTool(VIEW_SELECTVIEWMODE, _T("Select View Mode"), wxBitmap(wxImage(wxT(icon_path + "image.png"))), _T("Select View Mode"));
-	tool_bar_vis->AddTool(VIEW_WIREFRAME, _T("View Wireframe"), wxBitmap(wxImage(wxT(icon_path + "chart_line.png"))), _T("View wireframe"));
-	tool_bar_vis->AddTool(VIEW_SOLID, _T("View solid"), wxBitmap(wxImage(wxT(icon_path + "chart_bar.png"))), _T("View solid"));
+	tmp2 = icon_path + "chart_line.png";
+	tmp = "View Wireframe";
+	tmp3 = "View Wireframe";	  
+	tool_bar_vis->AddTool(VIEW_WIREFRAME,(const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
+	tmp2 = icon_path + "chart_bar.png";
+	tmp = "View solid";
+	tmp3 = "View solid";	  
+	tool_bar_vis->AddTool(VIEW_SOLID, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
 
-	//tool_bar_tools
-	tool_bar_tools->AddTool(CALCULATE_DISTANCE, _T("Calculate distance"), wxBitmap(wxImage(wxT(icon_path + "distance.png"))), _T("Calculate distance"));
+	  //tool_bar_tools
+	tmp2 = icon_path + "distance.png";
+	tmp = "Calculate distance";
+	tmp3 = "Calculate distance";	  
+	tool_bar_tools->AddTool(CALCULATE_DISTANCE,(const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
 
-	//tool_bar_element
-	tool_bar_element->AddTool(TRANSFORM_TRANSLATION, _T("Translate element"), wxBitmap(wxImage(wxT(icon_path + "translation.png"))), _T("Translate element"));
-	tool_bar_element->AddTool(TRANSFORM_ROTATION, _T("Rotate element"), wxBitmap(wxImage(wxT(icon_path + "rotation.png"))), _T("Rotate element"));
-	tool_bar_element->AddTool(TRANSFORM_SCALE, _T("Scale element"), wxBitmap(wxImage(wxT(icon_path + "scale.png"))), _T("Scale element"));
-	tool_bar_element->AddTool(ELEMENT_PROPERTIES, _T("Edit element properties"), wxBitmap(wxImage(wxT(icon_path + "properties.png"))), _T("Edit properties"));
+	  //tool_bar_element
+	tmp2 = icon_path + "translation.png";
+	tmp = "Translate element";
+	tmp3 = "Translate element";	  
+	tool_bar_element->AddTool(TRANSFORM_TRANSLATION, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
+	tmp2 = icon_path + "rotation.png";
+	tmp = "Rotate element";
+	tmp3 = "Rotate element";	  
+	tool_bar_element->AddTool(TRANSFORM_ROTATION, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
+	tmp2 = icon_path + "scale.png";
+	tmp = "Scale element";
+	tmp3 = "Scale element";	  
+	tool_bar_element->AddTool(TRANSFORM_SCALE, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
+	tmp2 = icon_path + "properties.png";
+	tmp = "Edit element properties";
+	tmp3 = "Edit properties";	  
+	tool_bar_element->AddTool(ELEMENT_PROPERTIES,(const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
 
 	//tool_bar_sim
 	tool_bar_sim->SetToolBitmapSize(wxSize(bic_size,bic_size));
 	ApplicationTime::GetInstance()->Attach(tool_bar_sim);
 
-	//tool_bar_help
-	tool_bar_help->AddTool(HELP, _T("Help"), wxBitmap(wxImage(wxT(icon_path + "help.png"))), _T("Help"));
+	  //tool_bar_help
+	tmp2 = icon_path + "help.png";
+	tmp = "Help";
+	tmp3 = "Help";	  
+	tool_bar_help->AddTool(HELP,(const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
 	
 	tool_bar_file->Realize();
 	tool_bar_edit->Realize();
@@ -595,19 +761,30 @@ void UIApplicationMainFrame::InitGUI () {
 	tool_bar_help->Realize();
 	tool_bar_status->Realize();
 
-	m_mgr.AddPane(tool_bar_file,    wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption(_T("File")).PaneBorder(false).Name(NAME_TOOL_BAR_FILE));
-	m_mgr.AddPane(tool_bar_edit,    wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption(_T("Edit")).PaneBorder(false).Name(NAME_TOOL_BAR_EDIT));
-	m_mgr.AddPane(tool_bar_vis,     wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption(_T("View")).PaneBorder(false).Name(NAME_TOOL_BAR_VIS));
-	m_mgr.AddPane(tool_bar_project, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption(_T("Project")).PaneBorder(false).Name(NAME_TOOL_BAR_PROJECT));
-	m_mgr.AddPane(tool_bar_element, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption(_T("Element")).PaneBorder(false).Name(NAME_TOOL_BAR_ELEMENT));
-	m_mgr.AddPane(tool_bar_tools,   wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption(_T("Tools")).PaneBorder(false).Name(NAME_TOOL_BAR_TOOLS));
+	  
+	tmp = "File";
+	m_mgr.AddPane(tool_bar_file,    wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_FILE));
+	tmp = "Edit";
+        m_mgr.AddPane(tool_bar_edit,    wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_EDIT));
+	tmp = "View";
+	m_mgr.AddPane(tool_bar_vis,     wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_VIS));
+	tmp = "Project";  
+	m_mgr.AddPane(tool_bar_project, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_PROJECT));
+	tmp = "Element";
+	m_mgr.AddPane(tool_bar_element, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_ELEMENT));
+	tmp = "Tools";  
+	m_mgr.AddPane(tool_bar_tools,   wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_TOOLS));
 
 	int width,height;
 	GetClientSize(&width,&height);
-	m_mgr.AddPane(tool_bar_status,  wxAuiPaneInfo().ToolbarPane().Bottom().Gripper().Floatable().Caption(_T("Application Status")).PaneBorder(false).Name(NAME_TOOL_BAR_STATUS)); //*
-	m_mgr.AddPane(tool_bar_sim, wxAuiPaneInfo().ToolbarPane().Bottom().Gripper().Floatable().Caption(_T("Animation Controls")).PaneBorder(false).Name(NAME_TOOL_BAR_SIM));
-	m_mgr.AddPane(tool_bar_sun, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption(_T("Sun Configuration")).PaneBorder(false).Name(NAME_TOOL_BAR_SUN));
-	m_mgr.AddPane(tool_bar_help, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption(_T("Help")).PaneBorder(false).Name(NAME_TOOL_BAR_HELP));
+	tmp = "Application Status";  
+	m_mgr.AddPane(tool_bar_status,  wxAuiPaneInfo().ToolbarPane().Bottom().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_STATUS)); //*
+	tmp = "Animation Controls";
+	m_mgr.AddPane(tool_bar_sim, wxAuiPaneInfo().ToolbarPane().Bottom().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_SIM));
+	tmp = "Sun Configuration";
+	m_mgr.AddPane(tool_bar_sun, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_SUN));
+	tmp = "Help";
+	m_mgr.AddPane(tool_bar_help, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_HELP));
 	
 	SetMenuBar(menu_bar);
 	menu_bar->Refresh();
@@ -632,26 +809,31 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::re
 	tool_bar_sun->Update_SunPos();
 
 	//Help Window
-	help_window = new UIHelp(this, wxID_ANY, "Capaware", "resources/application_help.png", "http://www.capaware.org", "Capaware 2008", "Version 1.0.0");
+	  help_window = new UIHelp(this, wxID_ANY, wxT("Capaware"), wxT("resources/application_help.png"), wxT("http://www.capaware.org"), wxT("Capaware 2008"), wxT("Version 1.0.0"));
 	help_window->Show(false);
 
 	//Layer Tree
 	layer_frame = new wxMiniFrame(this, PANE_LAYERTREE, _T("Layer Tree"),wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxTRANSPARENT_WINDOW,_T("Layer Tree"));
-	ui_layer_tree = new cpw::gui::UILayerTreePanel(this,navigator_manager,layer_tree, layer_frame, 0, 0, 200, 512, wxString(_T("Layer Tree")));
+	  ui_layer_tree = new cpw::gui::UILayerTreePanel(this,navigator_manager,layer_tree, (wxWindow *)layer_frame, 0, 0, 200, 512, ( wxString &)wxT("Layer Tree"),(long int)wxTAB_TRAVERSAL);
 	layer_tree.Attach((cpw::Observer *)ui_layer_tree);
 	ui_layer_tree->FillTree();
 	layer_frame->SetSize(wxSize(200,200));
 
 	//Layer Tree toolbar
 	ui_layer_tree_tb = layer_frame->CreateToolBar(wxNO_BORDER | wxHORIZONTAL | wxTB_FLAT);
-	ui_layer_tree_tb->SetToolBitmapSize(wxSize(ic_size,ic_size));
-	ui_layer_tree_tb->AddTool(ADD_ENTITY, _T("Import"), wxBitmap(wxImage(wxT(icon_path + "import.png"))), _T("Import"));	
+	  ui_layer_tree_tb->SetToolBitmapSize(wxSize(ic_size,ic_size));
+	std::string tmp2 = icon_path + "import.png";
+	ui_layer_tree_tb->AddTool(ADD_ENTITY, _("Import"), wxBitmap(wxImage((const wxString &)tmp2)), _("Import"));	
 	ui_layer_tree_tb->AddSeparator();
-	ui_layer_tree_tb->AddTool(NEW_CONTAINER_LAYER_PRIMITIVE, _T("New container layer template"), wxBitmap(wxImage(wxT(icon_path + "folder_brick_template.png"))), _T("Create container layer template"));
-	ui_layer_tree_tb->AddTool(NEW_ELEMPRIMITIVE, _T("New element template"), wxBitmap(wxImage(wxT(icon_path + "brick_p.png"))), _T("Create element template"));
+	tmp2 = icon_path + "folder_brick_template.png";  
+	ui_layer_tree_tb->AddTool(NEW_CONTAINER_LAYER_PRIMITIVE, _("New container layer template"), wxBitmap(wxImage((const wxString &)tmp2)), _("Create container layer template"));
+	tmp2 = icon_path + "brick_p.png";  	  
+	ui_layer_tree_tb->AddTool(NEW_ELEMPRIMITIVE, _("New element template"), wxBitmap(wxImage((const wxString &)tmp2)), _("Create element template"));
 	ui_layer_tree_tb->AddSeparator();
-	ui_layer_tree_tb->AddTool(NEW_LAYER, _T("New Layer"), wxBitmap(wxImage(wxT(icon_path + "folder_brick.png"))), _T("Add container layer"));
-	ui_layer_tree_tb->AddTool(NEW_ELEMENT, _T("New Element"), wxBitmap(wxImage(wxT(icon_path + "brick.png"))), _T("Add element"));
+	tmp2 = icon_path + "folder_brick.png";  	  	    
+	ui_layer_tree_tb->AddTool(NEW_LAYER, _("New Layer"), wxBitmap(wxImage((const wxString &)tmp2)), _("Add container layer"));
+	tmp2 = icon_path + "brick.png";  	  	      
+	ui_layer_tree_tb->AddTool(NEW_ELEMENT, _("New Element"), wxBitmap(wxImage((const wxString &)tmp2)), _("Add element"));
 	alphaSlider = new wxSlider(ui_layer_tree_tb, ALPHA_SLIDER, 0 , 0, 255, wxDefaultPosition, wxSize(70,19), wxSL_HORIZONTAL);
 	alphaSlider->SetLineSize(2);
 	alphaSlider->SetValue(255);
@@ -660,10 +842,11 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::re
 
 	////Connection Tree
 	cpw::remote::ConnectionManager * connection_manager = protocol->GetConnectionManager();
-	connection_frame = new wxMiniFrame(this, PANE_CONNECTIONTREE, _T("Connection Tree"), wxDefaultPosition,
-		wxDefaultSize, wxBORDER_NONE | wxTRANSPARENT_WINDOW,_T("Connection Tree"));
+	connection_frame = new wxMiniFrame(this, PANE_CONNECTIONTREE, _("Connection Tree"), wxDefaultPosition,
+					   wxDefaultSize, wxBORDER_NONE | wxTRANSPARENT_WINDOW,_("Connection Tree"));
+	  tmp2 = "Connection Tree";
 	ui_connection_tree = new cpw::gui::UIConnectionTreePanel(protocol, connection_frame,
-		0, 0, 200, 512, wxString(_T("Connection Tree")));
+			 0, 0, 200, 512, (wxString &)tmp2);
 	connection_manager->Attach((cpw::Observer *)ui_connection_tree);
 	ui_connection_tree->InitializeTree();
 	connection_frame->SetSize(wxSize(200,200));
@@ -725,13 +908,13 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::re
 	
 	m_mgr.AddPane(animation_scheme_frame, wxBOTTOM, wxT("Animation Entity Scheme")); 
 	
-	m_mgr.GetPane(layer_frame).MinSize(wxSize(100,100)).Name(NAME_LAYER_FRAME);
-	m_mgr.GetPane(properties_frame).MinSize(wxSize(100,100)).Name(NAME_PROPERTIES_FRAME);
-	m_mgr.GetPane(splitter).MinSize(wxSize(240,240)).Name(NAME_SPLITTER);
-	m_mgr.GetPane(log_frame).MinSize(wxSize(100, 100)).Name(NAME_LOG_FRAME); 
-	m_mgr.GetPane(scene_tree_frame).MinSize(wxSize(100, 100)).Name(NAME_SCENE_TREE_FRAME);
-	m_mgr.GetPane(connection_frame).MinSize(wxSize(100,100)).Name(NAME_CONNECTION_FRAME); 
-	m_mgr.GetPane(animation_scheme_frame).MinSize(wxSize(100, 50)).Name(NAME_ANIMATION_SCHEME_FRAME); 
+	  m_mgr.GetPane(layer_frame).MinSize(wxSize(100,100)).Name((const wxString &)NAME_LAYER_FRAME);
+	m_mgr.GetPane(properties_frame).MinSize(wxSize(100,100)).Name((const wxString &)NAME_PROPERTIES_FRAME);
+	m_mgr.GetPane(splitter).MinSize(wxSize(240,240)).Name((const wxString &)NAME_SPLITTER);
+	m_mgr.GetPane(log_frame).MinSize(wxSize(100, 100)).Name((const wxString &)NAME_LOG_FRAME); 
+	m_mgr.GetPane(scene_tree_frame).MinSize(wxSize(100, 100)).Name((const wxString &)NAME_SCENE_TREE_FRAME);
+	m_mgr.GetPane(connection_frame).MinSize(wxSize(100,100)).Name((const wxString &)NAME_CONNECTION_FRAME); 
+	m_mgr.GetPane(animation_scheme_frame).MinSize(wxSize(100, 50)).Name((const wxString &)NAME_ANIMATION_SCHEME_FRAME); 
 	
 	m_mgr.Update();
 
@@ -766,11 +949,13 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::re
 	
 	
     m_mgr.Update();
-	
-	OnSize(wxSizeEvent());
+      
+      wxSizeEvent event = wxSizeEvent();
+      OnSize((wxSizeEvent &)event);
 	
 	ui_default_config = m_mgr.SavePerspective();
-	wxString gui_config = ApplicationConfiguration::GetInstance()->GetUIConfiguration();
+	  std::string tmp = ApplicationConfiguration::GetInstance()->GetUIConfiguration();
+	  wxString gui_config = (wxString &) tmp;
 	if (!gui_config.empty())
 		m_mgr.LoadPerspective(gui_config);
 	m_mgr.Update();
@@ -840,7 +1025,7 @@ void UIApplicationMainFrame::NotAvailable(wxCommandEvent& WXUNUSED(event))
 
 	application->NotAvailable();
 
-	wxMessageDialog message(NULL,wxString("This option is not available yet."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+	wxMessageDialog message(NULL,wxT("This option is not available yet."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 	message.ShowModal();
 
 }
@@ -848,7 +1033,7 @@ void UIApplicationMainFrame::NotAvailable(wxCommandEvent& WXUNUSED(event))
 void UIApplicationMainFrame::AnimateEntity(wxCommandEvent& WXUNUSED(event))
 {
 	application->AnimateEntity();
-	wxMessageDialog message(NULL,wxString("This option is not available yet."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+	wxMessageDialog message(NULL,wxT("This option is not available yet."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 	message.ShowModal();
 
 }
@@ -1162,8 +1347,9 @@ int UIApplicationMainFrame::AddPluginMenu(const std::string &new_plugin)
 	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
 
 	
-	RegisterMenu(new_id, new_plugin);
-	wxMenuItem * menu_item = GetMenuItem(new_id, plugins_menu, _T("Ctrl+P"), _T(icon_path + "add.png"));
+	  RegisterMenu(new_id, new_plugin);
+	    std::string tmp2 = icon_path + "add.png";
+	    wxMenuItem * menu_item = GetMenuItem(new_id, plugins_menu, _("Ctrl+P"), (const wxString &)tmp2);
 	plugins_menu->Append(menu_item);
 	Connect(new_id, wxEVT_COMMAND_MENU_SELECTED, (wxObjectEventFunction)&UIApplicationMainFrame::OnPlugin);
 
@@ -1340,7 +1526,8 @@ void UIApplicationMainFrame::CalculateDistance(wxCommandEvent& WXUNUSED(event))
 
 std::string UIApplicationMainFrame::GetUIConfiguration()
 {
-	return (std::string) m_mgr.SavePerspective();
+  wxString tmp = m_mgr.SavePerspective();
+  return std::string(tmp.mb_str());
 }
 
 void UIApplicationMainFrame::Translate(wxCommandEvent& WXUNUSED(event))
@@ -1459,3 +1646,4 @@ void UIApplicationMainFrame::StopTimeAndControls()
 {
 	tool_bar_sim->Stop();
 }
+

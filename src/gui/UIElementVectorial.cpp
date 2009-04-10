@@ -88,7 +88,7 @@ UIElementVectorial::~UIElementVectorial()
 
 void UIElementVectorial::CreateGUIControls()
 {
-	SetTitle(wxT(vname));
+  SetTitle(wxString(vname.c_str(),wxConvUTF8));
 	SetIcon(wxNullIcon);
 	SetSize(8,8,388,422-60);
 	Center();
@@ -115,7 +115,7 @@ void UIElementVectorial::CreateGUIControls()
 	colour_ctrl->Disable();
 	colour_ctrl->Show(false);
 
-	Remove_Button = new wxBitmapButton(this, ID_REMOVE_BUTTON, wxBitmap(wxImage(wxT(icon_path + "delete.png"))), wxPoint(20,95-60), wxSize(22,22), wxBU_AUTODRAW, wxDefaultValidator, wxT("Remove_Button"));
+Remove_Button = new wxBitmapButton(this, ID_REMOVE_BUTTON, wxBitmap(wxImage(wxString((icon_path + "delete.png").c_str(),wxConvUTF8))), wxPoint(20,95-60), wxSize(22,22), wxBU_AUTODRAW, wxDefaultValidator, wxT("Remove_Button"));
 
 	_col = 79-30-15;	_row = 353+25-45-20-60;
 
@@ -150,8 +150,8 @@ void UIElementVectorial::CreateGUIControls()
 	_col = 20;	_row = 140+25-45-60;
 
 	img_list = new wxImageList(16, 16);
-	img_list->Add(wxBitmap(wxImage(wxT(icon_path + vicon))));
-	img_list->Add(wxBitmap(wxImage(wxT(icon_path + vicon_child))));
+	img_list->Add(wxBitmap(wxImage(wxString((icon_path + vicon).c_str(),wxConvUTF8))));
+	img_list->Add(wxBitmap(wxImage(wxString((icon_path + vicon_child).c_str(),wxConvUTF8))));
 
 	Points_TreeCtrl = new wxTreeCtrl(this, ID_POINTS_TREECTRL, wxPoint(_col, _row), wxSize(BOX_WIDTH, BOX_HEIGHT), wxTR_HAS_BUTTONS | wxTR_SINGLE);
 	Points_TreeCtrl->SetFont(wxFont(8, wxSWISS, wxNORMAL,wxNORMAL, false, wxT("Tahoma")));
@@ -160,8 +160,8 @@ void UIElementVectorial::CreateGUIControls()
 	Points_TreeCtrl->ExpandAll();
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		Points_TreeCtrl->SetBackgroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageColour()));
-		Points_TreeCtrl->SetForegroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour()));
+	  Points_TreeCtrl->SetBackgroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8)));
+	  Points_TreeCtrl->SetForegroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8)));
 	}
 
 	_col = 201;	_row = 326+70+25-45-20-60;
@@ -196,7 +196,7 @@ void UIElementVectorial::Exit()
 {
 	if(changes)
 	{
-		wxMessageDialog message(this,wxString("Save changes before quit?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+		wxMessageDialog message(this,wxT("Save changes before quit?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
 		{		
@@ -234,23 +234,23 @@ void UIElementVectorial::OnButtonFinish(wxCommandEvent& WXUNUSED(event))
 
 void UIElementVectorial::ButtonOK()
 {
-	std::string p = std::string(ElementVectorial_name_Ed->GetValue());
+  std::string p = std::string(ElementVectorial_name_Ed->GetValue().mb_str());
 	if((ElementVectorial_name_Ed->IsEmpty()) || (p.at(0) == ' ' ) )
 	{
-		wxMessageDialog message(this,wxString("The element needs a name."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+		wxMessageDialog message(this,wxT("The element needs a name."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 		message.ShowModal();
 	}
 	else
 	{	
 		EndDialog(wxID_OK);
 		int width;
-		std::stringstream aux (std::string(border_Edit->GetValue()));
+		std::stringstream aux (std::string(border_Edit->GetValue().mb_str()));
 		aux >> width;
 
 		std::string color;
-		color = std::string(colour_ctrl->GetColour().GetAsString(wxC2S_HTML_SYNTAX));
+		color = std::string(colour_ctrl->GetColour().GetAsString(wxC2S_HTML_SYNTAX).mb_str());
 
-		ElementVectorial_controller->CreatePermanentElementVectorial(std::string(ElementVectorial_name_Ed->GetValue()), color, width, modify);
+		ElementVectorial_controller->CreatePermanentElementVectorial(std::string(ElementVectorial_name_Ed->GetValue().mb_str()), color, width, modify);
 
 		ElementVectorial_controller->ReleaseMouseCallBack();
 	}
@@ -272,7 +272,7 @@ void UIElementVectorial::CheckPointsValues(wxCommandEvent& WXUNUSED(event))
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << posx;
-		Position_x_Edit->ChangeValue(aux2.str());
+		Position_x_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (Position_y_Edit->GetValue().Trim().ToDouble(&aux))
@@ -280,7 +280,7 @@ void UIElementVectorial::CheckPointsValues(wxCommandEvent& WXUNUSED(event))
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << posy;
-		Position_y_Edit->ChangeValue(aux2.str());
+		Position_y_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (Position_z_Edit->GetValue().Trim().ToDouble(&aux))
@@ -288,7 +288,7 @@ void UIElementVectorial::CheckPointsValues(wxCommandEvent& WXUNUSED(event))
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << posz;
-		Position_z_Edit->ChangeValue(aux2.str());
+		Position_z_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	//if (!update_on_changes)
@@ -404,9 +404,9 @@ void UIElementVectorial::FillUI(const int &nump, const std::string &color, const
 	update_on_changes = false;
 	std::stringstream aux;
 	aux << width;
-	border_Edit->SetValue(aux.str());
+	border_Edit->SetValue(wxString(aux.str().c_str(),wxConvUTF8));
 
-	colour_ctrl->SetColour(wxColour(color));
+	colour_ctrl->SetColour(wxColour(wxString(color.c_str(),wxConvUTF8)));
 	Points_TreeCtrl->DeleteAllItems();
 	Points_TreeCtrl->AddRoot(_T("Element Points"),IM_ROOT);
 	wxTreeItemId root = Points_TreeCtrl->GetRootItem();
@@ -472,10 +472,10 @@ void UIElementVectorial::render(wxDC& dc)
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
+	  wxColour c_brush = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	  dc.SetTextForeground(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8)));
 		dc.SetPen(wxPen(c_pen));
 		dc.SetBrush(wxBrush(c_brush));
 		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);
@@ -504,7 +504,7 @@ void UIElementVectorial::OnBorderSpinUp(wxSpinEvent& event)
 	border_Edit->GetValue().ToDouble(&f);
 	f+=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	border_Edit->SetValue(wop.str()); 
+	border_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -515,7 +515,7 @@ void UIElementVectorial::OnBorderSpinDown(wxSpinEvent& event)
 	border_Edit->GetValue().ToDouble(&f);
 	f-=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	border_Edit->SetValue(wop.str()); 
+	border_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -527,7 +527,7 @@ void UIElementVectorial::OnPositionXSpinUp(wxSpinEvent& event)
 	Position_x_Edit->GetValue().ToDouble(&f);
 	f+=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_x_Edit->SetValue(wop.str()); 
+	Position_x_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 void UIElementVectorial::OnPositionYSpinUp(wxSpinEvent& event)
@@ -538,7 +538,7 @@ void UIElementVectorial::OnPositionYSpinUp(wxSpinEvent& event)
 	Position_y_Edit->GetValue().ToDouble(&f);
 	f+=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_y_Edit->SetValue(wop.str()); 
+	Position_y_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -550,7 +550,7 @@ void UIElementVectorial::OnPositionZSpinUp(wxSpinEvent& event)
 	Position_z_Edit->GetValue().ToDouble(&f);
 	f+=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_z_Edit->SetValue(wop.str()); 
+	Position_z_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 }
 
 void UIElementVectorial::OnPositionXSpinDown(wxSpinEvent& event)
@@ -561,7 +561,7 @@ void UIElementVectorial::OnPositionXSpinDown(wxSpinEvent& event)
 	Position_x_Edit->GetValue().ToDouble(&f);
 	f-=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_x_Edit->SetValue(wop.str()); 
+	Position_x_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -573,7 +573,7 @@ void UIElementVectorial::OnPositionYSpinDown(wxSpinEvent& event)
 	Position_y_Edit->GetValue().ToDouble(&f);
 	f-=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_y_Edit->SetValue(wop.str()); 
+	Position_y_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -585,7 +585,7 @@ void UIElementVectorial::OnPositionZSpinDown(wxSpinEvent& event)
 	Position_z_Edit->GetValue().ToDouble(&f);
 	f-=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_z_Edit->SetValue(wop.str()); 
+	Position_z_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 }
 
 void UIElementVectorial::OnColourPickerChange(wxColourPickerEvent& event)
@@ -611,6 +611,6 @@ void UIElementVectorial::SetElementVectorialIcon(std::string &parenticon, std::s
 	vicon_child = childicon; 
 	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
 	img_list->RemoveAll();
-	img_list->Add(wxBitmap(wxImage(wxT(icon_path + parenticon))));
-	img_list->Add(wxBitmap(wxImage(wxT(icon_path + childicon))));
+	img_list->Add(wxBitmap(wxImage(wxString((icon_path + parenticon).c_str(),wxConvUTF8))));
+	img_list->Add(wxBitmap(wxImage(wxString((icon_path + childicon).c_str(),wxConvUTF8))));
 }

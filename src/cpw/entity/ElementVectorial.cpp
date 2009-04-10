@@ -54,7 +54,7 @@ int ElementVectorial::GetWidth()
 {
 	return width;
 }
-std::vector<cpw::Point3d<float>> &ElementVectorial::GetPoints()
+std::vector<cpw::Point3d<float> > &ElementVectorial::GetPoints()
 {
 	return points;
 }
@@ -67,7 +67,7 @@ const int ElementVectorial::GetWidth() const
 {
 	return width;
 }
-const std::vector<cpw::Point3d<float>> &ElementVectorial::GetPoints() const
+const std::vector<cpw::Point3d<float> > &ElementVectorial::GetPoints() const
 {
 	return points;
 }
@@ -84,7 +84,7 @@ void ElementVectorial::SetWidth(const int w)
 	Modified("width", width);
 }
 
-void ElementVectorial::SetPoints(const std::vector<cpw::Point3d<float>> &p)
+void ElementVectorial::SetPoints(const std::vector<cpw::Point3d<float> > &p)
 {
 	points = p;
 }
@@ -148,7 +148,7 @@ int ElementVectorial::CreatePersistence() {
 	AddPersistence((std::string)"width", aux.str());
 
 	AddPersistenceLevel("Points");
-	std::vector<cpw::Point3d<float>>::iterator iter_point;
+	std::vector<cpw::Point3d<float> >::iterator iter_point;
 	for(iter_point=points.begin();iter_point!=points.end();iter_point++)
 	{
 		std::stringstream x,y,z;

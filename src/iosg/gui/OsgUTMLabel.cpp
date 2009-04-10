@@ -21,7 +21,7 @@
  * The CAPAWARE development team
 */
 
-#include "stdafx.h"
+#include "../stdafx.h"
 
 #include <iosg/gui/OsgUTMLabel.h>
 #include <sstream>

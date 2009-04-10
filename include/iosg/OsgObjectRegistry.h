@@ -25,7 +25,7 @@
 
 #include <map>
 #include <osg/Node>
-#include <osgtext/fadetext>
+#include <osgText/FadeText>
 
 
 #include <iosg/Export.h>

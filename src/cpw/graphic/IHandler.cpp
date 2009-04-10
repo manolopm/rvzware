@@ -61,14 +61,14 @@ void IHandler::AdaptHandlerAndBrothersToModel(const bool &adapt_rotation)
 	cpw::Point3d<float> orientation(el->GetOrientation(0), el->GetOrientation(1), el->GetOrientation(2));
 
 	//scene->AdaptHandlerToModel(id, entity_target->GetId(), orientation, adapt_rotation);
-	scene->AdaptHandlerToModelFixedScreenSize(id, entity_target->GetId(), orientation, adapt_rotation, height * 0.66f, camera_pos, znear);
+	scene->AdaptHandlerToModelFixedScreenSize(id, entity_target->GetId(), orientation, adapt_rotation, (const int &)(height * 0.66f), camera_pos, znear);
 
 	for (std::vector< IHandler *>::iterator iter = brothers.begin();
 		 iter != brothers.end();
 		 iter++)
 	{
 		//scene->AdaptHandlerToModel((*iter)->GetId(), entity_target->GetId(), orientation, adapt_rotation);
-		scene->AdaptHandlerToModelFixedScreenSize((*iter)->GetId(), entity_target->GetId(), orientation, adapt_rotation, height * 0.66f, camera_pos, znear);
+	  scene->AdaptHandlerToModelFixedScreenSize((*iter)->GetId(), entity_target->GetId(), orientation, adapt_rotation, (const int &)(height * 0.66f), camera_pos, znear);
 	}
 }
 
@@ -94,14 +94,14 @@ void IHandler::AdaptHandlerAndBrothersToModel(const bool &adapt_rotation, const 
 	cpw::Point3d<float> orientation(el->GetOrientation(0), el->GetOrientation(1), el->GetOrientation(2));
 
 	//scene->AdaptHandlerToModel(id, entity_target->GetId(), rotation, adapt_rotation);
-	scene->AdaptHandlerToModelFixedScreenSize(id, entity_target->GetId(), rotation, adapt_rotation, height * 0.66f, camera_pos, znear);
+	scene->AdaptHandlerToModelFixedScreenSize(id, entity_target->GetId(), rotation, adapt_rotation, (const int &)(height * 0.66f), camera_pos, znear);
 
 	for (std::vector< IHandler *>::iterator iter = brothers.begin();
 		 iter != brothers.end();
 		 iter++)
 	{
 		//scene->AdaptHandlerToModel((*iter)->GetId(), entity_target->GetId(), rotation, adapt_rotation);
-		scene->AdaptHandlerToModelFixedScreenSize((*iter)->GetId(), entity_target->GetId(), rotation, adapt_rotation, height * 0.66f, camera_pos, znear);
+	  scene->AdaptHandlerToModelFixedScreenSize((*iter)->GetId(), entity_target->GetId(), rotation, adapt_rotation, (const int &)(height * 0.66f), camera_pos, znear);
 	}
 }
 

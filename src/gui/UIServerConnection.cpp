@@ -99,8 +99,8 @@ void UIServerConnection::CreateGUIControls()
 	description_memo->SetFont(wxFont(8, wxSWISS, wxNORMAL,wxNORMAL, false, wxT("Tahoma")));
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		description_memo->SetBackgroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageColour()));
-		description_memo->SetForegroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour()));
+	  description_memo->SetBackgroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8)));
+	  description_memo->SetForegroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8)));
 	}
 
 	_col += 0;
@@ -113,8 +113,8 @@ void UIServerConnection::CreateGUIControls()
 	Layer_tree_TreeCtrl->AssignImageList(img_list);
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		Layer_tree_TreeCtrl->SetBackgroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageColour()));
-		Layer_tree_TreeCtrl->SetForegroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour()));
+	  Layer_tree_TreeCtrl->SetBackgroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8)));
+	  Layer_tree_TreeCtrl->SetForegroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8)));
 	}
 	
 	//choice-----
@@ -156,12 +156,13 @@ void UIServerConnection::Close()
 {
 	if(changes)
 	{
-		wxMessageDialog message(this,wxString("Save changes before quit?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+		wxMessageDialog message(this,wxT("Save changes before quit?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
 		{		
-			//ButtonOK();
-			OnButtonNext(wxCommandEvent());
+		  //ButtonOK();
+		  wxCommandEvent tmp = wxCommandEvent();
+		  OnButtonNext((wxCommandEvent &)tmp);
 		}
 		if(modal == wxID_NO )
 		{
@@ -179,10 +180,10 @@ void UIServerConnection::OnButtonNext(wxCommandEvent& WXUNUSED(event))
 {
 	if(connection_state == 0)
 	{
-		std::string p = std::string(Layer_name_Ed->GetValue());
+	  std::string p = std::string(Layer_name_Ed->GetValue().mb_str());
 		if((Layer_name_Ed->IsEmpty()) || (p.at(0) == ' ' ) || (formatChoice->GetSelection() == wxNOT_FOUND) /*WxListBox1->IsEmpty()*/ )
 		{
-			wxMessageDialog message(this,wxString("The layer needs a name and image format."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+			wxMessageDialog message(this,wxT("The layer needs a name and image format."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 			message.ShowModal();
 		}
 		else
@@ -192,7 +193,7 @@ void UIServerConnection::OnButtonNext(wxCommandEvent& WXUNUSED(event))
 	}
 	else
 	{
-		wxMessageDialog message(this,wxString("You need to connect to a server."), wxString("Warning"),wxICON_EXCLAMATION |wxCANCEL);
+		wxMessageDialog message(this,wxT("You need to connect to a server."), wxT("Warning"),wxICON_EXCLAMATION |wxCANCEL);
 		int modal = message.ShowModal();
 	}
 
@@ -201,21 +202,21 @@ void UIServerConnection::OnButtonNext(wxCommandEvent& WXUNUSED(event))
 
 void UIServerConnection::SetConnectionMemo(std::string &server_url, std::string &abstr, int &c_state)
 {
-	server_combo_box->SetValue(server_url);
+  server_combo_box->SetValue(wxString(server_url.c_str(),wxConvUTF8));
 	connection_state = c_state;
-	description_memo->SetValue(wxString(abstr));
+	description_memo->SetValue(wxString(abstr.c_str(),wxConvUTF8));
 }
 
 void UIServerConnection::OnButtonConnect(wxCommandEvent& WXUNUSED(event))
 {
-	std::string server_url= server_combo_box->GetStringSelection();
+  std::string server_url= (std::string)server_combo_box->GetStringSelection().mb_str();
 	if (server_url == "")
-		server_url = server_combo_box->GetValue();
+	  server_url = (std::string)server_combo_box->GetValue().mb_str();
 	if (server_url != "")
 	{
 		std::string abstr;
 		connection_state = server_connection_controller->Connect(server_url, &abstr);
-		description_memo->SetValue(wxString(abstr));
+		description_memo->SetValue(wxString(abstr.c_str(),wxConvUTF8));
 		server_connection_controller->FillLayerTree();
 
 		if ((connection_state==0) && (server_combo_box->GetSelection()==wxNOT_FOUND))
@@ -232,14 +233,14 @@ void UIServerConnection::OnButtonConnect(wxCommandEvent& WXUNUSED(event))
 
 void UIServerConnection::OnConnect(wxCommandEvent& WXUNUSED(event))
 {
-	std::string server_url= server_combo_box->GetStringSelection();
+  std::string server_url= (std::string)server_combo_box->GetStringSelection().mb_str();
 	if (server_url == "")
-		server_url = server_combo_box->GetValue();
+	  server_url = (std::string)server_combo_box->GetValue().mb_str();
 	if (server_url != "")
 	{
 		std::string abstr;
 		connection_state = server_connection_controller->Connect(server_url, &abstr);
-		description_memo->SetValue(wxString(abstr));
+		description_memo->SetValue(wxString(abstr.c_str(),wxConvUTF8));
 		server_connection_controller->FillLayerTree();
 		changes = true;
 		if ((connection_state==0) && (server_combo_box->GetSelection()==wxNOT_FOUND))
@@ -264,7 +265,7 @@ void UIServerConnection::SetServerList(std::vector<std::string> &vector_server)
 	for(;i!=vector_server.end();i++)
 	{
 		if(*i != "")
-			server_array.Insert(*i,server_array.size());		
+		  server_array.Insert(wxString((*i).c_str(),wxConvUTF8),server_array.size());		
 	}
 	server_combo_box->Clear();
 	server_combo_box->Append(server_array);
@@ -278,8 +279,8 @@ std::vector<std::string> UIServerConnection::GetServerList()
 	int s_count = server_array.GetCount();
 	for(int i=0; i<s_count; i++)
 	{	
-		if(std::string(server_array[i])!="")
-			servers.push_back(std::string(server_array[i]));
+	  if(std::string(server_array[i].mb_str())!="")
+	    servers.push_back(std::string(server_array[i].mb_str()));
 	}
 	return servers;
 }
@@ -303,10 +304,10 @@ void UIServerConnection::render(wxDC& dc)
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
+	  wxColour c_brush = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	  dc.SetTextForeground(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8)));
 		dc.SetPen(wxPen(c_pen));
 		dc.SetBrush(wxBrush(c_brush));
 		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);
@@ -328,11 +329,11 @@ void UIServerConnection::EvtTreeItemSelChanged(wxTreeEvent& WXUNUSED(event))
 	if (item_selected.IsOk())
 	{	
 		changes = true;
-		std::string title = Layer_tree_TreeCtrl->GetItemText(item_selected);
+		std::string title = (std::string)Layer_tree_TreeCtrl->GetItemText(item_selected).mb_str();
 		std::string name = node_title_name[title];
 		if (name == "") return;
 
-		if(!modify) Layer_name_Ed->SetValue(title);
+		if(!modify) Layer_name_Ed->SetValue(wxString(title.c_str(),wxConvUTF8));
 
 		std::vector<std::string> formats = server_connection_controller->GetImageFormats(name);
 
@@ -342,7 +343,7 @@ void UIServerConnection::EvtTreeItemSelChanged(wxTreeEvent& WXUNUSED(event))
 		for(;i!=formats.end();i++)
 		{
 			if(*i != "")
-				formats_array.Insert(*i,formats_array.size());							
+			  formats_array.Insert(wxString((*i).c_str(),wxConvUTF8),formats_array.size());							
 		}
 
 		formatChoice->Clear();
@@ -358,7 +359,7 @@ void UIServerConnection::EvtTreeItemSelChanged(wxTreeEvent& WXUNUSED(event))
 			for(;j!=srs_list.end();j++)
 			{
 				if(*j != "")
-					srs_array.Insert(*j,srs_array.size());							
+				  srs_array.Insert(wxString((*j).c_str(),wxConvUTF8),srs_array.size());							
 			}
 
 			srsChoice->Clear();
@@ -374,10 +375,11 @@ void UIServerConnection::FillTree(std::vector<cpw::ogc::Node*> &nodes, wxTreeIte
    
 	for(std::vector<cpw::ogc::Node*>::iterator i=nodes.begin();i!=nodes.end();i++)
 	{
-		id = Layer_tree_TreeCtrl->AppendItem(parent_id,(*i)->Title());
+	  id = Layer_tree_TreeCtrl->AppendItem(parent_id,wxString((*i)->Title().c_str(),wxConvUTF8));
 		if((*i)->Type() == 1)	
-		{
-			UIServerConnection::FillTree((*i)->GetNodes(),id);
+		  {
+		    std::vector<cpw::ogc::Node*, std::allocator<cpw::ogc::Node*> > tmp = (*i)->GetNodes();
+		    UIServerConnection::FillTree((std::vector<cpw::ogc::Node*, std::allocator<cpw::ogc::Node*> >&) tmp,id);
 			std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
 			AddIcon(icon_path + "/folder.png", id);
 		}
@@ -398,7 +400,7 @@ void UIServerConnection::SetLayers(cpw::ogc::Node &root_node)
 	Layer_tree_TreeCtrl->DeleteAllItems();
 	if(nodes.size()>0)
 	{
-		wxTreeItemId root_id = Layer_tree_TreeCtrl->AddRoot(root_node.Title());
+	  wxTreeItemId root_id = Layer_tree_TreeCtrl->AddRoot(wxString(root_node.Title().c_str(),wxConvUTF8));
 		std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
 		AddIcon(icon_path + "/folder.png", root_id);
 		if (nodes[0]->GetNodes().size()!=0)
@@ -412,14 +414,14 @@ std::vector<std::string> UIServerConnection::GetSelectedLayers()
 	std::vector<std::string> v;
 	wxTreeItemId TreeElementId = Layer_tree_TreeCtrl->GetSelection();
 	wxString TreeElementString = Layer_tree_TreeCtrl->GetItemText(TreeElementId);
-	std::string name = TreeElementString;
+	std::string name = (std::string)TreeElementString.mb_str();
 	v.push_back(node_title_name[name]);
 	return v;
 }
 
 void UIServerConnection::AddIcon(const std::string url, wxTreeItemId id)
 {
-	wxBitmap icon(wxT(url), wxBITMAP_TYPE_ANY);
+	wxBitmap icon(wxString(url.c_str(),wxConvUTF8), wxBITMAP_TYPE_ANY);
  	int img_index = img_list->Add(icon);
 	Layer_tree_TreeCtrl->SetItemImage(id, img_index);
 }

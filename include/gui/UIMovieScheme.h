@@ -34,7 +34,7 @@
 #include <wx/textctrl.h>
 #include <wx/spinbutt.h>
 
-#include "GUITypes.h"
+#include "GUItypes.h"
 
 #include <cpw/ApplicationConfiguration.h>
 #include "ApplicationTime.h"

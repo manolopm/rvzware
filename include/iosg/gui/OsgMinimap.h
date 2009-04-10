@@ -74,7 +74,7 @@ namespace cpw
 				virtual bool HasFocus(){ return false; }
 				virtual void SetVisible(const bool &_visible);
 
-				virtual void OsgIMinimap::Update(osg::Matrix *mp = NULL);
+				virtual void Update(osg::Matrix *mp = NULL);
 
 				void SetCamera(OsgCamera *_camera) { camera = _camera; }
 				OsgCamera * GetCamera() { return camera; }

@@ -136,7 +136,7 @@ namespace cpw
 			private:
 
 				/** */
-				std::vector<cpw::Point3d<float>> ElementVectorial_array;
+				std::vector<cpw::Point3d<float> > ElementVectorial_array;
 
 				/** */
 				cpw::ElementVectorial *ElementVectorial_entity;

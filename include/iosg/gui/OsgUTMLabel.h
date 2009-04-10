@@ -31,7 +31,7 @@
 #include <iostream>
 #include <sstream>
 
-#include <osgtext/fadetext>
+#include <osgText/FadeText>
 
 #include <iosg/Export.h>
 

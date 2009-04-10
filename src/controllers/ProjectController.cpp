@@ -124,9 +124,17 @@ bool ProjectController::OpenProject(const std::string &url, const std::string &d
 bool ProjectController::OpenProject(wxWindow* parent, const std::string &default_path, cpw::IStatusController *status_controller, 
 									cpw::LayerTree &layer_tree, cpw::IGraphicFactory *graphic_factory)
 {
-	std::string &project_path = ApplicationConfiguration::GetInstance()->GetDataDirectory();
-	wxFileDialog dialog (parent,_T("Open Project"),_T(project_path.c_str()),wxEmptyString,
-							   _T("Project(*.cws)|*.cws|All files(*.*)|*.*") );
+  std::string &project_path = ApplicationConfiguration::GetInstance()->GetDataDirectory();
+  std::string str = "Project(*.cws)|*.cws|All files(*.*)|*.*";
+  wxString wxstr (str.c_str(), wxConvUTF8);
+  std::string str2 = "Open Project";
+  wxString wxstr2 (str2.c_str(), wxConvUTF8);
+  wxString wxstr3 (project_path.c_str(), wxConvUTF8);
+  wxFileDialog dialog ((wxWindow *)parent,
+		       wxstr2,
+		       wxstr3,
+		       wxEmptyString,
+		       (const wxString &)wxstr );
 	dialog.Center();
 
 	bool stop;
@@ -142,13 +150,13 @@ bool ProjectController::OpenProject(wxWindow* parent, const std::string &default
 			((cpw::gui::UIApplicationMainFrame *)parent)->RePaint();
 			((cpw::gui::UIApplicationMainFrame *)parent)->UpdateAUIManager();
 
-			url = dialog.GetPath();
+			url = dialog.GetPath().mb_str();
 			
 			bool result = OpenProject(url, default_path, status_controller, layer_tree, graphic_factory);
 
 			if(!result) 
 			{
-				wxMessageDialog dlg_error(parent,wxString("Error opening the scene file. Select a new scene from file."), wxString("Warning"),wxICON_EXCLAMATION|wxOK);
+				wxMessageDialog dlg_error(parent,wxT("Error opening the scene file. Select a new scene from file."), wxT("Warning"),wxICON_EXCLAMATION|wxOK);
 				dlg_error.Center();
 				dlg_error.ShowModal();
 				stop = false;
@@ -179,4 +187,5 @@ void ProjectController::CloseProject(cpw::LayerTree &layer_tree)
 
 	cpw::ApplicationScene::GetInstance()->GetScene()->Clear();
 }
+
 

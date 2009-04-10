@@ -112,8 +112,8 @@ void UILayerPrimitive::set_properties()
 	text_description->SetMinSize(wxSize(340-24, 100));
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		text_description->SetBackgroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageColour()));
-		text_description->SetForegroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour()));
+	  text_description->SetBackgroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8)));
+	  text_description->SetForegroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8)));
 	}
 	button_icon->SetMinSize(wxSize(25, 20));
 	panel_attr->SetMinSize(wxSize(53,20));
@@ -173,7 +173,7 @@ void UILayerPrimitive::do_layout()
 void UILayerPrimitive::OnButtonExplorer1(wxCommandEvent& WXUNUSED(event))
 {
 	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetIconDirectory();
-	wxFileDialog dialog(this,_T("Open Icon"),_T(icon_path),wxEmptyString,
+	wxFileDialog dialog(this,_T("Open Icon"),wxString(icon_path.c_str(),wxConvUTF8),wxEmptyString,
 						   _T("PNG file(*.png)|*.png|BMP file(*.bmp)|*.bmp|JPG file(*.jpg)|*.jpg|All files(*.*)|*.*") );
 	if(dialog.ShowModal() == wxID_OK)
 	{		
@@ -181,13 +181,13 @@ void UILayerPrimitive::OnButtonExplorer1(wxCommandEvent& WXUNUSED(event))
 	}
 	else
 	{
-		text_icon->SetValue("");		
+	  text_icon->SetValue(wxT(""));		
 	}
 }
 
 void UILayerPrimitive::OnButtonAttr(wxCommandEvent& WXUNUSED(event))
 {
-	UIAttributes new_attr_dlg(0,this,1, wxString("Primitive layer attributes"),wxDefaultPosition);
+	UIAttributes new_attr_dlg(0,this,1, wxT("Primitive layer attributes"),wxDefaultPosition);
 	if(!v_attr.empty())
 		new_attr_dlg.SetAttributes(v_attr);
 
@@ -200,7 +200,7 @@ void UILayerPrimitive::OnButtonCancel(wxCommandEvent& WXUNUSED(event))
 {
 	if(!text_name->IsEmpty())
 	{
-		wxMessageDialog message(this,wxString("Save changes before quit?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+		wxMessageDialog message(this,wxT("Save changes before quit?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
 		{			
@@ -219,10 +219,10 @@ void UILayerPrimitive::OnButtonCancel(wxCommandEvent& WXUNUSED(event))
 
 void UILayerPrimitive::OnButtonOK(wxCommandEvent& WXUNUSED(event))
 {
-	std::string p = std::string(text_name->GetValue());
+  std::string p = std::string(text_name->GetValue().mb_str());
 	if((text_name->IsEmpty()) || (p.at(0) == ' ' ) )
 	{
-		wxMessageDialog message(this,wxString("The primitive needs a name."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+		wxMessageDialog message(this,wxT("The primitive needs a name."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 		message.ShowModal();
 	}
 	else
@@ -250,10 +250,10 @@ void UILayerPrimitive::render(wxDC& dc)
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
+	  wxColour c_brush = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	  dc.SetTextForeground(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8)));
 		dc.SetPen(wxPen(c_pen));
 		dc.SetBrush(wxBrush(c_brush));
 		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);

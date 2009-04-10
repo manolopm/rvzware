@@ -80,7 +80,6 @@ namespace cpw
 				void InitGUI();
 				void OnPaint(wxPaintEvent& event);
 				void render(wxDC& dc);
-				void OnPaint();
 				//void OnEraseBackground(wxEraseEvent& event);
 		};
 	}

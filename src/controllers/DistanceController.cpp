@@ -267,7 +267,7 @@ void DistanceController::UpdateUI(const cpw::Point3d<float> &point)
 void DistanceController::RemoveAll()
 {
 	if(Distance_array.empty()) return;
-	std::vector<cpw::Point3d<float>>::iterator iter=Distance_array.begin();
+	std::vector<cpw::Point3d<float> >::iterator iter=Distance_array.begin();
 
 	Distance_array.clear();
 	

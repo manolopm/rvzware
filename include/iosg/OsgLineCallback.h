@@ -60,7 +60,7 @@ namespace cpw
 				/**  */
 				void SetGeometry(osg::Geometry* g);
 				/**  */
-				void SetNewInitialVertex(const std::vector<cpw::Point3d<float>> &draw_array);
+				void SetNewInitialVertex(const std::vector<cpw::Point3d<float> > &draw_array);
 				/**  */
 				void SetLeftBrother(OsgLineCallback *left_brother) { brothers[0] = left_brother; need_to_update=true; }
 				/**  */

@@ -22,7 +22,7 @@
 */
 
 #include <osgUtil/IntersectVisitor>
-#include <osgutil/LineSegmentIntersector>
+#include <osgUtil/LineSegmentIntersector>
 
 #include "stdafx.h"
 

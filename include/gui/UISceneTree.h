@@ -50,11 +50,10 @@ namespace cpw
 				UISceneTree(wxWindow *parent);
 				~UISceneTree(void);
 
-				void Refresh() { Refresh(wxCommandEvent()); }
+				void Refresh(wxCommandEvent &event);
 
 			private:
 
-				void Refresh(wxCommandEvent& WXUNUSED(event));
 
 				void AddNode(wxTreeItemId &parent_id, osg::Node *osg_node);
 				std::string GetTreeText(osg::Node *node);

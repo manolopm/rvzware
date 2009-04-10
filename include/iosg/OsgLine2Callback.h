@@ -58,7 +58,7 @@ namespace cpw
 
 				//sets
 				void SetGeometry(osg::Geometry* g);
-				void SetNewInitialVertex(const std::vector<cpw::Point3d<float>> &draw_array);
+				void SetNewInitialVertex(const std::vector<cpw::Point3d<float> > &draw_array);
 				void SetLeftBrother(OsgLine2Callback *left_brother) { brothers[0] = left_brother; need_to_update=true; }
 				void SetRightBrother(OsgLine2Callback *right_brother) { brothers[1] = right_brother; need_to_update=true; }
 				void SetCurveAdapterStepDistance(const float &_curve_adapter_step_distance) { curve_adapter_step_distance = _curve_adapter_step_distance;}

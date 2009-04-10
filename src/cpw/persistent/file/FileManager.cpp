@@ -179,7 +179,7 @@ bool FileManager::GetMap(const std::string &url, bool ssl, std::string &memBuf, 
 	if (ssl)
 	{
 		// Disable checking server certificate
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
 		// Disable checking server name
 		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
 	}

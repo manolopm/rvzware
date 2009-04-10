@@ -23,8 +23,8 @@
 #ifndef _OSGNAVIGATORPOSTDRAWCALLBACK_
 #define _OSGNAVIGATORPOSTDRAWCALLBACK_
 
-#include <osg/camera>
-#include <osg/Texture2d>
+#include <osg/Camera>
+#include <osg/Texture2D>
 #include <osgDB/WriteFile>
 
 #include <iosg/OsgNavigator.h>

@@ -45,14 +45,19 @@ namespace cpw
 		public:
 			UILayerPrimitive(wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);//(wxMDIParentFrame* parent, int id, const wxChar *titulo);//(wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
 			virtual ~UILayerPrimitive();
-			std::string GetPrimitiveName(){return std::string(text_name->GetValue());}
-			std::string GetIconPath(){return std::string(text_icon->GetValue());}
+			std::string GetPrimitiveName(){return std::string(text_name->GetValue().mb_str());}
+			std::string GetIconPath(){return std::string(text_icon->GetValue().mb_str());}
 			std::vector<cpw::Attribute> &GetAttributes(){ return v_attr;}
-			std::string GetDescription(){return std::string(text_description->GetValue());}
+			std::string GetDescription(){return std::string(text_description->GetValue().mb_str());}
 			std::string GetClassName();
-			void RePaint(){OnMove(wxMoveEvent());}
+			void RePaint(){
+			  wxMoveEvent event;
+			  OnMove(event);}
 
-			void SetContainerLayerPrimitiveName(const std::string &name) {text_name->SetValue(name);}
+			void SetContainerLayerPrimitiveName(const std::string &name) {
+			  wxString wxstr(name.c_str(), wxConvUTF8);
+			  text_name->SetValue(wxstr);
+			}
 
 		private:		
 			void set_properties();

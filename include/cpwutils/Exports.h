@@ -36,7 +36,7 @@
 	#endif
 
 
-	//#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
+	#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
 	#ifdef CPWUTILS_EXPORTS_STATIC
 	#    define FIREEXPORT
 	#else
@@ -46,6 +46,16 @@
 	#       define CPWUTILS_EXPORT __declspec(dllimport)
 	#   endif
 	#endif
-
+#else
+	#ifdef CPWUTILS_EXPORTS_STATIC
+	#    define FIREEXPORT
+	#else
+	#	ifdef CPWUTILS_EXPORTS
+	#		define CPWUTILS_EXPORT 
+	#	else
+	#       define CPWUTILS_EXPORT 
+	#   endif
+	#endif
+#endif
 #endif
 

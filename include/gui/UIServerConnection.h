@@ -99,10 +99,10 @@ namespace cpw
 
 				void                     SetLayers(ogc::Node &root_node);
 				std::vector<std::string> GetSelectedLayers();
-				std::string              GetName(){return std::string(Layer_name_Ed->GetValue());}
-				void                     SetName(const std::string &name){Layer_name_Ed->SetValue(name);}
-				std::string              GetSelectedFormat() {return std::string(formatChoice->GetString(formatChoice->GetSelection()));}
-				std::string              GetSelectedSRS() {return std::string(srsChoice->GetString(srsChoice->GetSelection()));}
+				std::string              GetName(){return (std::string) Layer_name_Ed->GetValue().mb_str(); }
+				void                     SetName(const std::string &name){Layer_name_Ed->SetValue(wxString(name.c_str(),wxConvUTF8));}
+				std::string              GetSelectedFormat() {return std::string(formatChoice->GetString(formatChoice->GetSelection()).mb_str());}
+				std::string              GetSelectedSRS() {return std::string(srsChoice->GetString(srsChoice->GetSelection()).mb_str());}
 				bool					 Builder() {return view_srs;}
 
 				void Modify (const bool &value) {modify=value; Layer_name_Ed->Enable(false);/* Back_button->Enable(false);*/}

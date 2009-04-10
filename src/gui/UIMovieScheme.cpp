@@ -73,8 +73,8 @@ void UIMovieScheme::InitGUI()
 
 	if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_backg   = ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		wxColour c_foreg   = ApplicationConfiguration::GetInstance()->GetForegroundColour();
+	  wxColour c_backg   = wxString(ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	  wxColour c_foreg   = wxString(ApplicationConfiguration::GetInstance()->GetForegroundColour().c_str(),wxConvUTF8);
 		SetBackgroundColour(c_backg);
 		SetForegroundColour(c_foreg);
 	}
@@ -85,32 +85,32 @@ void UIMovieScheme::InitGUI()
 	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
 	
 	//Zoom buttons
-	zoomIn_Button  = new wxBitmapButton(this, ID_MAGNIFIER_ZOOM_IN, wxBitmap(wxImage(wxT(icon_path + "magnifier_zoom_in_normal.png"))), wxPoint(2,1), wxSize(22,21), 0, wxDefaultValidator, wxT("Quit_Flame_Button"));
+	zoomIn_Button  = new wxBitmapButton(this, ID_MAGNIFIER_ZOOM_IN, wxBitmap(wxImage(wxString((icon_path + "magnifier_zoom_in_normal.png").c_str(),wxConvUTF8))), wxPoint(2,1), wxSize(22,21), 0, wxDefaultValidator, wxT("Quit_Flame_Button"));
 	zoomIn_Button->SetBackgroundColour(WX_COLOUR_SILK_BLUE);
-	zoomIn_Button->SetBitmapFocus(wxBitmap(wxImage(wxT(icon_path + "magnifier_zoom_in_pressed.png"))));
-	zoomIn_Button->SetBitmapHover(wxBitmap(wxImage(wxT(icon_path + "magnifier_zoom_in_hover.png"))));
-	zoomIn_Button->SetBitmapSelected(wxBitmap(wxImage(wxT(icon_path + "magnifier_zoom_in_pressed.png"))));
-	zoomOut_Button = new wxBitmapButton(this, ID_MAGNIFIER_ZOOM_OUT, wxBitmap(wxImage(wxT(icon_path + "magnifier_zoom_out_normal.png"))), wxPoint(26,1), wxSize(22,21), 0, wxDefaultValidator, wxT("Quit_Flame_Button"));
+	zoomIn_Button->SetBitmapFocus(wxBitmap(wxImage(wxString((icon_path + "magnifier_zoom_in_pressed.png").c_str(),wxConvUTF8))));
+	zoomIn_Button->SetBitmapHover(wxBitmap(wxImage(wxString((icon_path + "magnifier_zoom_in_hover.png").c_str(),wxConvUTF8))));
+	zoomIn_Button->SetBitmapSelected(wxBitmap(wxImage(wxString((icon_path + "magnifier_zoom_in_pressed.png").c_str(),wxConvUTF8))));
+	zoomOut_Button = new wxBitmapButton(this, ID_MAGNIFIER_ZOOM_OUT, wxBitmap(wxImage(wxString((icon_path + "magnifier_zoom_out_normal.png").c_str(),wxConvUTF8))), wxPoint(26,1), wxSize(22,21), 0, wxDefaultValidator, wxString(((std::string)("Quit_Flame_Button")).c_str(),wxConvUTF8));
 	zoomOut_Button->SetBackgroundColour(WX_COLOUR_SILK_BLUE);
-	zoomOut_Button->SetBitmapFocus(wxBitmap(wxImage(wxT(icon_path + "magnifier_zoom_out_pressed.png"))));
-	zoomOut_Button->SetBitmapHover(wxBitmap(wxImage(wxT(icon_path + "magnifier_zoom_out_hover.png"))));
-	zoomOut_Button->SetBitmapSelected(wxBitmap(wxImage(wxT(icon_path + "magnifier_zoom_out_pressed.png"))));
+	zoomOut_Button->SetBitmapFocus(wxBitmap(wxImage(wxString((icon_path + "magnifier_zoom_out_pressed.png").c_str(),wxConvUTF8))));
+	zoomOut_Button->SetBitmapHover(wxBitmap(wxImage(wxString((icon_path + "magnifier_zoom_out_hover.png").c_str(),wxConvUTF8))));
+	zoomOut_Button->SetBitmapSelected(wxBitmap(wxImage(wxString((icon_path + "magnifier_zoom_out_pressed.png").c_str(),wxConvUTF8))));
 		
 	zoomEdit = new wxTextCtrl(this, ID_ZOOM_EDIT, _T("1"), wxPoint(50,2), wxSize(64,19));
 	zoomEdit->SetFont(wxFont(8, wxSWISS, wxNORMAL,wxNORMAL, false, wxT("Tahoma")));
 	wxSpinButton *zoom_spin = new wxSpinButton(this, ID_SPIN_ZOOM, wxPoint(50+64,2), wxSize(10,19), wxSP_VERTICAL);
 
-	adjust_Button = new wxBitmapButton(this, ID_ADJUST_TIME_TO_WIDTH, wxBitmap(wxImage(wxT(icon_path + "adjust_normal.png"))), wxPoint(126,1), wxSize(22,21), 0, wxDefaultValidator, wxT("Adjust to scheme width"));	
+	adjust_Button = new wxBitmapButton(this, ID_ADJUST_TIME_TO_WIDTH, wxBitmap(wxImage(wxString((icon_path + "adjust_normal.png").c_str(),wxConvUTF8))), wxPoint(126,1), wxSize(22,21), 0, wxDefaultValidator, wxT("Adjust to scheme width"));	
 	adjust_Button->SetBackgroundColour(WX_COLOUR_SILK_BLUE);
-	adjust_Button->SetBitmapFocus(wxBitmap(wxImage(wxT(icon_path + "adjust_pressed.png"))));
-	adjust_Button->SetBitmapHover(wxBitmap(wxImage(wxT(icon_path + "adjust_hover.png"))));
-	adjust_Button->SetBitmapSelected(wxBitmap(wxImage(wxT(icon_path + "adjust_pressed.png"))));
+	adjust_Button->SetBitmapFocus(wxBitmap(wxImage(wxString((icon_path + "adjust_pressed.png").c_str(),wxConvUTF8))));
+	adjust_Button->SetBitmapHover(wxBitmap(wxImage(wxString((icon_path + "adjust_hover.png").c_str(),wxConvUTF8))));
+	adjust_Button->SetBitmapSelected(wxBitmap(wxImage(wxString((icon_path + "adjust_pressed.png").c_str(),wxConvUTF8))));
 
-	gotocurrent_Button = new wxBitmapButton(this, ID_GOTO_CURRENT, wxBitmap(wxImage(wxT(icon_path + "gotocurrent_normal.png"))), wxPoint(150,1), wxSize(22,21), 0, wxDefaultValidator, wxT("Adjust to scheme width"));	
+	gotocurrent_Button = new wxBitmapButton(this, ID_GOTO_CURRENT, wxBitmap(wxImage(wxString((icon_path + "gotocurrent_normal.png").c_str(),wxConvUTF8))), wxPoint(150,1), wxSize(22,21), 0, wxDefaultValidator, wxT("Adjust to scheme width"));	
 	gotocurrent_Button->SetBackgroundColour(WX_COLOUR_SILK_BLUE);
-	gotocurrent_Button->SetBitmapFocus(wxBitmap(wxImage(wxT(icon_path + "gotocurrent_pressed.png"))));
-	gotocurrent_Button->SetBitmapHover(wxBitmap(wxImage(wxT(icon_path + "gotocurrent_hover.png"))));
-	gotocurrent_Button->SetBitmapSelected(wxBitmap(wxImage(wxT(icon_path + "gotocurrent_pressed.png"))));
+	gotocurrent_Button->SetBitmapFocus(wxBitmap(wxImage(wxString((icon_path + "gotocurrent_pressed.png").c_str(),wxConvUTF8))));
+	gotocurrent_Button->SetBitmapHover(wxBitmap(wxImage(wxString((icon_path + "gotocurrent_hover.png").c_str(),wxConvUTF8))));
+	gotocurrent_Button->SetBitmapSelected(wxBitmap(wxImage(wxString((icon_path + "gotocurrent_pressed.png").c_str(),wxConvUTF8))));
 
 	//SetScrollbar(position of thumb,size of thumb:how many units can be seen at a time, total size in units, size(for Avgpág movement))
 	scrollBarH = new wxScrollBar(this, ID_SBH, wxPoint(0,h-(wxDefaultSize.y)), wxSize(w,wxDefaultSize.y), wxSB_HORIZONTAL);
@@ -127,21 +127,21 @@ void UIMovieScheme::OnZoomEditChanges(wxCommandEvent& WXUNUSED(event))
 		{
 			if (f < 1)
 			{
-				zoomEdit->ChangeValue("1");
+			  zoomEdit->ChangeValue(wxT("1"));
 				zoom = 1;
 				return;
 			}
 			std::stringstream aux2;
-			int aux = atoi(zoomEdit->GetValue());
+			int aux = atoi(((std::string)zoomEdit->GetValue().mb_str()).c_str());
 			zoom = aux;
 			aux2 << aux;
-			zoomEdit->ChangeValue(aux2.str());					
+			zoomEdit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));					
 		}
 		else
 		{
 			std::stringstream aux;
 			aux << zoom;
-			zoomEdit->ChangeValue(aux.str());
+			zoomEdit->ChangeValue(wxString(aux.str().c_str(),wxConvUTF8));
 		}
 		UpdateScrollBars();
 		Update();
@@ -181,9 +181,9 @@ void UIMovieScheme::render(wxDC &dc)
 
 	if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_brush = ApplicationConfiguration::GetInstance()->GetForegroundColour();
-		wxColour c_backg = ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();
+	  wxColour c_pen   = wxString(ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_brush = wxString(ApplicationConfiguration::GetInstance()->GetForegroundColour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);
 		virtualCanvas_memoryDC.SetPen(wxPen(c_pen));
 		virtualCanvas_memoryDC.SetBrush(wxBrush(c_brush));
 		virtualCanvas_memoryDC.SetBackground(wxBrush(c_backg));
@@ -228,7 +228,7 @@ void UIMovieScheme::OnZoomIn(wxCommandEvent& WXUNUSED(event))
 		zoom -= 1; 
 		std::ostringstream wop;
 		wop << std::fixed << zoom;	
-		zoomEdit->ChangeValue(wop.str());
+		zoomEdit->ChangeValue(wxString(wop.str().c_str(),wxConvUTF8));
 		UpdateZoom();
 	}
 }
@@ -238,7 +238,7 @@ void UIMovieScheme::OnZoomOut(wxCommandEvent& WXUNUSED(event))
 	zoom+=1; 
 	std::ostringstream wop;
 	wop << std::fixed << zoom;	
-	zoomEdit->ChangeValue(wop.str());
+	zoomEdit->ChangeValue(wxString(wop.str().c_str(),wxConvUTF8));
 	UpdateZoom();
 }
 
@@ -399,7 +399,7 @@ void UIMovieScheme::UpdateZoom()
 	//insertion_point = zoomEdit->GetInsertionPoint();
 	std::ostringstream wop;
 	wop << zoom;	
-	zoomEdit->SetValue(wop.str());
+	zoomEdit->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	//zoomEdit->SetInsertionPoint(insertion_point);
 }
 
@@ -479,7 +479,7 @@ void UIMovieScheme::Fill()
 						wxDateTime endt_ ((time_t)((*iter)->GetEndTime().seconds));
 						if ((startt_.GetTicks() > 1) && (endt_.GetTicks() > 1))
 						{
-							AnimatedBox * newbox = new AnimatedBox( n_entities, (*iter)->GetName(), startt_, endt_ );
+						  AnimatedBox * newbox = new AnimatedBox( n_entities, wxString((*iter)->GetName().c_str(),wxConvUTF8), startt_, endt_ );
 							AnimatedBoxes.push_back( newbox );
 							n_entities++;
 						}
@@ -583,7 +583,7 @@ void UIMovieScheme::OnZoomSpinDown(wxSpinEvent& event)
 	zoomEdit->GetValue().ToDouble(&f);
 	f-=1.0f;
 	wop << f; 
-	zoomEdit->SetValue(wop.str()); 
+	zoomEdit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 }
 void UIMovieScheme::OnZoomSpinUp(wxSpinEvent& event)
 {
@@ -592,7 +592,7 @@ void UIMovieScheme::OnZoomSpinUp(wxSpinEvent& event)
 	zoomEdit->GetValue().ToDouble(&f);
 	f+=1.0f;
 	wop << f; 
-	zoomEdit->SetValue(wop.str()); 
+	zoomEdit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 }
 
 //Animated box

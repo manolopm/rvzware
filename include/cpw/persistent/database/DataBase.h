@@ -67,7 +67,7 @@ namespace cpw
 			PGconn *GetDBConn() { return db_conn; }
 			bool GetConnected() { return db_boConnected;}
 			std::vector<std::string> &GetDBTableNames() { return db_tablenames; }
-			std::vector<std::vector<std::string>> &GetDBColumnsperTable() { return db_columnspertable; }
+			std::vector<std::vector<std::string> > &GetDBColumnsperTable() { return db_columnspertable; }
 
 			void SetDBHost(const std::string &host) { db_host = host; }
 			void SetDBUser(const std::string &user) { db_user = user; }
@@ -76,7 +76,7 @@ namespace cpw
 			void SetDBConn(PGconn *conn) { db_conn = conn; }
 			void SetConnected(bool connected) { db_boConnected = connected; }
 			void SetDBTableNames(const std::vector<std::string> &tablenames) { db_tablenames = tablenames; }
-			void SetDBColumnsperTable(const std::vector<std::vector<std::string>> &columnspertable) { db_columnspertable = columnspertable; }
+			void SetDBColumnsperTable(const std::vector<std::vector<std::string> > &columnspertable) { db_columnspertable = columnspertable; }
 
 			void Disconnect();
 
@@ -106,7 +106,7 @@ namespace cpw
 			//! Table names
 			std::vector<std::string> db_tablenames;
 			//! Array containing the column names of each table
-			std::vector<std::vector<std::string>> db_columnspertable;
+			std::vector<std::vector<std::string> > db_columnspertable;
 			//! TRUE if the connection is stablished
 			bool		db_boConnected;
 			

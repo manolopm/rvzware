@@ -77,12 +77,12 @@ namespace cpw
 
 				bool GetCoordsFromEditControls(cpw::Point3d<float> &pos);
 
-				void SetPositionX(const std::string &position_x) { update_on_changes = false; Position_x_Edit->SetValue(position_x); update_on_changes = true;}
-				void SetPositionY(const std::string &position_y) { update_on_changes = false; Position_y_Edit->SetValue(position_y); update_on_changes = true;}
-				void SetPositionZ(const std::string &position_z) { update_on_changes = false; Position_z_Edit->SetValue(position_z); update_on_changes = true;}
+				void SetPositionX(const std::string &position_x) { update_on_changes = false; Position_x_Edit->SetValue((wxString&)position_x); update_on_changes = true;}
+				void SetPositionY(const std::string &position_y) { update_on_changes = false; Position_y_Edit->SetValue((wxString&)position_y); update_on_changes = true;}
+				void SetPositionZ(const std::string &position_z) { update_on_changes = false; Position_z_Edit->SetValue((wxString&)position_z); update_on_changes = true;}
 
-				void SetElementVectorialName(std::string &name)  { ElementVectorial_name_Ed->SetLabel(_T(name));  }
-				void SetElementVectorialType(std::string &name)  { vname = name; SetTitle(wxT(vname));}
+				void SetElementVectorialName(std::string &name)  { ElementVectorial_name_Ed->SetLabel((wxString&)name);  }
+				void SetElementVectorialType(std::string &name)  { vname = name; SetTitle((wxString&)vname);}
 				void SetElementVectorialIcon(std::string &parenticon, std::string &childicon);
 
 				void Modify(const bool &value) {modify = value; ElementVectorial_name_Ed->Enable(false); }

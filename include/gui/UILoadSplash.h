@@ -77,7 +77,6 @@ namespace cpw
 				void OnMove(wxMoveEvent& event);
 				
 				void OnPaint(wxPaintEvent& event);
-				void OnPaint();
 				void OnEraseBackground(wxEraseEvent& event);
 
 				void render(wxDC& dc);

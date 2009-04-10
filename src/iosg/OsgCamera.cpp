@@ -1067,9 +1067,9 @@ void OsgCamera::UpdateGoingTo(double elapsed_time)
 	}	
 	
 	cpw::Point3d<double> difference;
-	difference.x = abs(place_to_go.x - place_to_start.x);
-	difference.y = abs(place_to_go.y - place_to_start.y);
-	difference.z = abs(place_to_go.z - place_to_start.z);
+	difference.x = fabs(place_to_go.x - place_to_start.x);
+	difference.y = fabs(place_to_go.y - place_to_start.y);
+	difference.z = fabs(place_to_go.z - place_to_start.z);
 
 	double travel_total_time = current_going_to_time + time_to_arrive;
 	cpw::Point3d<double> new_positionb;
@@ -1080,19 +1080,19 @@ void OsgCamera::UpdateGoingTo(double elapsed_time)
 
 	cpw::Point3d<double> new_position;
 
-	double position_increment = abs(place_to_go.x - position.x);
+	double position_increment = fabs(place_to_go.x - position.x);
 	if (place_to_go.x < position.x)
 		new_position.x = position.x - ((elapsed_time * position_increment) / time_to_arrive);
 	else
 		new_position.x = position.x + ((elapsed_time * position_increment) / time_to_arrive);
 
-	position_increment = abs(place_to_go.y - position.y);
+	position_increment = fabs(place_to_go.y - position.y);
 	if (place_to_go.y < position.y)
 		new_position.y = position.y - ((elapsed_time * position_increment) / time_to_arrive);
 	else
 		new_position.y = position.y + ((elapsed_time * position_increment) / time_to_arrive);
 
-	position_increment = abs(place_to_go.z - position.z);
+	position_increment = fabs(place_to_go.z - position.z);
 	if (place_to_go.z < position.z)
 		new_position.z = position.z - ((elapsed_time * position_increment) / time_to_arrive);
 	else
@@ -1780,7 +1780,7 @@ void OsgCamera::UpdateGoingToNoUAVChanges(const double &time)
 
 void OsgCamera::GoToPanoramic(const cpw::Point3d<double> &_place, const double &arrive_time)
 {
-	cpw::Point3d<double> &place = OsgScene::UTMToSceneCoords(_place);
+	cpw::Point3d<double> place = OsgScene::UTMToSceneCoords(_place);
 
 	initial_position = position;
 	initial_up = up;

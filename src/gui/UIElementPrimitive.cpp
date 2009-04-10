@@ -91,8 +91,8 @@ UIElementPrimitive::UIElementPrimitive(wxWindow* parent, int id, const wxString&
     text_description = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		text_description->SetBackgroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageColour()));
-		text_description->SetForegroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour()));
+	  text_description->SetBackgroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8)));
+	  text_description->SetForegroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8)));
 	}
 
     button_attributes = new wxButton(this, BUTTON_ATTR, wxT("Attributes..."));
@@ -193,22 +193,22 @@ void UIElementPrimitive::do_layout()
 void UIElementPrimitive::OnButtonExplorer1(wxCommandEvent& WXUNUSED(event))
 {
 	std::string &model_path = ApplicationConfiguration::GetInstance()->GetModelDirectory();
-	wxFileDialog dialog(this,_T("Open Model"),_T(model_path),wxEmptyString,
-						   _T("OSG file(*.osg)|*.osg|3DS file(*.3ds)|*.3ds|All files (*.*)|*.*") );
+	wxFileDialog dialog(this,_T("Open Model"),wxString(model_path.c_str(),wxConvUTF8),wxEmptyString,
+			    _T("OSG file(*.osg)|*.osg|3DS file(*.3ds)|*.3ds|All files (*.*)|*.*") );
 	if(dialog.ShowModal() == wxID_OK)
 	{		
 		text_model->SetValue(dialog.GetPath());
 	}
 	else
 	{
-		text_model->SetValue("");		
+	  text_model->SetValue(wxT(""));		
 	}
 }
 
 void UIElementPrimitive::OnButtonExplorer2(wxCommandEvent& WXUNUSED(event))
 {
 	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetIconDirectory();
-	wxFileDialog dialog(this,_T("Open Icon"),_T(icon_path),wxEmptyString,
+	wxFileDialog dialog(this,_T("Open Icon"),wxString(icon_path.c_str(),wxConvUTF8),wxEmptyString,
 						_T("PNG file(*.png)|*.png|BMP file(*.bmp)|*.bmp|JPG file(*.jpg)|*.jpg|All files (*.*)|*.*") );
 	if(dialog.ShowModal() == wxID_OK)
 	{		
@@ -216,7 +216,7 @@ void UIElementPrimitive::OnButtonExplorer2(wxCommandEvent& WXUNUSED(event))
 	}
 	else
 	{
-		text_icon->SetValue("");		
+	  text_icon->SetValue(wxT(""));		
 	}
 }
 
@@ -234,30 +234,30 @@ void UIElementPrimitive::OnButtonFont(wxCommandEvent& WXUNUSED(event))
 		font = fontdata.GetChosenFont();
 		colour = fontdata.GetColour(); 
 		std::string face, size, col, style;
-		face = font.GetFaceName();  
+		face = std::string(font.GetFaceName().mb_str());  
 		size = font.GetPointSize(); 
-		style = font.GetWeightString(); 
+		style = std::string(font.GetWeightString().mb_str()); 
 		std::ostringstream str;
 		str << font.GetPointSize();
 		size = str.str();
-		col = std::string(colour.GetAsString(wxC2S_NAME)); 
+		col = std::string(colour.GetAsString(wxC2S_NAME).mb_str()); 
 		
 		if (font.GetUnderlined())		
 			strfont = "["+face+"]" + "["+size+"]" + "["+style+"]" + "["+col+"]" + "[UNDERLINED]";
 		else
 			strfont = "["+face+"]" + "["+size+"]" + "["+style+"]" + "["+col+"]";
 		
-		text_font->SetValue(strfont);
+		text_font->SetValue(wxString(strfont.c_str(),wxConvUTF8));
 	}
 	else
 	{
-		text_font->SetValue("");
+	  text_font->SetValue(wxT(""));
 	}
 }
 
 void UIElementPrimitive::OnButtonAttr(wxCommandEvent& WXUNUSED(event))
 {
-	UIAttributes new_attr_dlg(1,this,1, wxString("Primitive element attributes"),wxDefaultPosition);
+	UIAttributes new_attr_dlg(1,this,1, wxT("Primitive element attributes"),wxDefaultPosition);
 	if(!v_attr.empty())
 		new_attr_dlg.SetAttributes(v_attr);
 
@@ -270,7 +270,7 @@ void UIElementPrimitive::OnButtonCancel(wxCommandEvent& WXUNUSED(event))
 {
 	if(!text_name->IsEmpty())
 	{
-		wxMessageDialog message(this,wxString("Save changes before quit?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+		wxMessageDialog message(this,wxT("Save changes before quit?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
 		{			
@@ -290,10 +290,10 @@ void UIElementPrimitive::OnButtonCancel(wxCommandEvent& WXUNUSED(event))
 
 void UIElementPrimitive::OnButtonOK(wxCommandEvent& WXUNUSED(event))
 {
-	std::string p = std::string(text_name->GetValue());
+  std::string p = std::string(text_name->GetValue().mb_str());
 	if((text_name->IsEmpty()) || (p.at(0) == ' ' ) )
 	{
-		wxMessageDialog message(this,wxString("The primitive needs a name."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+		wxMessageDialog message(this,wxT("The primitive needs a name."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 		message.ShowModal();
 	}
 	else
@@ -317,10 +317,10 @@ void UIElementPrimitive::render(wxDC& dc)
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
+	wxColour c_brush = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+dc.SetTextForeground(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8)));
 		dc.SetPen(wxPen(c_pen));
 		dc.SetBrush(wxBrush(c_brush));
 		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);

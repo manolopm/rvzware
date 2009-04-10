@@ -37,7 +37,7 @@ UILogWindow::UILogWindow(wxWindow *parent, const int &sizex, const int &sizey, c
 	wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
 	SetSizer(top_sizer);
 
-	log_text = new wxTextCtrl(this, wxID_ANY, std::string(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxHSCROLL);
+	log_text = new wxTextCtrl(this, wxID_ANY, wxString(std::string("").c_str(),wxConvUTF8), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxHSCROLL);
 
 	top_sizer->Add(log_text,1,wxGROW);
 
@@ -51,8 +51,8 @@ void UILogWindow::NewLogMessage(const std::string &new_message)
 {
 	if (SHOW_ADDITIONAL_WINDOWS)
 	{
-		log_text->AppendText("\n");
-		log_text->AppendText(new_message);
+	  log_text->AppendText(wxT("\n"));
+	  log_text->AppendText(wxString(new_message.c_str(),wxConvUTF8));
 	}
 }
 

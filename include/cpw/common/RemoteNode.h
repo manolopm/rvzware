@@ -88,3 +88,9 @@ namespace cpw
 		//void SetMACAddress(const std::string &_macaddress);
 		//const std::string &GetMACAddress() const;
 		//const std::string &GetMACAddress();
+
+
+
+
+
+

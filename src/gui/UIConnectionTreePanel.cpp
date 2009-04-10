@@ -63,22 +63,22 @@ using namespace cpw::gui;
 
 BEGIN_EVENT_TABLE(UIConnectionTreePanel, wxPanel)
 
-	EVT_TREE_ITEM_EXPANDED(CONNECTION_TREE_PANEL, EvtTreeItemExpanded)
-	EVT_TREE_ITEM_COLLAPSED(CONNECTION_TREE_PANEL, EvtTreeItemCollapsed)
+EVT_TREE_ITEM_EXPANDED(CONNECTION_TREE_PANEL, UIConnectionTreePanel::EvtTreeItemExpanded)
+	EVT_TREE_ITEM_COLLAPSED(CONNECTION_TREE_PANEL, UIConnectionTreePanel::EvtTreeItemCollapsed)
 	
-	EVT_TREE_ITEM_RIGHT_CLICK(CONNECTION_TREE_PANEL, OnRightClick)
+	EVT_TREE_ITEM_RIGHT_CLICK(CONNECTION_TREE_PANEL, UIConnectionTreePanel::OnRightClick)
 
 END_EVENT_TABLE()
 
 
 BEGIN_EVENT_TABLE(UIConnectionTreePanelPopUpMenu, wxMenu)
 
-	EVT_MENU	 ( RECONNECT_MENU_ITEM, Reconnect	)
-	EVT_MENU	 ( EXPLORE_MENU_ITEM, Explore	)
-	EVT_MENU	 ( DISCONNECT_MENU_ITEM, Disconnect	)
-	EVT_MENU	 ( DELETE_MENU_ITEM, Delete	)
+	EVT_MENU	 ( RECONNECT_MENU_ITEM, UIConnectionTreePanelPopUpMenu::Reconnect	)
+	EVT_MENU	 ( EXPLORE_MENU_ITEM, UIConnectionTreePanelPopUpMenu::Explore	)
+	EVT_MENU	 ( DISCONNECT_MENU_ITEM, UIConnectionTreePanelPopUpMenu::Disconnect	)
+	EVT_MENU	 ( DELETE_MENU_ITEM, UIConnectionTreePanelPopUpMenu::Delete	)
 
-	EVT_MENU	 ( DISCONNECT_ENTITY_MENU_ITEM, DisconnectEntity	)
+	EVT_MENU	 ( DISCONNECT_ENTITY_MENU_ITEM, UIConnectionTreePanelPopUpMenu::DisconnectEntity	)
 
 END_EVENT_TABLE()
 
@@ -108,15 +108,15 @@ UIConnectionTreePanel::UIConnectionTreePanel(cpw::remote::RemoteProtocol *protoc
 	
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_foreg = cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetPageColour();	
+	  wxColour c_foreg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8);	
 		tree_ctrl->SetBackgroundColour(c_backg);
 		tree_ctrl->SetForegroundColour(c_foreg);
 	}
 
 	tree_ctrl->SetSize(this->GetSize());
 	
-	root_id = tree_ctrl->AddRoot("-Root item (it is hidden)-");
+	root_id = tree_ctrl->AddRoot(wxT("-Root item (it is hidden)-"));
 		
 	img_list = new wxImageList(16, 16);
 	tree_ctrl->AssignImageList(img_list);
@@ -172,7 +172,7 @@ void UIConnectionTreePanel::InitializeTree()
 		std::stringstream ss;
 		ss << it2->GetPort();
 		name = it2->GetIPAddress() + ":" + ss.str();
-		wxTreeItemId id = tree_ctrl->AppendItem(root_id, wxString(name));
+		wxTreeItemId id = tree_ctrl->AppendItem(root_id, wxString(name.c_str(),wxConvUTF8));
 		AddIcon(connection_manager->GetConnectionState(*it2), id);
 
 		connection_tree_relation[*it2] = id;
@@ -210,7 +210,7 @@ void UIConnectionTreePanel::FillTree(cpw::RemoteNode node, wxTreeItemId parent_i
 		cpw::Entity *entity = cpw::EntityRegistry::GetInstance()->GetEntity(*it);
 		if (entity != NULL)
 		{
-			wxTreeItemId id = tree_ctrl->AppendItem(parent_id, wxString(entity->GetName()));
+			wxTreeItemId id = tree_ctrl->AppendItem(parent_id, wxString(entity->GetName().c_str(),wxConvUTF8));
 			AddIcon(entity->GetIcon(), id);
 			entity_tree_relation.insert(std::pair<cpw::TypeId, wxTreeItemId>(entity->GetId(), id));
 		}
@@ -292,7 +292,7 @@ void UIConnectionTreePanel::DisconnectEntity(const cpw::RemoteNode &node, const 
 
 	delete message;
 
-	connection_manager->Unsubscribe(connection, (cpw::TypeId) entity_id);
+	connection_manager->Unsubscribe(connection, (cpw::TypeId &) entity_id);
 
 	protocol->CleanUpModifiers();
 }
@@ -361,7 +361,7 @@ void UIConnectionTreePanel::AddIcon(const std::string &icon_filename, wxTreeItem
 		//cpw::PrimitiveRegistry::GetInstance()->GetPrimitiveFromUrl(primitive_url)->GetIcon();
 	if (id.IsOk())
 	{
-		wxIcon icon(wxT(icon_filename), wxBITMAP_TYPE_ANY);
+		wxIcon icon(wxString(icon_filename.c_str(),wxConvUTF8), wxBITMAP_TYPE_ANY);
 		int img_index = img_list->Add(icon);
 		tree_ctrl->SetItemImage(id, img_index);
 	}

@@ -24,7 +24,9 @@
 #ifndef _PLUGINITERFACE_
 #define _PLUGINITERFACE_
 
-#include "windows.h"
+#ifdef WIN32
+  #include "windows.h"
+#endif
 
 #include <string>
 #include <vector>
@@ -37,12 +39,19 @@
 #include <cpw/graphic/INavigatorManager.h>
 #include <cpw/common/IStatusController.h>
 
+#if defined(_MSC_VER) || defined(__CYGWIN__) || defined(__MINGW32__) || defined( __BCPLUSPLUS__)  || defined( __MWERKS__)
 #ifndef IMPORT
 #define DLLEXPORT __declspec(dllexport)
 #else
 #define DLLEXPORT __declspec(dllimport)
 #endif
-
+#else
+#ifndef IMPORT
+#define DLLEXPORT 
+#else
+#define DLLEXPORT 
+#endif
+#endif
 /** 
 	\brief This is the interface for the plugins of the application
 */

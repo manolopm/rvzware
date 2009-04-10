@@ -142,7 +142,8 @@ bool ElementController::ChangePrimitive(const std::string &primitive_url)
 			}
 			else
 			{
-				wxMessageDialog message1(NULL,wxString("Cannot load the primitive."), wxString("Capaware"),wxICON_WARNING |wxOK);				
+			  wxMessageDialog message1(NULL,wxT("Cannot load the primitive."),
+						   wxT("Capaware"),wxICON_WARNING |wxOK);				
 				message1.ShowModal();
 			}
 		}
@@ -285,7 +286,7 @@ bool ElementController::CreateElement(const std::string &name, const std::string
 	}
 	else
 	{
-		wxMessageDialog message1(NULL,wxString("Cannot allocate memory for the element.\nClose other applications and try again."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);				
+	  wxMessageDialog message1(NULL,wxT("Cannot allocate memory for the element.\nClose other applications and try again."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);				
 		message1.ShowModal();
 		element3d = NULL;
 		return false;

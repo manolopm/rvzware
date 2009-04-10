@@ -81,7 +81,6 @@ namespace cpw
 				void OnButtonOK(wxCommandEvent& WXUNUSED(event));
 				
 				void OnPaint(wxPaintEvent& event);
-				void OnPaint();
 				void OnEraseBackground(wxEraseEvent& event);
 
 				wxString application_title;

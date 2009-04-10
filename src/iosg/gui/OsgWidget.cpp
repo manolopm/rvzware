@@ -22,7 +22,7 @@
 */
 #include <sstream>
 
-#include "stdafx.h"
+#include "../stdafx.h"
 
 #include <iosg/gui/OsgWidget.h>
 #include <iosg/OsgObjectRegistrySingleton.h>

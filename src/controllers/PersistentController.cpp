@@ -95,16 +95,19 @@ cpw::Persistent *PersistentController::Load(wxWindow* parent, const std::string 
 	if (ferror == cpw::PERSISTENTOK)
 	{
 		if(persistent == NULL)
-		{
-			wxMessageDialog message(parent, wxString(std::string("Error loading the " + type + ". \nThe file may be corrupted.")), 
-									wxString("Error"),wxICON_WARNING |wxOK);
+		  {
+		    std::string msg = "Error loading the " + type + ". \nThe file may be corrupted.";
+		  wxMessageDialog message(parent,(const wxString&) msg, 
+					  wxT("Error"),
+					  wxICON_WARNING |wxOK);
 			message.ShowModal();
 		}
 	}
 	else
-	{
-		wxMessageDialog message(parent, wxString(std::string("Error loading the " + type + ". \nFile can not be opened.")), 
-							    wxString("Error"),wxICON_WARNING |wxOK);
+	  {
+	    std::string msg = "Error loading the " + type + ". \nFile can not be opened.";
+	    wxMessageDialog message(parent, (const wxString&)msg, 
+				    wxT("Error"),wxICON_WARNING |wxOK);
 		message.ShowModal();
 	}
 
@@ -116,15 +119,16 @@ cpw::Persistent *PersistentController::Load(wxWindow* parent, const std::string 
 cpw::Persistent *PersistentController::Load(wxWindow* parent, const std::string &type)
 {
 	cpw::Persistent *persistent; 
-
-	wxFileDialog dialog (parent,_T(std::string("Open " + type)), wxEmptyString,wxEmptyString,
-					     _T(file_description[type]));
+	
+	std::string msg = "Open " + type;
+	wxFileDialog dialog (parent,(const wxString &)msg,
+			     wxEmptyString,wxEmptyString,
+			     (const wxString &)file_description[type]);
 
 	if(dialog.ShowModal() == wxID_OK)
 	{						
-		std::string url = dialog.GetPath();
-
-		persistent = Load(parent, url);
+	  wxString url = dialog.GetPath();
+	  persistent = Load(parent, (std::string &)url);
 	}
 
 	return persistent;
@@ -141,7 +145,7 @@ cpw::PersistentError PersistentController::Save(wxWindow* parent, cpw::Persisten
 	do
 	{
 
-		std::string &url = persistent->GetUrl();
+	  std::string url = persistent->GetUrl();
 		ferror = persistent->Save(overwrite);
 		
 		int modal;
@@ -149,8 +153,9 @@ cpw::PersistentError PersistentController::Save(wxWindow* parent, cpw::Persisten
 		switch (ferror)
 		{
 			case cpw::PERSISTENTALREADYEXISTS:
-				{
-					wxMessageDialog message1(NULL,wxString("File already exists.\n Do you want to overwrite it?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO|wxCANCEL);				
+			  {
+			    
+			    wxMessageDialog message1(NULL,wxT("File already exists.\n Do you want to overwrite it?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO|wxCANCEL);				
 					modal = message1.ShowModal();
 					if (modal == wxID_YES)
 					{
@@ -161,29 +166,34 @@ cpw::PersistentError PersistentController::Save(wxWindow* parent, cpw::Persisten
 						// mostramos un filedialog para buscar elegir un nuevo nombre ???
 						wxFileDialog dlg_file (NULL,_T("Save entity"),wxEmptyString,wxEmptyString,
 							   _T("Element(*.cel)|*.cel|Layer(*.cla)|*.cla|All files(*.*)|*.*") );
-						dlg_file.SetPath(_T(url));
+						dlg_file.SetPath((const wxString&)url);
 						if(dlg_file.ShowModal() == wxID_OK)
-						{
-							persistent->SetUrl(std::string(dlg_file.GetPath()));
-						}
+						  {
+						    wxString str = dlg_file.GetPath();
+						    std::string stdstr = std::string(str.mb_str());
+						    persistent->SetUrl((const std::string &)stdstr);
+						  }
 						else stop = true;						
 					}
 					if (modal == wxID_CANCEL) stop = true;
 					break;
 				}
 			case cpw::PERSISTENTPERMISSIONDENIED:
-				{
-					wxMessageDialog message2(NULL, wxString("Error writing file, permission denied.\n Do you want to select other path?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO);
+			  {
+			    
+			    wxMessageDialog message2(NULL, wxT("Error writing file, permission denied.\n Do you want to select other path?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO);
 					modal = message2.ShowModal();
 					if (modal == wxID_YES)
 					{						
 						wxFileDialog dlg_file (NULL,_T("Save entity"),wxEmptyString,wxEmptyString,
 							   _T("Element(*.cel)|*.cel|Layer(*.cla)|*.cla|All files(*.*)|*.*") );
-						dlg_file.SetPath(_T(url));
+						dlg_file.SetPath((const wxString &)url);
 						if(dlg_file.ShowModal() == wxID_OK)
 						{							
-							//ferror = Save(entity, url, persistent_manager, overwrite); 
-							persistent->SetUrl(std::string(dlg_file.GetPath()));
+						  //ferror = Save(entity, url, persistent_manager, overwrite);
+						  wxString str = dlg_file.GetPath();
+						  std::string stdstr = std::string(str.mb_str());
+						  persistent->SetUrl((const std::string &)stdstr);
 						}
 						else
 							stop = true;

@@ -83,7 +83,8 @@ void LayerController::InstacePrimitiveLayer(cpw::gui::UILayer *ui_layer_)
 				}
 				else
 				{
-					wxMessageDialog message1(NULL,wxString("Cannot load the primitive."), wxString("Capaware"),wxICON_WARNING |wxOK);				
+				  wxMessageDialog message1(NULL,wxT("Cannot load the primitive."),
+							   wxT("Capaware"),wxICON_WARNING |wxOK);				
 					message1.ShowModal();
 				}
 			}
@@ -142,7 +143,8 @@ void LayerController::CreateLayer(wxWindow* parent, cpw::LayerTree &layer_tree)
 		}
 		else
 		{
-			wxMessageDialog message1(NULL,wxString("Cannot allocate memory for the layer.\nClose other applications and try again."), wxString("Warning"),wxICON_EXCLAMATION |wxYES);				
+		  wxMessageDialog message1(NULL,wxT("Cannot allocate memory for the layer.\nClose other applications and try again."),
+					   wxT("Warning"),wxICON_EXCLAMATION |wxYES);				
 			message1.ShowModal();
 		}
 	} 

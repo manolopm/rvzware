@@ -342,7 +342,7 @@ int Loggable::AdaptPersistence(Node *root)
 {
 	Persistent::AdaptPersistence(root);
 
-	std::vector<cpw::Node *> &components = root->GetChildren();
+	std::vector<cpw::Node *> components = root->GetChildren();
 	std::vector<cpw::Node *>::iterator i = components.begin();
 	
 	i = components.begin();
@@ -351,7 +351,7 @@ int Loggable::AdaptPersistence(Node *root)
 	changes.clear();
 	if (i != components.end())
 	{
-		std::vector<cpw::Node *> &_changes = (*i)->GetChildren();
+		std::vector<cpw::Node *> _changes = (*i)->GetChildren();
 		std::vector<cpw::Node *>::iterator j = _changes.begin();
 		for(;j!=_changes.end();j++)
 		{

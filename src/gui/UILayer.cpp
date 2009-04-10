@@ -87,7 +87,7 @@ void UILayer::CreateGUIControls()
 	Center();
 	
 	std::string &primitive_path = ApplicationConfiguration::GetInstance()->GetPrimitiveDirectory();
-	open_primitive =  new wxFileDialog(this, wxT("Choose a file"), wxT(primitive_path), wxT(""), wxT("*.cla"), wxOPEN);
+	open_primitive =  new wxFileDialog(this, wxT("Choose a file"), wxString(primitive_path.c_str(),wxConvUTF8), wxT(""), wxT("*.cla"), wxOPEN);
 
 	int col_= 20;int row_ = 20;
 	
@@ -117,8 +117,8 @@ void UILayer::CreateGUIControls()
 	tc_description->SetFont(wxFont(8, wxSWISS, wxNORMAL,wxNORMAL, false, wxT("Tahoma")));
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		tc_description->SetBackgroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageColour()));
-		tc_description->SetForegroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour()));
+	  tc_description->SetBackgroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8)));
+	  tc_description->SetForegroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8)));
 	}
 
 	row_ += 85+80-24+5+10;
@@ -140,7 +140,7 @@ void UILayer::SetPrimitivesUrl(const std::map<std::string, cpw::TypeId> &vec_url
 	std::map<std::string, cpw::TypeId>::const_iterator i = vec_url.begin();
 	for(i; i!=vec_url.end();i++)
 	{
-		wxString* url = new wxString((wxString)(i->first));
+	  wxString* url = new wxString((i->first).c_str(),wxConvUTF8);
 		primitiveChoice->Insert(*url,0);
 		delete url;
 	}
@@ -151,7 +151,7 @@ void UILayer::OnChoiceChanged(wxCommandEvent& WXUNUSED(event))
     primitive_url = "";
 	if (primitiveChoice->GetSelection() != wxNOT_FOUND)
 	{		
-		std::string pname = primitiveChoice->GetString(primitiveChoice->GetSelection());
+	  std::string pname = (std::string)primitiveChoice->GetString(primitiveChoice->GetSelection()).mb_str();
 		std::map<std::string, cpw::TypeId>::iterator i = v_url.find(pname);
 		if (i!= v_url.end())
 		{
@@ -169,14 +169,14 @@ void UILayer::OnBrowsePrimitivesButton(wxCommandEvent& event)
 	primitive_id = cpw::TypeId();
     if(open_primitive->ShowModal() == wxID_OK ) 
     {
-        primitive_url = open_primitive->GetPath();
-		std::string pname = primitiveChoice->GetString(primitiveChoice->GetSelection());
-		lc->InstacePrimitiveLayer(this);
-		primitiveChoice->Clear();
-		lc->SetPrimitivesUrl(this);
-		primitiveChoice->SetSelection(primitiveChoice->FindString(lc->GetPrimitiveName()));
-		button_ok->Enable(true);
-	}
+      primitive_url = (std::string)open_primitive->GetPath().mb_str();
+      std::string pname = (std::string)primitiveChoice->GetString(primitiveChoice->GetSelection()).mb_str();
+      lc->InstacePrimitiveLayer(this);
+      primitiveChoice->Clear();
+      lc->SetPrimitivesUrl(this);
+      primitiveChoice->SetSelection(primitiveChoice->FindString(wxString(lc->GetPrimitiveName().c_str(),wxConvUTF8)));
+      button_ok->Enable(true);
+    }
 }
 
 
@@ -187,11 +187,11 @@ void UILayer::OnButtonOK(wxCommandEvent& WXUNUSED(event))
 
 void UILayer::ButtonOK()
 {
-	std::string p = std::string(tc_name->GetValue());
+  std::string p = (std::string)(tc_name->GetValue().mb_str());
 	int cc = primitiveChoice->GetSelection();
 	if((cc == wxNOT_FOUND && primitiveChoice->IsEnabled()) || (tc_name->IsEmpty()) || (p.at(0) == ' ' ) )
 	{
-		wxMessageDialog message(this,wxString("The layer needs a template and a name."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+		wxMessageDialog message(this,wxT("The layer needs a template and a name."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 		message.ShowModal();
 	}
 	else
@@ -204,7 +204,7 @@ void UILayer::ButtonOK()
 void UILayer::OnButtonHtml(wxCommandEvent& WXUNUSED(event))
 {
 	std::string &root_path = ApplicationConfiguration::GetInstance()->GetRootDirectory();
-	wxFileDialog dialog(this,_T("Open HTML file"),_T(root_path),wxEmptyString,
+	wxFileDialog dialog(this,_T("Open HTML file"),wxString(root_path.c_str(),wxConvUTF8),wxEmptyString,
 						   _T("File html(*.html)|*.html|All files(*.*)|*.*") );
 	if(dialog.ShowModal() == wxID_OK)
 	{		
@@ -216,7 +216,7 @@ void UILayer::OnButtonCancel(wxCommandEvent& WXUNUSED(event))
 {
 	if((!tc_name->IsEmpty())||(!tc_description->IsEmpty())||(!tc_html->IsEmpty()))
 	{
-		wxMessageDialog message(this,wxString("Save changes before quit?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+		wxMessageDialog message(this,wxT("Save changes before quit?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
 		{		
@@ -235,7 +235,7 @@ void UILayer::OnButtonCancel(wxCommandEvent& WXUNUSED(event))
 
 void UILayer::OnButtonAttributes(wxCommandEvent& WXUNUSED(event))
 {
-	UIEAttributes new_attr_dlg(0,this,1, wxString("Layer attributes"),wxDefaultPosition);
+	UIEAttributes new_attr_dlg(0,this,1, wxT("Layer attributes"),wxDefaultPosition);
 	if(!attributes.empty())
 		new_attr_dlg.SetAttributes(attributes);
 
@@ -260,10 +260,10 @@ void UILayer::render(wxDC& dc)
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
+	  wxColour c_brush = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	  dc.SetTextForeground(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8)));
 		dc.SetPen(wxPen(c_pen));
 		dc.SetBrush(wxBrush(c_brush));
 		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);

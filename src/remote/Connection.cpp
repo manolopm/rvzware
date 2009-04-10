@@ -41,7 +41,9 @@
 #include <remote/DisconnectEntityData.h>
 #include <remote/Connection.h>
 
-
+#ifndef UINT8_MAX
+#define UINT8_MAX 255
+#endif
 using namespace cpw::remote;
 
 

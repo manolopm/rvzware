@@ -214,7 +214,7 @@ void UIAttributes::OnButtonAdd(wxCommandEvent& WXUNUSED(event))
 	else
 	{
 		text_name->Clear();
-		wxMessageDialog message(this,wxString("You can't create an attibute without name."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+		wxMessageDialog message(this,wxT("You can't create an attibute without name."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 		message.ShowModal();
 	}
 }
@@ -240,7 +240,7 @@ void UIAttributes::OnButtonCancel(wxCommandEvent& WXUNUSED(event))
 {
 	if(grid_modify)
 	{
-		wxMessageDialog message(this,wxString("Save changes before quit?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+		wxMessageDialog message(this,wxT("Save changes before quit?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
 		{			
@@ -264,9 +264,9 @@ std::vector<cpw::Attribute> UIAttributes::GetAttributes()
 	cpw::Attribute attr;
 	for(int i=0; i<grid_1->GetNumberRows(); i++)
 	{
-		attr.name  = std::string(grid_1->GetCellValue(i,0));
-		attr.type  = std::string(grid_1->GetCellValue(i,1));	
-		attr.value = std::string(grid_1->GetCellValue(i,2));
+	  attr.name  = std::string(grid_1->GetCellValue(i,0).mb_str());
+	  attr.type  = std::string(grid_1->GetCellValue(i,1).mb_str());	
+	  attr.value = std::string(grid_1->GetCellValue(i,2).mb_str());
 		v_attr.push_back(attr);
 	}
 	return v_attr;
@@ -278,9 +278,9 @@ void UIAttributes::SetAttributes(const std::vector<cpw::Attribute> &attr)
 	for(std::vector<cpw::Attribute>::const_iterator i= attr.begin(); i!= attr.end(); i++)
 	{
 		grid_1->InsertRows();
-		grid_1->SetCellValue(0,0,wxT(i->name));
-		grid_1->SetCellValue(0,1,wxT(i->type));
-		grid_1->SetCellValue(0,2,wxT(i->value));
+		grid_1->SetCellValue(0,0,wxString(i->name.c_str(),wxConvUTF8));
+		grid_1->SetCellValue(0,1,wxString(i->type.c_str(),wxConvUTF8));
+		grid_1->SetCellValue(0,2,wxString(i->value.c_str(),wxConvUTF8));
 	}
 }
 
@@ -299,10 +299,10 @@ void UIAttributes::render(wxDC& dc)
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
+	  wxColour c_brush = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	  dc.SetTextForeground(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8)));
 		dc.SetPen(wxPen(c_pen));
 		dc.SetBrush(wxBrush(c_brush));
 		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);

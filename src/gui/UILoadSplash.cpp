@@ -46,6 +46,7 @@ UILoadSplash::UILoadSplash(wxWindow *parent, wxWindowID id, const wxString &titl
 		SetForegroundColour(paren->GetForegroundColour());
 		SetBackgroundColour(paren->GetBackgroundColour());
 	}
+
 	CreateGUIControls();
 }
 
@@ -58,7 +59,7 @@ void UILoadSplash::CreateGUIControls()
 	SetTitle(wxT(""));
 	SetIcon(wxNullIcon);
 
-	m_bmp = wxBitmap(wxImage(wxT(background_image)));
+	m_bmp = wxBitmap(wxImage(wxString(background_image.c_str(),wxConvUTF8)));
 	
 	SetSize(8,8,m_bmp.GetWidth(),m_bmp.GetHeight());
 	Center();
@@ -84,9 +85,6 @@ void UILoadSplash::render(wxDC& dc)
 	dc.DrawBitmap(m_bmp, 0, 0, false);
 }
 
-void UILoadSplash::OnPaint()
-{ 
-}
 
 void UILoadSplash::OnEraseBackground(wxEraseEvent& event)
 {

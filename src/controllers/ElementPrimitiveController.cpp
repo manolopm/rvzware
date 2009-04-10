@@ -51,7 +51,7 @@ ElementPrimitiveController::~ElementPrimitiveController()
 void ElementPrimitiveController::CreateElementPrimitive(wxWindow* parent) {
 
 	//Create the form for the new primitive
-	cpw::gui::UIElementPrimitive new_dlg(parent,1, wxString("Element Primitive"),wxDefaultPosition);
+	cpw::gui::UIElementPrimitive new_dlg(parent,1, wxT("Element Primitive"),wxDefaultPosition);
 	std::stringstream name;
 	name << "ElementPrimitive" << cpw::EntityFactory::GetInstance()->GetEntityNumber();
 	new_dlg.SetElementPrimitiveName(name.str());
@@ -64,7 +64,8 @@ void ElementPrimitiveController::CreateElementPrimitive(wxWindow* parent) {
 		// Read data form and create the new primitive element
 		new_element_primitive->SetName(new_dlg.GetPrimitiveName());
 		((cpw::Element3D*)new_element_primitive)->SetModelUrl(new_dlg.GetModelPath());
-		wxIcon icon(wxT(new_dlg.GetIconPath()), wxBITMAP_TYPE_ANY);
+		wxString wxstr(new_dlg.GetIconPath().c_str(), wxConvUTF8);
+		wxIcon icon(wxstr, wxBITMAP_TYPE_ANY);
 		if (icon.IsOk())
 			new_element_primitive->SetIcon(new_dlg.GetIconPath());
 		else
@@ -91,3 +92,4 @@ bool ElementPrimitiveController::IsOpen()
 {
 	return false;	
 }
+

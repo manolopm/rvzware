@@ -31,20 +31,25 @@
 #include <algorithm>
 #include <assert.h>
 #include <ctime>
-#include <direct.h>
+
 #include <fstream>
 #include <iostream>
 #include <list>
 #include <map>
 #include <memory.h>
-#include <process.h>
+
 #include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
 #include <vector>
+
+#ifdef WIN32
 #include <windows.h>
+#include <direct.h>
+#include <process.h>
+#endif
 
 #include <cpw/debugger.h>
 

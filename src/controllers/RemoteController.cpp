@@ -305,8 +305,10 @@ void RemoteController::RecvGetPublishedResponse(const cpw::remote::Connection *c
 	if (ui_published.ShowModal() == wxID_OK)
 	{
 		if (ui_published.IsBack())
-			Connect();
-		protocol->GetEntities((cpw::remote::Connection *)connection, ui_published.GetSelectedEntities());
+		  Connect();
+		std::vector<cpw::TypeId, std::allocator<cpw::TypeId> > vct = ui_published.GetSelectedEntities();
+		protocol->GetEntities((cpw::remote::Connection *)connection,
+				      (std::vector<cpw::TypeId, std::allocator<cpw::TypeId> > &)vct);
 	}
 
 }

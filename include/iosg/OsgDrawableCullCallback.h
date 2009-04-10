@@ -64,7 +64,7 @@ namespace cpw
 		{
 		public:
 
-			OsgDrawableCullCallback::OsgDrawableCullCallback (OsgPetitionManager *_petman, OsgVisitor *_visitor): 
+			OsgDrawableCullCallback (OsgPetitionManager *_petman, OsgVisitor *_visitor): 
 				blending(0), last_blending(255), petman(_petman), visitor(_visitor),
 				//PET_PEND(false), //TextureWMS(NULL), //NFDP(0), 
 				// ult_gen(0), maxLODvis(0), ultLODped(0), 

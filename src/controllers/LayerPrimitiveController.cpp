@@ -49,7 +49,7 @@ void LayerPrimitiveController::CreateContainerLayerPrimitive(wxWindow* parent)
 {
 	//Create the form for the new Container primitive
 	
-	cpw::gui::UILayerPrimitive new_dlg(parent,1, wxString("Container Layer Primitive"),wxDefaultPosition);
+	cpw::gui::UILayerPrimitive new_dlg(parent,1, wxT("Container Layer Primitive"),wxDefaultPosition);
 
 	std::stringstream name;
 	name << "ContainerLayerPrimitive" << cpw::EntityFactory::GetInstance()->GetEntityNumber();
@@ -62,7 +62,8 @@ void LayerPrimitiveController::CreateContainerLayerPrimitive(wxWindow* parent)
 		
 		// Read data form and create the new primitive element
 		new_layer_primitive->SetName(new_dlg.GetPrimitiveName());
-		wxIcon icon(wxT(new_dlg.GetIconPath()), wxBITMAP_TYPE_ANY);
+		wxString wxstr(new_dlg.GetIconPath().c_str(),wxConvUTF8);
+		wxIcon icon(wxstr, wxBITMAP_TYPE_ANY);
 		if (icon.IsOk())
 			new_layer_primitive->SetIcon(new_dlg.GetIconPath());
 		else

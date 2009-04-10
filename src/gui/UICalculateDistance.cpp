@@ -89,7 +89,8 @@ UICalculateDistance::~UICalculateDistance()
 
 void UICalculateDistance::CreateGUIControls()
 {
-	SetTitle(wxT(vname));
+  wxString str(vname.c_str(),wxConvUTF8);
+	SetTitle(str);
 	SetIcon(wxNullIcon);
 	SetSize(8,8,388,141);
 	SetPosition(wxPoint(20,20));
@@ -103,13 +104,13 @@ void UICalculateDistance::CreateGUIControls()
 
 	//Choice
 	wxArrayString arrayStringFor_formatChoice;
-	arrayStringFor_formatChoice.Add("Kilometers");
-	arrayStringFor_formatChoice.Add("Meters");
-	arrayStringFor_formatChoice.Add("Centimeters");
-	arrayStringFor_formatChoice.Add("Inches");
-	arrayStringFor_formatChoice.Add("Yards");
-	arrayStringFor_formatChoice.Add("Milles");
-	arrayStringFor_formatChoice.Add("Nautic milles");
+	arrayStringFor_formatChoice.Add(wxT("Kilometers"));
+	arrayStringFor_formatChoice.Add(wxT("Meters"));
+	arrayStringFor_formatChoice.Add(wxT("Centimeters"));
+	arrayStringFor_formatChoice.Add(wxT("Inches"));
+	arrayStringFor_formatChoice.Add(wxT("Yards"));
+	arrayStringFor_formatChoice.Add(wxT("Milles"));
+	arrayStringFor_formatChoice.Add(wxT("Nautic milles"));
 	formatChoice = new wxChoice(this, ID_FORMAT_CHOICE, wxPoint(_col+248,_row), wxSize(100,23), arrayStringFor_formatChoice, 0, wxDefaultValidator, wxT("WxChoice1"));
 	formatChoice->SetFont(wxFont(8, wxSWISS, wxNORMAL,wxNORMAL, false, wxT("Tahoma")));
 	formatChoice->SetSelection(1);
@@ -185,14 +186,18 @@ void UICalculateDistance::render(wxDC& dc)
 	GetClientSize (&client_w, &client_h);
 
 	if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
-	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
-		dc.SetPen(wxPen(c_pen));
-		dc.SetBrush(wxBrush(c_brush));
-		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);
+	  {
+	    wxString str(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	    wxColour c_pen   = (wxColour)str;
+	    wxString str2(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);
+	    wxColour c_backg = (wxColour)str2;
+	    wxString str3(ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	    wxColour c_brush = (wxColour)str3;
+	    wxString str4(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8);
+	    dc.SetTextForeground((wxColour)str4);
+	    dc.SetPen(wxPen(c_pen));
+	    dc.SetBrush(wxBrush(c_brush));
+	    dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);
 	}
 
 	std::ostringstream wop,wop2,wop3,wop4; 
@@ -210,15 +215,15 @@ void UICalculateDistance::render(wxDC& dc)
 	wxPoint box1_first(20-2,45-9);
 	wxPoint box1_last(368,45+22);
 	dc.DrawRoundedRectangle(box1_first.x, box1_first.y, box1_last.x-box1_first.x, box1_last.y-box1_first.y,3.1f);
-	dc.DrawRotatedText(_T(wop2.str().c_str()),89+10-30-5,45, 0);
-	dc.DrawRotatedText(_T(wop3.str().c_str()),89+10-30-5+92+10+15-3,45, 0);
-	dc.DrawRotatedText(_T(wop4.str().c_str()),89+10-30-5+184+20+15+10-2,45, 0);
+	dc.DrawRotatedText(wxString(wop2.str().c_str(),wxConvUTF8),89+10-30-5,45, 0);
+	dc.DrawRotatedText(wxString(wop3.str().c_str(),wxConvUTF8),89+10-30-5+92+10+15-3,45, 0);
+	dc.DrawRotatedText(wxString(wop4.str().c_str(),wxConvUTF8),89+10-30-5+184+20+15+10-2,45, 0);
 
 	wxFont font(10, wxSWISS, wxNORMAL,wxNORMAL, false, wxT("Tahoma"));
 	wxFont font_ = dc.GetFont();
 	dc.SetFont(font);
 	dc.DrawRotatedText(_T("Distance:"),20,12, 0);
-	dc.DrawRotatedText(_T(wop.str().c_str()),20+65,12, 0);
+	dc.DrawRotatedText(wxString(wop.str().c_str(),wxConvUTF8),20+65,12, 0);
 	dc.SetFont(font_);
 }
 
@@ -265,9 +270,9 @@ void UICalculateDistance::OnEraseBackground(wxEraseEvent& event)
 void UICalculateDistance::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 {
 	ElementVectorial_controller->RemoveAll();
-	Position_x_Edit->ChangeValue("0.000");
-	Position_y_Edit->ChangeValue("0.000");
-	Position_z_Edit->ChangeValue("0.000");
+	Position_x_Edit->ChangeValue(wxString("0.000",wxConvUTF8));
+	Position_y_Edit->ChangeValue(wxString("0.000",wxConvUTF8));
+	Position_z_Edit->ChangeValue(wxString("0.000",wxConvUTF8));
 	Refresh();
 	Update();
 }

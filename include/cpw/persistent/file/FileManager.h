@@ -59,7 +59,7 @@ namespace cpw {
 
 		static size_t writeCallback(void *buffer, size_t size, size_t nmemb, void *getMapWorkingData);
 		bool GetMap(const std::string &url, bool ssl, std::string &memBuf, const std::string &proxy);
-		static size_t FileManager::read_callback(void *ptr, size_t size, size_t nmemb, void *stream);
+		static size_t read_callback(void *ptr, size_t size, size_t nmemb, void *stream);
 		int PutFile(const std::string &localFilename, const std::string &urlDest);
 
 	};

@@ -185,10 +185,10 @@ namespace cpw
 			
 			virtual void SetRequestManager(cpw::IRequestReceiver *rm) = 0;
 			virtual void SetWCSRequestManager(cpw::IRequestReceiver *rm) = 0;
-			virtual void AddLine(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible) = 0;
-			virtual void AddLine2(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible) = 0;
-			virtual void AddLine3(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible) = 0;
-			virtual void UpdateLine(const std::string &object_id, const std::vector<cpw::Point3d<float>> &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible, const int &update_point) = 0;
+			virtual void AddLine(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible) = 0;
+			virtual void AddLine2(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible) = 0;
+			virtual void AddLine3(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible) = 0;
+			virtual void UpdateLine(const std::string &object_id, const std::vector<cpw::Point3d<float> > &draw_array, const std::string &color, const int &r, const int &g, const int &b, const int &width, const bool &visible, const int &update_point) = 0;
 			virtual void AddObject(const std::string &name, const std::string &model, const cpw::Point3d<float> &pos)=0;
 
 			virtual void SetSunPosition(const float &pos) = 0;
@@ -226,8 +226,8 @@ namespace cpw
 			virtual bool Generate() = 0;
 			//virtual bool GenerateImage(cpw::Request &request) = 0;
 			virtual std::vector<std::string> GetOsgdemParam()=0;
-			virtual void SetRequestMap(std::map<int, std::vector<unsigned long int>> _rm) = 0;
-			virtual void SetRequestDEMMap(std::map<int, std::vector<unsigned long int>> _rdm) = 0;
+			virtual void SetRequestMap(std::map<int, std::vector<unsigned long int> > _rm) = 0;
+			virtual void SetRequestDEMMap(std::map<int, std::vector<unsigned long int> > _rdm) = 0;
 			
 			
 

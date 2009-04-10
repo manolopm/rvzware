@@ -29,8 +29,8 @@
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osg/ref_ptr>
-#include <osgtext/fadetext>
-#include <osg/camera>
+#include <osgText/FadeText>
+#include <osg/Camera>
 
 #include <iosg/OsgNavigatorWxFrame.h>
 #include <iosg/OsgNavigatorWxGLCanvas.h>
@@ -135,7 +135,7 @@ namespace cpw
 				void DisableHUDCamera() { hud_camera_active_switch->setAllChildrenOff(); }
 				void EnableHUDCameraAndDisableOthers();
 
-				virtual void OsgNavigator::NewWindow(wxWindow *parent_frame);
+				virtual void NewWindow(wxWindow *parent_frame);
 
 				virtual void SetFocus();
 
@@ -158,7 +158,7 @@ namespace cpw
 
 			private:
 				
-				cpw::Point3d<float> OsgNavigator::UnProjectPixel(const int &mousex, const int &mousey);
+				cpw::Point3d<float> UnProjectPixel(const int &mousex, const int &mousey);
 
 				bool lite_version;
 				std::string default_path; 

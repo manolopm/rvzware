@@ -23,7 +23,9 @@
 #ifndef _REMOTECONTROLLER_
 #define _REMOTECONTROLLER_
 
-#include <windows.h>
+#ifdef WIN32
+ #include <windows.h>
+#endif
 #include <string>
 #include <wx/wx.h>
 #include <wx/window.h>

@@ -52,7 +52,7 @@ using namespace cpw::gui;
 #define TAG_KEYFLAMES 0
 
 BEGIN_EVENT_TABLE(UIFire,wxDialog)  
-	EVT_PAINT		(UIFire::OnPaint)
+	EVT_PAINT     (UIFire::OnPaint)
 	EVT_BUTTON    (ID_LOADFIRETEXURE_BUTTON,      UIFire::OnButtonLoadFireTexture)
 	EVT_BUTTON    (ID_LOADSMOKETEXTURE_BUTTON,      UIFire::OnButtonLoadSmokeTexture)
 	EVT_BUTTON    (ID_CANCEL_BUTTON,      UIFire::OnButtonCancel)
@@ -67,8 +67,8 @@ BEGIN_EVENT_TABLE(UIFire,wxDialog)
 	EVT_TEXT      (ID_FIRETEXTURE_EDIT, UIFire::OnTexturesChanges)
 	EVT_TREE_SEL_CHANGED (ID_KEYFLAMES_TREECTRL, UIFire::OnTreeSelectionChanged)
 	EVT_DATE_CHANGED (ID_TIMESTAMP_CALENDAR, UIFire::OnDateChange)
-	EVT_TREE_ITEM_EXPANDED(ID_KEYFLAMES_TREECTRL, OnItemExpanded)
-	EVT_TREE_ITEM_COLLAPSED(ID_KEYFLAMES_TREECTRL, OnItemCollapsed)
+EVT_TREE_ITEM_EXPANDED(ID_KEYFLAMES_TREECTRL, UIFire::OnItemExpanded)
+EVT_TREE_ITEM_COLLAPSED(ID_KEYFLAMES_TREECTRL, UIFire::OnItemCollapsed)
 	EVT_LEFT_DOWN     (UIFire::OnMouseLeftDown)
 	EVT_LEFT_UP     (UIFire::OnMouseLeftUp)
 	EVT_MOTION  (UIFire::OnMouseLeftDrag)
@@ -128,7 +128,8 @@ void UIFire::CreateGUIControls()
 	int _row = 195;
 
 	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
-	m_bmp = wxBitmap(wxImage(wxT(icon_path + "grid.png")));
+	std::string tmp = icon_path + "grid.png";
+	m_bmp = wxBitmap(wxImage(wxString(tmp.c_str(),wxConvUTF8)));
 
 	Fire_name_Ed = new wxTextCtrl(this, ID_FIRENAME_EDIT, wxT("Fire"), wxPoint(97,10), wxSize(237,21), 0, wxDefaultValidator, wxT("Fire_name_Ed"));
 	Fire_name_Ed->SetFont(wxFont(8, wxSWISS, wxNORMAL,wxNORMAL, false, wxT("Tahoma")));
@@ -146,9 +147,10 @@ void UIFire::CreateGUIControls()
 	Load_smoke_texture_button->SetFont(wxFont(8, wxSWISS, wxNORMAL,wxNORMAL, false, wxT("Tahoma")));
 
 	_col = TIMELINE_CORNERX + (TIMELINE_WIDTH/2 - 100); _row = TIMELINE_CORNERY;
-
-	Add_KeyFlame_Button = new wxBitmapButton(this, ID_ADDKEYFLAME_BUTTON, wxBitmap(wxImage(wxT(icon_path + "film_add.png"))), wxPoint(20,_row + TIMELINE_HEIGHT + 5), wxSize(22,22), wxBU_AUTODRAW, wxDefaultValidator, wxT("Quit_Flame_Button"));
-	Quit_Flame_Button = new wxBitmapButton(this, ID_QUITFLAMEBUTTON, wxBitmap(wxImage(wxT(icon_path + "delete.png"))), wxPoint(20+24,_row + TIMELINE_HEIGHT + 5), wxSize(22,22), wxBU_AUTODRAW, wxDefaultValidator, wxT("Quit_Flame_Button"));
+	tmp = icon_path + "film_add.png";
+	Add_KeyFlame_Button = new wxBitmapButton(this, ID_ADDKEYFLAME_BUTTON, wxBitmap(wxImage(wxString(tmp.c_str(),wxConvUTF8))), wxPoint(20,_row + TIMELINE_HEIGHT + 5), wxSize(22,22), wxBU_AUTODRAW, wxDefaultValidator, wxT("Quit_Flame_Button"));
+	tmp = icon_path + "delete.png";
+	Quit_Flame_Button = new wxBitmapButton(this, ID_QUITFLAMEBUTTON, wxBitmap(wxImage(wxString(tmp.c_str(),wxConvUTF8))), wxPoint(20+24,_row + TIMELINE_HEIGHT + 5), wxSize(22,22), wxBU_AUTODRAW, wxDefaultValidator, wxT("Quit_Flame_Button"));
 
 	timestamp_calendar = new wxDatePickerCtrl(this, ID_TIMESTAMP_CALENDAR, wxDefaultDateTime, wxPoint(70 + 60 + _col,_row + TIMELINE_HEIGHT + 10 ),wxSize(80,19), wxDP_DEFAULT | wxDP_SHOWCENTURY | wxDP_DROPDOWN);
 	wxString dt = MyTimeCtrl::GetCurrentTime();
@@ -249,12 +251,15 @@ void UIFire::CreateGUIControls()
 	WxListBox1->SetFont(GetFont());
 	WxListBox1->SetForegroundColour(GetForegroundColour());
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
-		WxListBox1->SetBackgroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageColour()));
+	  WxListBox1->SetBackgroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8)));
 
 	img_list = new wxImageList(16, 16);
-	img_list->Add(wxBitmap(wxImage(wxT(icon_path + "fire.png"))));
-	img_list->Add(wxBitmap(wxImage(wxT(icon_path + "film.png"))));
-	img_list->Add(wxBitmap(wxImage(wxT(icon_path + "flame.png"))));
+	tmp = icon_path + "fire.png";
+	img_list->Add(wxBitmap(wxImage(wxString(tmp.c_str(),wxConvUTF8))));
+	tmp = icon_path + "film.png";
+	img_list->Add(wxBitmap(wxImage(wxString(tmp.c_str(),wxConvUTF8))));
+	tmp = icon_path + "flame.png";
+	img_list->Add(wxBitmap(wxImage(wxString(tmp.c_str(),wxConvUTF8))));
 
 	Keyflames_TreeCtrl = new wxTreeCtrl(note_panel, ID_KEYFLAMES_TREECTRL, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS/* | wxTR_HIDE_ROOT*/ | wxTR_SINGLE);//, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT/*, wxTR_HAS_BUTTONS*/);
 	Keyflames_TreeCtrl->SetFont(GetFont());
@@ -262,8 +267,8 @@ void UIFire::CreateGUIControls()
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		Keyflames_TreeCtrl->SetBackgroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageColour()));
-		Keyflames_TreeCtrl->SetForegroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour()));
+	  Keyflames_TreeCtrl->SetBackgroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8)));
+	  Keyflames_TreeCtrl->SetForegroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8)));
 	}
 	Keyflames_TreeCtrl->SetFont(wxFont(8, wxSWISS, wxNORMAL,wxNORMAL, false, wxT("Tahoma")));
 	Keyflames_TreeCtrl->AssignImageList(img_list);
@@ -285,7 +290,8 @@ void UIFire::CreateGUIControls()
 
 void UIFire::OnHourChanges(wxCommandEvent& event)
 {
-	OnDateChange(wxDateEvent());
+  wxDateEvent tmp = wxDateEvent();
+  OnDateChange((wxDateEvent &)tmp);
 }
 
 void UIFire::OnClose(wxCloseEvent& /*event*/)
@@ -307,10 +313,10 @@ void UIFire::OnButtonLoadFireTexture(wxCommandEvent& WXUNUSED(event))
 
 	if(dialog.ShowModal() == wxID_OK)
 	{						
-        std::string url = dialog.GetPath();
-		Fire_texture_Ed->SetValue(url); 
-		fire_texture = url;
-		changes = true;
+	  std::string url = std::string(dialog.GetPath().mb_str());
+	  Fire_texture_Ed->SetValue(wxString(url.c_str(),wxConvUTF8)); 
+	  fire_texture = url;
+	  changes = true;
 	}
 }
 
@@ -322,8 +328,8 @@ void UIFire::OnButtonLoadSmokeTexture(wxCommandEvent& WXUNUSED(event))
 
 	if(dialog.ShowModal() == wxID_OK)
 	{						
-        std::string url = dialog.GetPath();		
-		Smoke_texture_Button->SetValue(url); 
+	  std::string url = std::string(dialog.GetPath().mb_str());		
+	  Smoke_texture_Button->SetValue(wxString(url.c_str(),wxConvUTF8)); 
 		smoke_texture = url;
 		changes = true;
 	}
@@ -333,8 +339,8 @@ void UIFire::OnButtonLoadSmokeTexture(wxCommandEvent& WXUNUSED(event))
 void UIFire::OnTexturesChanges(wxCommandEvent& WXUNUSED(event))
 {
 	std::string ft, st;
-	ft = Fire_texture_Ed->GetValue();
-	st = Smoke_texture_Button->GetValue();
+	ft = std::string(Fire_texture_Ed->GetValue().mb_str());
+	st = std::string(Smoke_texture_Button->GetValue().mb_str());
 	if((ft != "") && (st != "") )
 		fire_controller->ChangeTextures(ft, st);
 	changes = true;
@@ -349,11 +355,12 @@ void UIFire::Close()
 {
 	if (changes)
 	{
-		wxMessageDialog message(this,wxString("Save changes before quit?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+		wxMessageDialog message(this,wxT("Save changes before quit?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
-		{		
-			OnButtonFinish(wxCommandEvent());
+		  {
+		    wxCommandEvent tmp = wxCommandEvent();
+		    OnButtonFinish((wxCommandEvent &)tmp);
 		}
 		else if(modal == wxID_NO )
 		{
@@ -385,17 +392,17 @@ void UIFire::Close()
 
 void UIFire::OnButtonFinish(wxCommandEvent& WXUNUSED(event))
 {
-	std::string p = std::string(Fire_name_Ed->GetValue());
+  std::string p = std::string(Fire_name_Ed->GetValue().mb_str());
 	if((Fire_name_Ed->IsEmpty()) || (p.at(0) == ' ' ) )
 	{
-		wxMessageDialog message(this,wxString("The fire needs a name."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+		wxMessageDialog message(this,wxT("The fire needs a name."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 		message.ShowModal();
 	}
 	else
 	{	
-		if (fire_controller->CreatePermanentFire(std::string(Fire_name_Ed->GetValue()),
-										std::string(Fire_texture_Ed->GetValue()),
-										std::string(Smoke_texture_Button->GetValue()), modify))
+	  if (fire_controller->CreatePermanentFire(std::string(Fire_name_Ed->GetValue().mb_str()),
+						   std::string(Fire_texture_Ed->GetValue().mb_str()),
+						   std::string(Smoke_texture_Button->GetValue().mb_str()), modify))
 		{
 			EndDialog(wxID_OK);
 			fire_controller->ReleaseMouseCallBack();
@@ -404,7 +411,7 @@ void UIFire::OnButtonFinish(wxCommandEvent& WXUNUSED(event))
 		{
 			if(!fire_controller->GetOverwrite())
 			{
-				wxMessageDialog message(this,wxString("    The fire needs one perimeter at least\n and each perimeter must have one flame at least.\n    Also, each perimeter must have a minimun \nof two flames."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+				wxMessageDialog message(this,wxT("    The fire needs one perimeter at least\n and each perimeter must have one flame at least.\n    Also, each perimeter must have a minimun \nof two flames."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 				message.ShowModal();
 			}			
 		}
@@ -421,7 +428,7 @@ void UIFire::OnListBoxSelectItem(wxCommandEvent& WXUNUSED(event))
 		fire_controller->UpdateUI(WxListBox1->GetSelection(), GetActiveKeyFlame(), GetActiveFlame());
 }
 
-void UIFire::CheckFlamesValues()
+void UIFire::CheckFlamesValuesInt()
 {
 	if (!update_on_changes)
 		return;
@@ -429,85 +436,85 @@ void UIFire::CheckFlamesValues()
 	double aux;
 
 	if (Smoke_particles_seize_Edit->GetValue().Trim().ToDouble(&aux) && aux>=0)
-		spseize = abs((float) aux);
+		spseize = fabs((float) aux);
 	else
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << spseize;
-		Smoke_particles_seize_Edit->ChangeValue(aux2.str());
+		Smoke_particles_seize_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 
 	if (Smoke_particles_life_Edit->GetValue().Trim().ToDouble(&aux) && aux>=0)
-		splife = abs((float) aux);
+		splife = fabs((float) aux);
 	else
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << splife;
-		Smoke_particles_life_Edit->ChangeValue(aux2.str());
+		Smoke_particles_life_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (Fire_particles_size_Edit->GetValue().Trim().ToDouble(&aux) && aux>=0)
-		fpsize = abs((float) aux);
+		fpsize = fabs((float) aux);
 	else
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << fpsize;
-		Fire_particles_size_Edit->ChangeValue(aux2.str());
+		Fire_particles_size_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (Fire_particles_life_Edit->GetValue().Trim().ToDouble(&aux) && aux>=0)
-		fplife = abs((float) aux);
+		fplife = fabs((float) aux);
 	else
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << fplife;
-		Fire_particles_life_Edit->ChangeValue(aux2.str());
+		Fire_particles_life_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (Position_x_Edit->GetValue().Trim().ToDouble(&aux) && aux>=0)
-		posx = abs((float) aux);
+		posx = fabs((float) aux);
 	else
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (15) << posx;
-		Position_x_Edit->ChangeValue(aux2.str());
+		Position_x_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (Position_y_Edit->GetValue().Trim().ToDouble(&aux) && aux>=0)
-		posy = abs((float) aux);
+		posy = fabs((float) aux);
 	else
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (15) << posy;
-		Position_y_Edit->ChangeValue(aux2.str());
+		Position_y_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (Position_z_Edit->GetValue().Trim().ToDouble(&aux) && aux>=0)
-		posz = abs((float) aux);
+		posz = fabs((float) aux);
 	else
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (15) << posz;
-		Position_z_Edit->ChangeValue(aux2.str());
+		Position_z_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (smoke_Intesity_Edit->GetValue().Trim().ToDouble(&aux) && aux>=0)
-		spintensity = abs((float) aux);
+		spintensity = fabs((float) aux);
 	else
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << spintensity;
-		smoke_Intesity_Edit->ChangeValue(aux2.str());
+		smoke_Intesity_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	if (Fire_Intesity_Edit->GetValue().Trim().ToDouble(&aux) && aux>=0)
-		fpintensity = abs((float) aux);
+		fpintensity = fabs((float) aux);
 	else
 	{
 		std::stringstream aux2;
 		aux2 << std::fixed << std::setprecision (5) << fpintensity;
-		Fire_Intesity_Edit->ChangeValue(aux2.str());
+		Fire_Intesity_Edit->ChangeValue(wxString(aux2.str().c_str(),wxConvUTF8));
 	}
 
 	fire_controller->UpdateFlame(GetActiveKeyFlame(), GetActiveFlame());
@@ -517,7 +524,7 @@ void UIFire::CheckFlamesValues()
 
 void UIFire::CheckFlamesValues(wxCommandEvent& WXUNUSED(event))
 {
-	CheckFlamesValues();
+  CheckFlamesValuesInt();
 }
 
 bool UIFire::GetCoordsFromEditControls(cpw::Point3d<float> &position, float &smoke_life, float &smoke_size, float &fire_life, float &fire_size, float &fire_intensity, float &smoke_intensity)
@@ -677,7 +684,7 @@ void UIFire::OnButtonQuitFlame(wxCommandEvent& WXUNUSED(event))
 
 void UIFire::AddIcon(const std::string url, wxTreeItemId id)
 {
-	wxBitmap icon(wxT(url), wxBITMAP_TYPE_ANY);
+  wxBitmap icon(wxString(url.c_str(),wxConvUTF8), wxBITMAP_TYPE_ANY);
  	int img_index = img_list->Add(icon);
 	Keyflames_TreeCtrl->SetItemImage(id, img_index);
 }
@@ -689,12 +696,12 @@ void UIFire::OnButtonAddFlame(wxCommandEvent& WXUNUSED(event))
 		if (wxTreeItemId item_id = Keyflames_TreeCtrl->GetSelection())
 		{
 			wxString  item_label = Keyflames_TreeCtrl->GetItemText(item_id);
-			if (item_label(0,9) == "Perimeter")
+			if (item_label(0,9) == wxT("Perimeter"))
 			{
 				Keyflames_TreeCtrl->AppendItem(item_id, _T("Flame"), IM_FLAME);
 				Keyflames_TreeCtrl->Expand(item_id);
 			}
-			if (item_label == "Flame")
+			if (item_label == wxT("Flame"))
 				Keyflames_TreeCtrl->InsertItem(Keyflames_TreeCtrl->GetItemParent(item_id), item_id, _T("Flame"), IM_FLAME);
 		}
 	}
@@ -714,7 +721,7 @@ void UIFire::OnButtonAddKeyFlame(wxCommandEvent& WXUNUSED(event))
 		std::ostringstream wop;
 		wop << "Perimeter " << keyflameCounter;	
 	
-		wxTreeItemId id = Keyflames_TreeCtrl->AppendItem(Keyflames_TreeCtrl->GetRootItem(), _T(wop.str()), IM_KEYFLAME);
+		wxTreeItemId id = Keyflames_TreeCtrl->AppendItem(Keyflames_TreeCtrl->GetRootItem(), wxString(wop.str().c_str(),wxConvUTF8), IM_KEYFLAME);
 		Keyflames_TreeCtrl->Expand(Keyflames_TreeCtrl->GetRootItem());
 		timeStamp_Edit->SetValue(MyTimeCtrl::GetCurrentTime());
 		fire_controller->AddTimeSlice(timestamp_calendar->GetValue().GetTicks() +  GetTime());
@@ -853,7 +860,7 @@ void UIFire::AddPerimeter(const bool &new_p)
 	std::ostringstream wop;
 	wop << "Perimeter " << keyflameCounter;	
 
-	Keyflames_TreeCtrl->AppendItem(Keyflames_TreeCtrl->GetRootItem(), _T(wop.str()), IM_KEYFLAME);
+	Keyflames_TreeCtrl->AppendItem(Keyflames_TreeCtrl->GetRootItem(), wxString(wop.str().c_str(),wxConvUTF8), IM_KEYFLAME);
 	Keyflames_TreeCtrl->Expand(Keyflames_TreeCtrl->GetRootItem());
 	
 	if (new_p)
@@ -910,7 +917,7 @@ void UIFire::UpdateOnChanges()
 void UIFire::OnDateChange(wxDateEvent& event)
 {
 	wxDateTime temp = timestamp_calendar->GetValue();
-	wxDateTime out(temp.GetTicks() + GetTime());
+	wxDateTime out((double)(temp.GetTicks() + GetTime()));
 
 	int prev_keyflame, next_keyflame;
 	next_keyflame = (timelineActivePerimeter >= keyflameCounter-1)? keyflameCounter-1 : timelineActivePerimeter+1;
@@ -1063,7 +1070,7 @@ void UIFire::SetDate(const wxDateTime &new_date)
 
 	tvalue = st1 + ":" + st2 + ":" + st3;
 
-	timeStamp_Edit->SetValue(tvalue.c_str());
+	timeStamp_Edit->SetValue(wxString(tvalue.c_str(),wxConvUTF8));
 	timestamp_calendar->SetValue(new_date);
 
 
@@ -1083,10 +1090,10 @@ void UIFire::render(wxDC& dc)
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
+	  wxColour c_brush = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	  dc.SetTextForeground(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8)));
 		dc.SetPen(wxPen(c_pen));
 		dc.SetBrush(wxBrush(c_brush));
 		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);
@@ -1140,9 +1147,9 @@ void UIFire::render(wxDC& dc)
 		}
 }
 
-void UIFire::OnPaint()
+/*void UIFire::OnPaint()
 { 
-}
+}*/
 
 void UIFire::UpdateTimeLine(const std::vector<wxDateTime> date_times)
 {
@@ -1260,7 +1267,7 @@ void UIFire::OnSmokeLifeSpinUp(wxSpinEvent& event)
 	Smoke_particles_life_Edit->GetValue().ToDouble(&f);
 	f+=0.1f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Smoke_particles_life_Edit->SetValue(wop.str()); 
+	Smoke_particles_life_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -1271,7 +1278,7 @@ void UIFire::OnSmokeSizeSpinUp(wxSpinEvent& event)
 	Smoke_particles_seize_Edit->GetValue().ToDouble(&f);
 	f+=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Smoke_particles_seize_Edit->SetValue(wop.str()); 
+	Smoke_particles_seize_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -1282,7 +1289,7 @@ void UIFire::OnSmokeIntesitySpinUp(wxSpinEvent& event)
 	smoke_Intesity_Edit->GetValue().ToDouble(&f);
 	f+=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	smoke_Intesity_Edit->SetValue(wop.str());
+	smoke_Intesity_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	changes = true;
 }
 
@@ -1293,7 +1300,7 @@ void UIFire::OnFireLifeSpinUp(wxSpinEvent& event)
 	Fire_particles_life_Edit->GetValue().ToDouble(&f);
 	f+=0.1f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Fire_particles_life_Edit->SetValue(wop.str()); 
+	Fire_particles_life_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 void UIFire::OnFireSizeSpinUp(wxSpinEvent& event)
@@ -1303,7 +1310,7 @@ void UIFire::OnFireSizeSpinUp(wxSpinEvent& event)
 	Fire_particles_size_Edit->GetValue().ToDouble(&f);
 	f+=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Fire_particles_size_Edit->SetValue(wop.str()); 
+	Fire_particles_size_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -1314,7 +1321,7 @@ void UIFire::OnFireIntensitySpinUp(wxSpinEvent& event)
 	Fire_Intesity_Edit->GetValue().ToDouble(&f);
 	f+=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Fire_Intesity_Edit->SetValue(wop.str()); 
+	Fire_Intesity_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -1325,7 +1332,7 @@ void UIFire::OnSmokeLifeSpinDown(wxSpinEvent& event)
 	Smoke_particles_life_Edit->GetValue().ToDouble(&f);
 	f-=0.1f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Smoke_particles_life_Edit->SetValue(wop.str()); 
+	Smoke_particles_life_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 void UIFire::OnSmokeSizeSpinDown(wxSpinEvent& event)
@@ -1335,7 +1342,7 @@ void UIFire::OnSmokeSizeSpinDown(wxSpinEvent& event)
 	Smoke_particles_seize_Edit->GetValue().ToDouble(&f);
 	f-=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Smoke_particles_seize_Edit->SetValue(wop.str()); 
+	Smoke_particles_seize_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -1346,7 +1353,7 @@ void UIFire::OnSmokeIntesitySpinDown(wxSpinEvent& event)
 	smoke_Intesity_Edit->GetValue().ToDouble(&f);
 	f-=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	smoke_Intesity_Edit->SetValue(wop.str()); 
+	smoke_Intesity_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -1357,7 +1364,7 @@ void UIFire::OnFireLifeSpinDown(wxSpinEvent& event)
 	Fire_particles_life_Edit->GetValue().ToDouble(&f);
 	f-=0.1f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Fire_particles_life_Edit->SetValue(wop.str()); 
+	Fire_particles_life_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 void UIFire::OnFireSizeSpinDown(wxSpinEvent& event)
@@ -1367,7 +1374,7 @@ void UIFire::OnFireSizeSpinDown(wxSpinEvent& event)
 	Fire_particles_size_Edit->GetValue().ToDouble(&f);
 	f-=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Fire_particles_size_Edit->SetValue(wop.str()); 
+	Fire_particles_size_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 void UIFire::OnFireIntensitySpinDown(wxSpinEvent& event)
@@ -1377,7 +1384,7 @@ void UIFire::OnFireIntensitySpinDown(wxSpinEvent& event)
 	Fire_Intesity_Edit->GetValue().ToDouble(&f);
 	f-=1.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Fire_Intesity_Edit->SetValue(wop.str()); 
+	Fire_Intesity_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -1388,7 +1395,7 @@ void UIFire::OnPositionXSpinUp(wxSpinEvent& event)
 	Position_x_Edit->GetValue().ToDouble(&f);
 	f+=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_x_Edit->SetValue(wop.str());
+	Position_x_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	changes = true;
 }
 void UIFire::OnPositionYSpinUp(wxSpinEvent& event)
@@ -1398,7 +1405,7 @@ void UIFire::OnPositionYSpinUp(wxSpinEvent& event)
 	Position_y_Edit->GetValue().ToDouble(&f);
 	f+=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_y_Edit->SetValue(wop.str());
+	Position_y_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8));
 	changes = true;
 }
 
@@ -1409,7 +1416,7 @@ void UIFire::OnPositionZSpinUp(wxSpinEvent& event)
 	Position_z_Edit->GetValue().ToDouble(&f);
 	f+=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_z_Edit->SetValue(wop.str()); 
+	Position_z_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -1420,7 +1427,7 @@ void UIFire::OnPositionXSpinDown(wxSpinEvent& event)
 	Position_x_Edit->GetValue().ToDouble(&f);
 	f-=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_x_Edit->SetValue(wop.str()); 
+	Position_x_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -1431,7 +1438,7 @@ void UIFire::OnPositionYSpinDown(wxSpinEvent& event)
 	Position_y_Edit->GetValue().ToDouble(&f);
 	f-=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_y_Edit->SetValue(wop.str()); 
+	Position_y_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 
@@ -1442,7 +1449,7 @@ void UIFire::OnPositionZSpinDown(wxSpinEvent& event)
 	Position_z_Edit->GetValue().ToDouble(&f);
 	f-=10.0f;
 	wop << std::fixed << std::setprecision(5) << f;  
-	Position_z_Edit->SetValue(wop.str()); 
+	Position_z_Edit->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 	changes = true;
 }
 

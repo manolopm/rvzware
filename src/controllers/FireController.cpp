@@ -388,7 +388,7 @@ void FireController::UpdateUI(int active_ignition_point, int active_perimeter, i
 	UpdateUIIgnitionPoints(active_ignition_point);
 	UpdateUIFlames(active_perimeter, active_flame);
 	
-	ui_fire->CheckFlamesValues();
+	ui_fire->CheckFlamesValuesInt();
 
 	ui_fire->SetCallUpdate(true);
 
@@ -428,7 +428,8 @@ void FireController::UpdateUIIgnitionPoints(int &active_index)
 	{
 		std::ostringstream ignition_ostr;
 		ignition_ostr << "Ignition point " << i;
-		ui_listbox->Append(ignition_ostr.str());
+		std::string ignition = ignition_ostr.str();
+		ui_listbox->Append((const wxString &)ignition);
 	}
 
 	if (active_index != -1)
@@ -443,15 +444,18 @@ void FireController::UpdateUIIgnitionPoints(int &active_index)
 				aux_str.precision(15);
 				
 				aux_str << ip->x;
-				ui_fire->SetPositionX(aux_str.str());
+				std::string temp = aux_str.str();
+				ui_fire->SetPositionX((std::string &)temp);
 				aux_str.str("");
 
 				aux_str << ip->y;
-				ui_fire->SetPositionY(aux_str.str());
+				temp = aux_str.str();
+				ui_fire->SetPositionY((std::string &)temp);
 				aux_str.str("");
 
 				aux_str << ip->z;
-				ui_fire->SetPositionZ(aux_str.str());
+				temp = aux_str.str();
+				ui_fire->SetPositionZ((std::string &)temp);
 				aux_str.str("");
 	
 				
@@ -750,39 +754,48 @@ void FireController::FillUIWithFlameData(cpw::utils::Flame &flame)
 	std::ostringstream aux_str;
 	aux_str.precision(15);
 	aux_str << flame.fire.GetCoords().x;
-	ui_fire->SetPositionX(aux_str.str());
+	std::string tmp = aux_str.str();
+	ui_fire->SetPositionX((std::string &)tmp);
 	aux_str.str("");
 	
 	aux_str << flame.fire.GetCoords().y;
-	ui_fire->SetPositionY(aux_str.str());
+	tmp = aux_str.str();
+	ui_fire->SetPositionY((std::string &)tmp);
 	aux_str.str("");
 
 	aux_str << flame.fire.GetCoords().z;
-	ui_fire->SetPositionZ(aux_str.str());
+	tmp = aux_str.str();
+	ui_fire->SetPositionZ((std::string &)tmp);
 	aux_str.str("");
 
 	aux_str << flame.fire.GetParticlesLife();
-	ui_fire->SetFireLife(aux_str.str());
+	tmp = aux_str.str();
+	ui_fire->SetFireLife((std::string &)tmp);
 	aux_str.str("");
 
 	aux_str << flame.smoke.GetParticlesLife();
-	ui_fire->SetSmokeLife(aux_str.str());
+	tmp = aux_str.str();
+	ui_fire->SetSmokeLife((std::string &)tmp);
 	aux_str.str("");
 
 	aux_str << flame.fire.GetSize().min;
-	ui_fire->SetFireSize(aux_str.str());
+	tmp = aux_str.str();
+	ui_fire->SetFireSize((std::string &)tmp);
 	aux_str.str("");
 
 	aux_str << flame.smoke.GetSize().max;
-	ui_fire->SetSmokeSize(aux_str.str());
+	tmp = aux_str.str();
+	ui_fire->SetSmokeSize((std::string &)tmp);
 	aux_str.str("");
 
 	aux_str << flame.fire.GetNewParticlesSec().max;
-	ui_fire->SetFireIntensity(aux_str.str());
+	tmp = aux_str.str();
+	ui_fire->SetFireIntensity((std::string &)tmp);
 	aux_str.str("");
 
 	aux_str << flame.smoke.GetNewParticlesSec().max;
-	ui_fire->SetSmokeIntensity(aux_str.str());
+	tmp = aux_str.str();
+	ui_fire->SetSmokeIntensity((std::string &)tmp);
 	aux_str.str("");
 }
 
@@ -888,9 +901,11 @@ void FireController::ModifyProperties(cpw::Entity *ent)
 	new_fire = false;
 
 	ui_fire->Modify(true);
-	ui_fire->SetFireName(fire->GetName());	
-	ui_fire->SetFireTexture(fire->GetFireTexture());
-	ui_fire->SetSmokeTexture(fire->GetSmokeTexture());
+	ui_fire->SetFireName(fire->GetName());
+	std::string temp = fire->GetFireTexture();
+	ui_fire->SetFireTexture((std::string &)temp);
+	temp = fire->GetSmokeTexture();
+	ui_fire->SetSmokeTexture((std::string &)temp);
 
 	fire_entity = fire;
 

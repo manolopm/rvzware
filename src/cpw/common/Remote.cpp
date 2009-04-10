@@ -203,7 +203,7 @@ int Remote::AdaptPersistence(Node *root)
 {
 	Sorted::AdaptPersistence(root);
 
-	std::vector<cpw::Node *> &components = root->GetChildren();
+	std::vector<cpw::Node *> components = root->GetChildren();
 	std::vector<cpw::Node *>::iterator i = components.begin();
 	
 	while ((i != components.end()) && ((*i)->GetName() != std::string("synchs"))) i++;
@@ -211,7 +211,7 @@ int Remote::AdaptPersistence(Node *root)
 	synchs.clear();
 	if (i != components.end())
 	{
-		std::vector<cpw::Node *> &syncs = (*i)->GetChildren();
+		std::vector<cpw::Node *> syncs = (*i)->GetChildren();
 		std::vector<cpw::Node *>::iterator j = syncs.begin();
 		for(j;j!=syncs.end();j++)
 		{

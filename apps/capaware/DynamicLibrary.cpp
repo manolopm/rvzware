@@ -21,7 +21,11 @@
  * The CAPAWARE development team
 */
 
+#ifdef WIN32
 #include <windows.h>
+#else
+#include <dlfcn.h>
+#endif
 #include <iostream>
 #include <sstream>
 
@@ -33,12 +37,21 @@
 using namespace std;  
 DynamicLibrary::~DynamicLibrary()
 {
-	FreeLibrary((HMODULE)h);
+#ifdef WIN32
+  FreeLibrary((HMODULE)h);
+#else
+    dlclose(h);
+#endif
+    
 }
 void DynamicLibrary::Load(const std::string &library)
 {
 	library_url = library;
-	h = LoadLibrary(library_url.c_str());
+	  #ifdef WIN32
+	  h = LoadLibrary(library_url.c_str());
+#else
+	    h = dlopen(library_url.c_str(),RTLD_LAZY);
+#endif
 	if(h == NULL)
 		std::cout << "Error..." << endl;	
 }
@@ -46,8 +59,13 @@ void DynamicLibrary::Load(const std::string &library)
 void DynamicLibrary::RegisterPluginMenu(std::string &nmenu)
 {
 	if (h != NULL)
-	{
-		register_menu menu = (register_menu) GetProcAddress((HMODULE)h, "RegisterMenu");
+	  {
+	    #ifdef WIN32
+	    register_menu menu = (register_menu) GetProcAddress((HMODULE)h, "RegisterMenu");
+#else
+	      register_menu menu = (register_menu) dlsym(h, "RegisterMenu");
+#endif
+	      
 		if (menu != NULL)
 			menu(nmenu);	
 	}
@@ -56,8 +74,13 @@ void DynamicLibrary::RegisterPluginMenu(std::string &nmenu)
 void DynamicLibrary::ExecutePlugin(std::vector<cpw::Entity*> &ventity, cpw::ApplicationScene *appscene, const std::string &entity_path, const std::string &icon_path, const std::string &data_path, const std::string &language, wxWindow *parent, cpw::INavigatorManager *navigator_manager,cpw::IStatusController* status_controller/*cwcontent::StatusController *status_controller*/)
 {
 	if (h != NULL)
-	{
-		exec_plugin exec = (exec_plugin) GetProcAddress((HMODULE)h, "ExecPlugin");
+	  {
+	    #ifdef WIN32
+	    exec_plugin exec = (exec_plugin) GetProcAddress((HMODULE)h, "ExecPlugin");
+#else
+	    exec_plugin exec = (exec_plugin)dlsym(h, "ExecPlugin");
+#endif
+	      
 		if (exec != NULL)
 			exec(ventity, appscene, entity_path, icon_path, data_path, language, parent, navigator_manager,status_controller);
 	}
@@ -66,8 +89,12 @@ void DynamicLibrary::ExecutePlugin(std::vector<cpw::Entity*> &ventity, cpw::Appl
 void DynamicLibrary::EntitiesToRegister(std::vector<cpw::Entity*> &ventityregister)
 {
 	if (h != NULL)
-	{
-		entities_to_register etr = (entities_to_register) GetProcAddress((HMODULE)h, "EntitiesToRegister");
+	  {
+	    #ifdef WIN32
+	    entities_to_register etr = (entities_to_register) GetProcAddress((HMODULE)h, "EntitiesToRegister");
+#else
+	      entities_to_register etr = (entities_to_register) dlsym(h, "EntitiesToRegister");
+		#endif
 		if (etr != NULL)
 			etr(ventityregister);	
 	}

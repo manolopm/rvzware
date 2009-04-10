@@ -148,12 +148,12 @@ cpw::Entity* EntityController::Load2(const std::string &url, bool all, cpw::Enti
 
 					if(all && entity->isContainer())
 					{
-						std::vector<cpw::Node *> &components = root->GetChildren();
+						std::vector<cpw::Node *> components = root->GetChildren();
 						std::vector<cpw::Node *>::iterator i = components.begin();
 						while ((i!=components.end()) && ((*i)->GetName() != std::string("components"))) i++;
 						if (i!=components.end())
 						{
-							std::vector<cpw::Node *> &comp = (*i)->GetChildren();
+							std::vector<cpw::Node *> comp = (*i)->GetChildren();
 							std::vector<cpw::Node *>::iterator j = comp.begin();
 							for(j;j!=comp.end();j++)
 							{
@@ -190,24 +190,27 @@ cpw::Entity* EntityController::Load2(const std::string &url, bool all, cpw::Enti
 cpw::Entity* EntityController::Load(wxWindow* parent, cpw::LayerTree &layer_tree)
 {
 	std::string &entity_path = ApplicationConfiguration::GetInstance()->GetEntityDirectory();
-	wxFileDialog dialog (parent,_T("Open entity"),_T(entity_path.c_str()),wxEmptyString,
-							   _T("Element(*.cel)|*.cel|Layer(*.cla)|*.cla|All files(*.*)|*.*") );
+	wxFileDialog dialog ((wxWindow *)parent,(const wxString&)_("Open entity"),
+			     (const wxString&)entity_path,
+			     wxEmptyString,
+			     _("Element(*.cel)|*.cel|Layer(*.cla)|*.cla|All files(*.*)|*.*") );
 
 	cpw::Entity *entity = NULL;
 
 	if(dialog.ShowModal() == wxID_OK)
 	{						
-        std::string url = dialog.GetPath();
+	  std::string url =(std::string)(dialog.GetPath().mb_str());
 
-		entity = Load(url);
-
-		if(entity == NULL)
-		{
-			wxMessageDialog message(parent,wxString("Error loading the entity. \nThe file may be corrupted."), wxString("Error"),
-									wxICON_WARNING |wxOK);
-			message.ShowModal();
-		}
-
+	entity = Load(url);
+	
+	if(entity == NULL)
+	  {
+	    wxMessageDialog message(parent,wxT("Error loading the entity. \nThe file may be corrupted."),
+				    wxT("Error"),
+				    wxICON_WARNING |wxOK);
+	    message.ShowModal();
+	  }
+	
 	}
 
 	return entity;
@@ -245,8 +248,8 @@ bool EntityController::AddEntity(wxWindow* parent, cpw::LayerTree &layer_tree)
 		if(!layer_tree.AddToActiveLayer(entity))
 		{
 			
-			wxMessageDialog message(parent,wxString("Unable to add the entity to the layer tree. Recursive inclusion."), wxString("Capaware"),
-									wxICON_WARNING |wxOK);
+		  wxMessageDialog message(parent,wxT("Unable to add the entity to the layer tree. Recursive inclusion."), wxT("Capaware"),
+					  wxICON_WARNING |wxOK);
 			message.ShowModal();
 
 			return false;

@@ -185,3 +185,5 @@ std::ostream &operator <<(std::ostream &s, const cpw::ogc::Folder &folder);
 
 
 #endif
+
+

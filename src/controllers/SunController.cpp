@@ -39,3 +39,5 @@ void SunController::SetSunPosition(const float &pos)
 	if (scene != NULL)
 		scene->SetSunPosition(pos);
 }
+
+

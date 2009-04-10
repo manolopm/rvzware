@@ -354,7 +354,7 @@ bool HandlerController::AdaptActiveHandlerAndBrothersToActiveEntity()
 	navigator_manager->GetFocusedOrFirstNavigator()->GetScreenSize(width, height);
 	cpw::Point3d<double> camera_pos = navigator_manager->GetFocusedOrFirstNavigator()->GetCameraController()->GetCamera()->GetUTMPosition();
 
-	scene->AdaptHandlerToModelFixedScreenSize(active_handler, active_entity, cpw::Point3d<float>(0.0f, 0.0f, 0.0f), false, height * 0.66f, camera_pos, znear);
+	scene->AdaptHandlerToModelFixedScreenSize(active_handler, active_entity, cpw::Point3d<float>(0.0f, 0.0f, 0.0f), false,(const int &)( height * 0.66f), camera_pos, znear);
 
 	////scene->AdaptHandlerToModel(active_handler, active_entity, cpw::Point3d<float>(0.0f, 0.0f, 0.0f), false);
 
@@ -372,7 +372,7 @@ bool HandlerController::AdaptActiveHandlerAndBrothersToActiveEntity()
 	{
 
 		//scene->AdaptHandlerToModel((*iterb)->GetId(), active_entity, cpw::Point3d<float>(0.0f, 0.0f, 0.0f), false);
-		scene->AdaptHandlerToModelFixedScreenSize((*iterb)->GetId(), active_entity, cpw::Point3d<float>(0.0f, 0.0f, 0.0f), false, height * 0.66f, camera_pos, znear);
+	  scene->AdaptHandlerToModelFixedScreenSize((*iterb)->GetId(), active_entity, cpw::Point3d<float>(0.0f, 0.0f, 0.0f), false, (const int &)(height * 0.66f), camera_pos, znear);
 		(*iterb)->SetEntityTarget(entity);
 	}
 

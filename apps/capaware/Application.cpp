@@ -32,8 +32,10 @@
 #include "stdafx.h"
 
 #include "Application.h"
- 
+
+#ifdef WIN32 
 #include <windows.h>
+#endif
 #include <iosg/OsgFactory.h>
 
 #include <cpw/graphic/IGraphicFactory.h>
@@ -88,17 +90,19 @@ layer_tree(), plugin_map(), three_dimension_camera_controller(NULL), two_dimensi
 	//for being able to load all type of images
 	wxInitAllImageHandlers();
 
+#ifdef WIN32
 	//This is to activate memory-leaks detection
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
 
 	wmsInitialize();
 	application_time = ApplicationTime::GetInstance();
 	application_time->Off();
 	cpw::IdGenerator::SetNamespace(GetMACaddress());
 
-
+#ifdef WIN32
 	SetThreadAffinityMask(GetCurrentThread(), 0);
-	
+#endif
 
 }
 
@@ -157,7 +161,7 @@ bool Application::OnInit()
 	main_frame->Show(false);
 	main_frame->Maximize(true);
 	main_frame->ShowSplash();
-	
+
 		RegisterAllPlugins();
 	EntitiesToRegisterFromPlugins();
 
@@ -312,7 +316,8 @@ void Application::SaveAll()
 	ferror = controller.Save(layer_tree.GetTopLayer(), true, true);
 	if (ferror != cpw::PERSISTENTOK)
 	{
-		wxMessageDialog message(NULL,wxString("Some entities from the layer tree could not be saved."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+		wxMessageDialog message(NULL,wxString((const wxString&)"Some entities from the layer tree could not be saved."), wxString((const wxString&)"Warning"),wxICON_EXCLAMATION |wxOK);
+
 		message.ShowModal();
 	}
 }
@@ -338,7 +343,7 @@ bool Application::Close()
 
 	if(layer_tree.isModified()) 
 	{
-		wxMessageDialog message(NULL,wxString("Save changes from the layer tree before quit?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+		wxMessageDialog message(NULL,wxString((const wxString&)"Save changes from the layer tree before quit?"), wxString((const wxString&)"Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
 		{	
@@ -346,7 +351,7 @@ bool Application::Close()
 			ferror = controller.Save(layer_tree.GetTopLayer(), true, true);
 			if (ferror != cpw::PERSISTENTOK)
 			{
-				wxMessageDialog message(NULL,wxString("Some entities from the layer tree could not be saved."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+				wxMessageDialog message(NULL,wxString((const wxString&)"Some entities from the layer tree could not be saved."), wxString((const wxString&)"Warning"),wxICON_EXCLAMATION |wxOK);
 				message.ShowModal();
 			}
 
@@ -500,8 +505,11 @@ bool Application::InitCpwEntities()
 
 	std::string title = project_controller->GetProjectFullName();
 	if (title!="")
-		main_frame->SetTitle(_T(title+" - Capaware"));
-
+{
+		
+std::string tmp = (title+" - Capaware");
+main_frame->SetTitle((const wxString&)tmp);
+ }
 
 	navigator_manager->SetAllNavigatorsToInitialPosition();
 
@@ -1301,7 +1309,10 @@ void Application::OpenProject()
 		
 		std::string title = project_controller->GetProjectFullName();
 		if (title!="")
-			main_frame->SetTitle(_T(title+" - Capaware"));
+		{
+			std::string tmp = title+" - Capaware";
+			main_frame->SetTitle((const wxString&)tmp);
+		}
 
 		navigator_manager->SetAllNavigatorsToInitialPosition();
 
@@ -1325,7 +1336,7 @@ bool Application::CloseProject()
 
 	if(layer_tree.isModified()) 
 	{
-		wxMessageDialog message(NULL,wxString("Save changes from the layer tree before quit?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+		wxMessageDialog message(NULL,(const wxString &)"Save changes from the layer tree before quit?", (const wxString &)"Warning",wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
 		{	
@@ -1333,7 +1344,7 @@ bool Application::CloseProject()
 			ferror = controller.Save(layer_tree.GetTopLayer(), true, true);
 			if (ferror != cpw::PERSISTENTOK)
 			{
-				wxMessageDialog message(NULL,wxString("Some entities from the layer tree could not be saved."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+				wxMessageDialog message(NULL,(const wxString &)"Some entities from the layer tree could not be saved.", (const wxString &)"Warning",wxICON_EXCLAMATION |wxOK);
 				message.ShowModal();
 			}
 
@@ -1355,7 +1366,7 @@ bool Application::CloseProject()
 
 		DeleteControllers();
 
-		main_frame->SetTitle("Capaware");
+		main_frame->SetTitle((const wxString&)"Capaware");
 		project_controller->CloseProject(layer_tree);
 
 		navigator_manager->GetFocusedOrFirstNavigator()->ShowHUD(false);

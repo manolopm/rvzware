@@ -118,8 +118,8 @@ void ParticleSystemCallBack::Insert(const cpw::Callable* callable)
 		}
 		else
 		{
-			new_rate.min = entity->GetNewParticlesSec().min * total_length * PSC_MULT;
-			new_rate.max = entity->GetNewParticlesSec().max * total_length * PSC_MULT;
+		  new_rate.min = entity->GetNewParticlesSec().min * total_length * PSC_MULT;
+		  new_rate.max = entity->GetNewParticlesSec().max * total_length * PSC_MULT;
 		}
 		
 		app_scene->UpdateParticleSystemParticleGeneratorRate(entity_id, new_rate);

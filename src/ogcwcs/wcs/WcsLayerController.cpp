@@ -340,7 +340,7 @@ std::string WcsLayerController::GetMapURL(const WcsLayer &layer, int width, int 
 
 bool WcsLayerController::DescribeCoverage(const std::string &folder)
 {
-	std::map<std::string, std::vector<std::string>>::iterator it = wcs_crs.find(folder);
+	std::map<std::string, std::vector<std::string> >::iterator it = wcs_crs.find(folder);
 	if(it != wcs_crs.end())
 		return true;
 
@@ -372,7 +372,7 @@ bool WcsLayerController::DescribeCoverage(const std::string &folder)
 
 std::vector<std::string> WcsLayerController::WCS_CRS(const std::string &folder)
 {
-	std::map<std::string, std::vector<std::string>>::iterator it = wcs_crs.find(folder);
+	std::map<std::string, std::vector<std::string> >::iterator it = wcs_crs.find(folder);
 	if(it != wcs_crs.end())
 		return it->second;
 	else
@@ -427,6 +427,6 @@ void WcsLayerController::ProcessDescribeCoverage(const std::string &folder, std:
 		ss = ss.substr(pos2, ss.size());
 		pos0 = ss.find("EPSG:");
 	}
-	wcs_crs.insert(std::make_pair<std::string, std::vector<std::string>>(folder, v));
+	wcs_crs.insert(std::make_pair<std::string, std::vector<std::string> >(folder, v));
 
 }

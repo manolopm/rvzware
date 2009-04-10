@@ -39,7 +39,7 @@
 //#include <iostream>
 ///////////////////// end builder //////////////////
 
-#include <../../include/ogc/WmsLayerController.h>
+#include <ogc/WmsLayerController.h>
 
 //////PJ
 #include <string>
@@ -447,7 +447,7 @@ void OsgSceneBuilder::Generate(cpw::Request &request)
 
 			if( ComposeImage(request) )
 			{
-				std::map<int, std::vector<cpw::Request>>::iterator it_mapr = request_mapp.begin();
+				std::map<int, std::vector<cpw::Request> >::iterator it_mapr = request_mapp.begin();
 				for( ; it_mapr != request_mapp.end() ; it_mapr++)
 				{
 					if(it_mapr->second.size() > 1) 
@@ -627,26 +627,26 @@ bool OsgSceneBuilder::TestImage(cpw::Request &request)
 }
 
 
-void OsgSceneBuilder::SetRequestMap(std::map<int, std::vector<unsigned long int>> _rm)
+void OsgSceneBuilder::SetRequestMap(std::map<int, std::vector<unsigned long int> > _rm)
 {
 	request_map = _rm;
 
 	request_file_map.clear();
 	request_mapp.clear();
 
-	for(std::map<int, std::vector<unsigned long int>>::iterator it= request_map.begin();
+	for(std::map<int, std::vector<unsigned long int> >::iterator it= request_map.begin();
 		it != request_map.end();
 		it++)
 	{
 		std::vector<std::string> sv(it->second.size(),"");
 
-		request_file_map.insert(std::make_pair<int, std::vector<std::string>>(it->first,sv));
-		request_mapp.insert(std::make_pair<int, std::vector<cpw::Request>>(it->first,std::vector<cpw::Request>(it->second.size())));
+		request_file_map.insert(std::make_pair<int, std::vector<std::string> >(it->first,sv));
+		request_mapp.insert(std::make_pair<int, std::vector<cpw::Request> >(it->first,std::vector<cpw::Request>(it->second.size())));
 	}
 }
 
 
-void OsgSceneBuilder::SetRequestDEMMap(std::map<int, std::vector<unsigned long int>> _rdm)
+void OsgSceneBuilder::SetRequestDEMMap(std::map<int, std::vector<unsigned long int> > _rdm)
 {
 	request_dem = _rdm;
 
@@ -657,7 +657,7 @@ bool OsgSceneBuilder::ComposeImage(cpw::Request &request)
 {
 	int pos = -1;
 
-	std::map<int, std::vector<unsigned long int>>::iterator it = request_map.begin();
+	std::map<int, std::vector<unsigned long int> >::iterator it = request_map.begin();
 	std::vector<unsigned long int>::iterator v_it;
 	int count = 0;
 	while((it!=request_map.end()) && (pos == -1))
@@ -682,7 +682,7 @@ bool OsgSceneBuilder::ComposeImage(cpw::Request &request)
 		(request_mapp[pos])[count] = request;
 	}
 
-	for(std::map<int, std::vector<std::string>>::iterator aux=request_file_map.begin();
+	for(std::map<int, std::vector<std::string> >::iterator aux=request_file_map.begin();
 		aux != request_file_map.end();
 		aux++)
 	{
@@ -697,7 +697,7 @@ bool OsgSceneBuilder::ComposeImage(cpw::Request &request)
 
 ////////////////Composicion de imagenes////////////////////////////////////////////////////////		
 
-	std::map<int, std::vector<cpw::Request>>::iterator iter = request_mapp.begin();
+	std::map<int, std::vector<cpw::Request> >::iterator iter = request_mapp.begin();
 
 	for(; iter != request_mapp.end() ; iter++)
 	{

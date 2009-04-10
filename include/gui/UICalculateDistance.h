@@ -68,12 +68,12 @@ namespace cpw {
 				
 				virtual ~UICalculateDistance();
 
-				void SetPositionX(const std::string &position_x) { Position_x_Edit->SetValue(position_x); Refresh(); Update();}
-				void SetPositionY(const std::string &position_y) { Position_y_Edit->SetValue(position_y); Refresh(); Update();}
-				void SetPositionZ(const std::string &position_z) { Position_z_Edit->SetValue(position_z); Refresh(); Update();}
+				void SetPositionX(const std::string &position_x) { Position_x_Edit->SetValue((wxString&)position_x); Refresh(); Update();}
+				void SetPositionY(const std::string &position_y) { Position_y_Edit->SetValue((wxString&)position_y); Refresh(); Update();}
+				void SetPositionZ(const std::string &position_z) { Position_z_Edit->SetValue((wxString&)position_z); Refresh(); Update();}
 
-				void SetDistanceName(std::string &name)  { ElementVectorial_name_Ed->SetLabel(_T(name));  }
-				void SetDistanceType(std::string &name)  { vname = name; SetTitle(wxT(vname));}
+				void SetDistanceName(std::string &name)  { ElementVectorial_name_Ed->SetLabel((wxString&)name);  }
+				void SetDistanceType(std::string &name)  { vname = name; SetTitle((wxString&)vname);}
 
 				float GetDistance() {return distance;}
 				void SetDistance(const float &d) {distance = d;}

@@ -25,7 +25,7 @@
 
 #include <iosg/gui/OsgWidget.h>
 
-#include <osgtext/fadetext>
+#include <osgText/FadeText>
 
 #include <iosg/Export.h>
 
@@ -74,7 +74,7 @@ namespace cpw
 				void SetLabel(const std::string &label_ = "");
 				virtual void SetObject(const std::string &filename);
 
-				virtual void OsgILabel::Update(osg::Matrix *mp);
+				virtual void Update(osg::Matrix *mp);
 
 			private:
 

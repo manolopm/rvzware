@@ -55,7 +55,7 @@ namespace cpw
 				OsgIWidget *GetChild(const std::string &name);
 				OsgIWidget *GetChild(const unsigned int &index);
 				unsigned int GetNumChildren() { return (unsigned int) children.size(); }
-				virtual void OsgIContainer::ResizeScreen(const int &x, const int &y);
+				virtual void ResizeScreen(const int &x, const int &y);
 
 				virtual void Update(osg::Matrix *mp=NULL);
 

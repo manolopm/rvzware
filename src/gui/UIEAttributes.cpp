@@ -202,7 +202,7 @@ void UIEAttributes::OnButtonEAModify(wxCommandEvent& WXUNUSED(event))
 {
 	//sel_row = this->GetSelRow();
 	std::string p;
-	p=std::string(text_name->GetValue());
+	p=std::string(text_name->GetValue().mb_str());
 	if ( (!text_name->IsEmpty()) && (p[0]!=' '))
 	{
 		grid_attr->SetCellValue(sel_row,0,text_name->GetValue());
@@ -217,7 +217,7 @@ void UIEAttributes::OnButtonEAModify(wxCommandEvent& WXUNUSED(event))
 	else
 	{
 		text_name->Clear();
-		wxMessageDialog message(this,wxString("You can't create an attibute without name."), wxString("Warning"),wxICON_EXCLAMATION |wxOK);
+		wxMessageDialog message(this,wxT("You can't create an attibute without name."), wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 		message.ShowModal();
 	}
 }
@@ -226,7 +226,7 @@ void UIEAttributes::OnButtonEAModify(wxCommandEvent& WXUNUSED(event))
 void UIEAttributes::OnButtonOK(wxCommandEvent& WXUNUSED(event))
 {
 	std::string p;
-	p=std::string(text_name->GetValue());
+	p=std::string(text_name->GetValue().mb_str());
 	if ( (!text_name->IsEmpty()) && (p[0]!=' '))
 	{
 		grid_attr->SetCellValue(sel_row,0,text_name->GetValue());
@@ -245,7 +245,7 @@ void UIEAttributes::OnButtonCancel(wxCommandEvent& WXUNUSED(event))
 {
 	if(grid_modify)
 	{
-		wxMessageDialog message(this,wxString("Save changes before quit?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+		wxMessageDialog message(this,wxT("Save changes before quit?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
 		{			
@@ -269,9 +269,9 @@ std::vector<cpw::Attribute> UIEAttributes::GetAttributes()
 	cpw::Attribute attr;
 	for(int i=0; i<grid_attr->GetNumberRows(); i++)
 	{
-		attr.name  = std::string(grid_attr->GetCellValue(i,0));
-		attr.type  = std::string(grid_attr->GetCellValue(i,1));	
-		attr.value = std::string(grid_attr->GetCellValue(i,2));
+	  attr.name  = std::string(grid_attr->GetCellValue(i,0).mb_str());
+	  attr.type  = std::string(grid_attr->GetCellValue(i,1).mb_str());	
+	  attr.value = std::string(grid_attr->GetCellValue(i,2).mb_str());
 		v_attr.push_back(attr);
 	}
 	return v_attr;
@@ -285,9 +285,9 @@ void UIEAttributes::SetAttributes(const std::vector<cpw::Attribute> &attr)
 	{
 		grid_attr->AppendRows();
 		numrows = grid_attr->GetRows()-1;
-		grid_attr->SetCellValue(numrows,0,wxT(i->name));
-		grid_attr->SetCellValue(numrows,1,wxT(i->type));
-		grid_attr->SetCellValue(numrows,2,wxT(i->value));
+		grid_attr->SetCellValue(numrows,0,wxString((i->name).c_str(),wxConvUTF8));
+		grid_attr->SetCellValue(numrows,1,wxString((i->type).c_str(),wxConvUTF8));
+		grid_attr->SetCellValue(numrows,2,wxString((i->value).c_str(),wxConvUTF8));
 	}
 
 }
@@ -328,10 +328,10 @@ void UIEAttributes::render(wxDC& dc)
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
+	  wxColour c_brush = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	  dc.SetTextForeground(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8)));
 		dc.SetPen(wxPen(c_pen));
 		dc.SetBrush(wxBrush(c_brush));
 		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);

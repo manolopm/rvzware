@@ -49,14 +49,16 @@ namespace cpw
 			UIElementPrimitive(wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);//(wxMDIParentFrame* parent, int id, const wxChar *titulo);//(wxWindow* parent, int id, const wxString& title, const wxPoint& pos=wxDefaultPosition, const wxSize& size=wxDefaultSize, long style=wxDEFAULT_DIALOG_STYLE);
 			virtual ~UIElementPrimitive();
 
-			std::string GetPrimitiveName(){return std::string(text_name->GetValue());}
-			std::string GetModelPath(){return std::string(text_model->GetValue());}
-			std::string GetIconPath(){return std::string(text_icon->GetValue());}
+			std::string GetPrimitiveName(){return std::string(text_name->GetValue().mb_str());}
+			std::string GetModelPath(){return std::string(text_model->GetValue().mb_str());}
+			std::string GetIconPath(){return std::string(text_icon->GetValue().mb_str());}
 			std::vector<cpw::Attribute> GetAttributes(){ return v_attr;}
-			std::string GetFontType(){return std::string(text_font->GetValue());}
-			std::string GetDescription(){return std::string(text_description->GetValue());}
+			std::string GetFontType(){return std::string(text_font->GetValue().mb_str());}
+			std::string GetDescription(){return std::string(text_description->GetValue().mb_str());}
 
-			void SetElementPrimitiveName(const std::string &name) {text_name->SetValue(name);}
+			void SetElementPrimitiveName(const std::string &name) {
+			  wxString wxstr(name.c_str(), wxConvUTF8);
+			  text_name->SetValue(wxstr);}
 
 
 		private:		

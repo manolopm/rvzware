@@ -114,15 +114,16 @@
 #include <osgParticle/SectorPlacer>
 #include <osgParticle/SegmentPlacer>
 #include <osgUtil/IntersectVisitor>
-#include <osgutil/LineSegmentIntersector>
+#include <osgUtil/LineSegmentIntersector>
 #include <osgUtil/Optimizer>
 #include <osgText/FadeText>
 #include <osgText/Font>
 #include <osgText/Text>
 
-#include <windows.h>
-#include <Iphlpapi.h>
-
+#ifdef WIN32
+  #include <windows.h>
+  #include <Iphlpapi.h>
+#endif 
 
 
 #include <cstdlib>

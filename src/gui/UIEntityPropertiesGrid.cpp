@@ -46,8 +46,8 @@ UIEntityPropertiesGrid::UIEntityPropertiesGrid(wxWindow *parent, wxWindowID id) 
 	properties_tree->SetIndent(0);
 	if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_foreg = ApplicationConfiguration::GetInstance()->GetPageFontColour();
-		wxColour c_backg = ApplicationConfiguration::GetInstance()->GetPageColour();	
+	  wxColour c_foreg = wxString(ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8);	
 		properties_tree->SetBackgroundColour(c_backg);
 		properties_tree->SetForegroundColour(c_foreg);
 	}
@@ -79,7 +79,7 @@ void UIEntityPropertiesGrid::ShowEntity(cpw::Node *root_node, cpw::Node *node, w
 	wxTreeItemId t_root = properties_tree->GetRootItem();
 	wxTreeItemId t_id1;
 	if (node != root_node)
-		t_id1 = properties_tree->AppendItem(t_parent,node->GetName());
+	  t_id1 = properties_tree->AppendItem(t_parent,wxString(node->GetName().c_str(),wxConvUTF8));
 	else
 		t_id1 = t_root;
 
@@ -92,13 +92,13 @@ void UIEntityPropertiesGrid::ShowEntity(cpw::Node *root_node, cpw::Node *node, w
 		std::map<std::string, std::string>::iterator attr_iter = attr->begin();
 		for( ; attr_iter != attr->end(); attr_iter++)
 		{
-			t_aux = properties_tree->AppendItem(t_id1,attr_iter->first);
-			properties_tree->SetItemText(t_aux,1,attr_iter->second);
+		  t_aux = properties_tree->AppendItem(t_id1,wxString(attr_iter->first.c_str(),wxConvUTF8));
+		  properties_tree->SetItemText(t_aux,1,wxString(attr_iter->second.c_str(),wxConvUTF8));
 		}
 	}
 	else
 	{
-		properties_tree->SetItemText(t_id1,1,node->GetValue());
+	  properties_tree->SetItemText(t_id1,1,wxString(node->GetValue().c_str(),wxConvUTF8));
 	}
 	properties_tree->Expand(t_root);
 
@@ -118,8 +118,9 @@ void UIEntityPropertiesGrid::ShowEntity(cpw::Node *root_node, cpw::Node *node, w
 void UIEntityPropertiesGrid::ShowEntity(cpw::Entity *entity)
 {
 	if (entity == NULL)
-	{
-		this->OnSize(wxSizeEvent());	
+	  {
+	    wxSizeEvent tmp = wxSizeEvent();
+	    this->OnSize((wxSizeEvent &)tmp);	
 		return;
 	}
 
@@ -127,12 +128,13 @@ void UIEntityPropertiesGrid::ShowEntity(cpw::Entity *entity)
 
 	properties_tree->DeleteRoot();
 	
-	wxTreeItemId t_root  = properties_tree->AddRoot(root->GetName());
+	wxTreeItemId t_root  = properties_tree->AddRoot(wxString(root->GetName().c_str(),wxConvUTF8));
 	properties_tree->Expand(t_root);
 	ShowEntity(root, root, t_root);
 	properties_tree->ExpandAll(t_root);
-
-	this->OnSize(wxSizeEvent());
+	
+	wxSizeEvent tmp = wxSizeEvent();
+	this->OnSize((wxSizeEvent &)tmp);
 	delete root;
 }
 

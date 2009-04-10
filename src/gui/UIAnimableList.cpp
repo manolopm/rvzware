@@ -78,8 +78,8 @@ void UIAnimableList::CreateGUIControls()
 
 	//AnimableTree
 	img_list = new wxImageList(16, 16);
-	img_list->Add(wxBitmap(wxImage(wxT(icon_path + "folder.png"))));
-	img_list->Add(wxBitmap(wxImage(wxT(icon_path + "selected.png"))));
+	img_list->Add(wxBitmap(wxImage(wxString((icon_path + "folder.png").c_str(),wxConvUTF8))));
+	img_list->Add(wxBitmap(wxImage(wxString((icon_path + "selected.png").c_str(),wxConvUTF8))));
                                       
 	animableTree = new wxTreeListCtrl(this, ID_ANIMABLE_TREE, wxPoint(20,20), wxSize(345,265), wxTR_HAS_BUTTONS | wxTR_HAS_VARIABLE_ROW_HEIGHT | wxTR_FULL_ROW_HIGHLIGHT | wxTR_EDIT_LABELS| wxTR_HIDE_ROOT);//wxTR_SINGLE| wxTR_HAS_BUTTONS /**/ );
 	animableTree->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxNORMAL, false, wxT("Tahoma")));
@@ -88,11 +88,11 @@ void UIAnimableList::CreateGUIControls()
 	
 	if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		animableTree->SetBackgroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageColour()));
-		animableTree->SetForegroundColour(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour()));
+	  animableTree->SetBackgroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8)));
+	  animableTree->SetForegroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8)));
 	}
 	
-	wxTreeItemId t_root  = animableTree->AddRoot("Top Layer");
+	wxTreeItemId t_root  = animableTree->AddRoot(wxT("Top Layer"));
 	animableTree->SetItemImage(t_root, IM_TREE_ROOT);
 	animableTree->SetItemType(t_root,0,wxCheckboxItemType);
 
@@ -151,7 +151,7 @@ void UIAnimableList::Clear()
 
 void UIAnimableList::AddIcon(const std::string &icon_filename, wxTreeItemId id)
 {
-	wxIcon icon(wxT(icon_filename), wxBITMAP_TYPE_ANY);
+	wxIcon icon(wxString(icon_filename.c_str(),wxConvUTF8), wxBITMAP_TYPE_ANY);
 	int img_index = img_list->Add(icon);
 	animableTree->SetItemImage(id, img_index);
 }
@@ -163,7 +163,7 @@ void UIAnimableList::Append(const std::vector<cpw::Entity*> &animated_entities)
 	wxTreeItemId t_id1;
 	for(;iter != animated_entities.end(); iter++)
 	{
-		t_id1 = animableTree->AppendItem(t_root,(*iter)->GetName());
+	  t_id1 = animableTree->AppendItem(t_root,wxString((*iter)->GetName().c_str(),wxConvUTF8));
 		AddIcon((*iter)->GetIcon(), t_id1);
 		animableTree->SetItemType(t_id1,0,wxCheckboxItemType);
 		if ((*iter)->isAnimate())
@@ -241,10 +241,10 @@ void UIAnimableList::render(wxDC& dc)
 
 	if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
-		wxColour c_brush = ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-		dc.SetTextForeground(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour()));
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
+	  wxColour c_brush = wxString(ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8);
+	  dc.SetTextForeground(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour().c_str(),wxConvUTF8)));
 		dc.SetPen(wxPen(c_pen));
 		dc.SetBrush(wxBrush(c_brush));
 		dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);

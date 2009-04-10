@@ -1,0 +1,26 @@
+LIB_FILES =   wmsCapabilitiesParser.cpp  wmsCapabilitiesState.cpp  wms.cpp wmsMemoryStream.cpp  wmsReferenced.cpp  wmsUrl.cpp iso8601.cpp  wmsCapabilitiesRoot.cpp wmsClient.cpp wmsCurlMemoryStream.cpp  wmsNotify.cpp wmsStyle.cpp
+
+
+INCLUDE = -I/usr/include -I../../include -I/usr/include/postgresql/ -I/usr
+LFLAGS = -fPIC -lcurl -lpq -lOpenThreads -lboost_filesystem -lexpat
+CFLAGS = -fPIC
+CC = g++
+LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
+
+all: libwms.so
+
+clean:
+	rm -f $(LIBOFILES)
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+libwms.so: $(LIBOFILES)
+	rm -f $@
+	g++ -shared -Wl,-soname, $(LIBOFILES) -o $@
+
+
+
+
+
+

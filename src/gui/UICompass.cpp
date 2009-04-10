@@ -21,12 +21,12 @@
  * The CAPAWARE development team
 */
 
-//#include <gui/UIShapedFrame.h>
+#include <gui/UIShapedFrame.h>
 #include "UIApplicationMainFrame.h"
 
 #include <wx/region.h>
 #include <wx/bitmap.h>
-#include <debugger.h>
+#include <cpw/debugger.h>
 
 using namespace cpw::gui;
 

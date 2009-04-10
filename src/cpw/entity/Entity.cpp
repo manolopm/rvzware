@@ -440,12 +440,12 @@ int Entity::AdaptPersistence(Node *root)
 	std::istringstream strpublish (root->GetChildValue("published"));
 	strpublish >> published;
 
-	std::vector<cpw::Node *> &components = root->GetChildren();
+	std::vector<cpw::Node *> components = root->GetChildren();
 	std::vector<cpw::Node *>::iterator i = components.begin();
 	while ((i!=components.end()) && ((*i)->GetName() != std::string("attributes"))) i++;
 	if (i!=components.end())
 	{
-		std::vector<cpw::Node *> &attr = (*i)->GetChildren();
+		std::vector<cpw::Node *> attr = (*i)->GetChildren();
 		std::vector<cpw::Node *>::iterator j = attr.begin();
 		for(j;j!=attr.end();j++)
 		{

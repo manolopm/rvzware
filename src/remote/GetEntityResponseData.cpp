@@ -26,7 +26,12 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
+#ifdef WIN32
 #include <direct.h>
+#else
+#include <sys/types.h>
+#include <sys/stat.h>
+#endif
 
 #include "stdafx.h"
 
@@ -319,8 +324,11 @@ bool GetEntityResponseData::Decode(const DataStream &data_stream)
 				cpw::ApplicationConfiguration::GetInstance()->GetEntityDirectory() + "remote/";
 
 			//Create folder
+			#ifdef WIN32
 			mkdir(root_folder.c_str());
-
+#else
+			mkdir(root_folder.c_str(),0777);
+			#endif
 
 			while (nbin>0)
 			{

@@ -23,7 +23,7 @@
 #ifndef _NAVIGATORPREDRAWCALLBACK_
 #define _NAVIGATORPREDRAWCALLBACK_
 
-#include <osg/camera>
+#include <osg/Camera>
 
 #include <iosg/OsgNavigator.h>
 

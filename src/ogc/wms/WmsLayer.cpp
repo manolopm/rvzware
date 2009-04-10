@@ -258,14 +258,14 @@ int WmsLayer::AdaptPersistence(cpw::Node *root)
 	wms_image_format =  (root->GetChildValue("WMS_ImageFormat"));
 	wms_version =  (root->GetChildValue("WMS_Version"));
 
-	std::vector<cpw::Node *> &root_children = root->GetChildren();
+	std::vector<cpw::Node *> root_children = root->GetChildren();
 	std::vector<cpw::Node *>::iterator i;
 
 	for(i = root_children.begin(); i != root_children.end(); i++)
 	{
 		if ((*i)->GetName() == "WMS_ImageFormats")
 		{
-			std::vector<cpw::Node *> &format_children = (*i)->GetChildren();
+			std::vector<cpw::Node *> format_children = (*i)->GetChildren();
 			std::vector<cpw::Node *>::iterator j;
 			for(j = format_children.begin(); j != format_children.end(); j++)
 			{

@@ -45,7 +45,9 @@
 #include <wx/dcscreen.h>
 #include <wx/scrolwin.h>
 #include <wx/renderer.h>
-
+#include <wx/combobox.h>
+#include <wx/valtext.h>
+#include <wx/validate.h>
 
 #if defined(__WXMSW__) &&  defined(_NATIVE_WIN32_) 
 #include <wx/dcmemory.h>
@@ -59,8 +61,11 @@
 
 
 //ca
-LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 
+#ifdef WIN32
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+#endif
 //using cpw::wxTreeListCtrl;
 //using cpw::CheckBoxChangeEvent
 ////AJ own event for checkboxes
@@ -840,13 +845,15 @@ class wxEditFloatValidator : public wxValidator
 //Long Type Validator 
 class wxEditLongValidator : public wxValidator
 {
-     long *val;
+  long *val;
+  wxEditLongValidator &operator = (const wxEditLongValidator &);
  public:
-     wxEditLongValidator(long* val);
-     wxObject* Clone() const;
-     bool TransferFromWindow();
-     bool TransferToWindow();
-     bool Validate(wxWindow* parent);
+  wxEditLongValidator(long* val);
+  wxEditLongValidator(const wxEditLongValidator &v);
+  wxObject* Clone() const;
+  bool TransferFromWindow();
+  bool TransferToWindow();
+  bool Validate(wxWindow* parent);
 };
 
 // control used for in-place edit
@@ -1267,7 +1274,7 @@ void wxTreeListRenameTimer::Notify()
  {
      wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
      float t;
-     int r=sscanf(s.c_str()," %f",&t);
+     int r=sscanf((const char *)s.c_str()," %f",&t);
      if (r==1)
      {
          *val=t;
@@ -1278,7 +1285,7 @@ void wxTreeListRenameTimer::Notify()
   
  bool wxEditFloatValidator::TransferToWindow()
  {
-     wxString buf=wxString::Format("%g",*val);  
+   wxString buf=wxString::Format(_T("%g"),*val);  
      ((wxTextCtrl*)m_validatorWindow)->SetValue(buf);
      return true;
  }
@@ -1287,7 +1294,7 @@ void wxTreeListRenameTimer::Notify()
  {
      wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
      float t;
-     int r=sscanf(s.c_str()," %f",&t);
+     int r=sscanf((const char *)s.c_str()," %f",&t);
      if (r==1)
      {        
          return true;
@@ -1302,7 +1309,11 @@ void wxTreeListRenameTimer::Notify()
  {
      val=pval;  
  }
- 
+
+wxEditLongValidator::wxEditLongValidator(const wxEditLongValidator &v):wxValidator()
+{
+  val = v.val;
+}
  // Note the 'const' here
  wxObject* wxEditLongValidator::Clone() const
  {
@@ -1312,11 +1323,11 @@ void wxTreeListRenameTimer::Notify()
  bool wxEditLongValidator::TransferFromWindow()
  {
      wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
-     float t;
-     int r=sscanf(s.c_str()," %d",&t);
+     long int t;
+     int r=sscanf((const char *)s.c_str()," %d",&t);
      if (r==1)
      {
-         *val=t;
+       *val=t;
          return true;
      }
      return false;
@@ -1324,7 +1335,7 @@ void wxTreeListRenameTimer::Notify()
   
  bool wxEditLongValidator::TransferToWindow()
  {
-     wxString buf=wxString::Format("%d",*val);  
+   wxString buf=wxString::Format(_T("%d"),*val);  
      ((wxTextCtrl*)m_validatorWindow)->SetValue(buf);
      return true;
  }
@@ -1333,7 +1344,7 @@ void wxTreeListRenameTimer::Notify()
  {
      wxString s=((wxTextCtrl*)m_validatorWindow)->GetValue();
      float t;
-     int r=sscanf(s.c_str()," %d",&t);
+     int r=sscanf((const char *)s.c_str()," %d",&t);
      if (r==1)
      {        
          return true;
@@ -1595,7 +1606,7 @@ void wxEditSpinCtrl::OnChar( wxKeyEvent &event )
     if (event.GetKeyCode() == WXK_RETURN)
     {
         (*m_accept) = true;
-        (*m_res) = wxString::Format("%d",GetValue()); //fixme: find the inttostr equivalent
+        (*m_res) = wxString::Format(_T("%d"),GetValue()); //fixme: find the inttostr equivalent
 
         if ((*m_res) != m_startValue)
             m_owner->OnRenameAccept();
@@ -1657,7 +1668,7 @@ void wxEditSpinCtrl::OnKillFocus( wxFocusEvent &event )
         wxPendingDelete.Append(this);
 
     (*m_accept) = true;
-    (*m_res) = wxString::Format("%d",GetValue());
+    (*m_res) = wxString::Format(_T("%d"),GetValue());
 
     if ((*m_res) != m_startValue)
         m_owner->OnRenameAccept();
@@ -1708,8 +1719,10 @@ void wxEditDateCtrl::OnChar( wxKeyEvent &event )
 {
     if (event.GetKeyCode() == WXK_RETURN)
     {
-        (*m_accept) = true;
-        (*m_res) = wxString::Format("%d",GetValue().FormatDate()); //fixme: find the inttostr equivalent
+      (*m_accept) = true;
+      long int tmp;
+      wxString(GetValue().FormatDate()).ToLong(&tmp);
+        (*m_res) = wxString::Format(_T("%d"),tmp ); //fixme: find the inttostr equivalent
 
         if ((*m_res) != m_startValue)
             m_owner->OnRenameAccept();
@@ -1789,6 +1802,7 @@ void wxEditDateCtrl::SetTextFocus(void)
 
 
 //locura para capturar eventos de win... - -''''''''''
+#ifdef WIN32
 LRESULT CALLBACK WndProc (HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 
@@ -1801,6 +1815,8 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	 }
 	 return 0;
 }
+
+#endif
 
 
 
@@ -2036,7 +2052,7 @@ void wxTreeListHeaderWindow::DoDrawRect( wxDC *dc, int x, int y, int w, int h )
 		dc->SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT),1, wxSOLID));
 	}
 	else 
-		dc->SetPen(wxPen(SetBackgroundColour (wxColour(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour())),1,wxSOLID));
+	  dc->SetPen(wxPen(SetBackgroundColour (wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8))),1,wxSOLID));
 
 #endif
     dc->DrawLine( x+w-m_corner+1, y, x+w, y+h );  // right (outer)
@@ -2209,7 +2225,7 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 	if ((cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 		dc.SetBackgroundMode(wxTRANSPARENT);
 	else
-		dc.SetBackground(wxBrush(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour())));
+	  dc.SetBackground(wxBrush(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8))));
 
     // do *not* use the listctrl colour for headers - one day we will have a
     // function to set it separately
@@ -2223,7 +2239,7 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if ((cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 		dc.SetTextForeground (wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT ));
 	else
-		dc.SetTextForeground (wxColour(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour()));
+	  dc.SetTextForeground (wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour().c_str(),wxConvUTF8)));
 #endif
 
     int x = HEADER_OFFSET_X;
@@ -2341,7 +2357,7 @@ void wxTreeListHeaderWindow::DrawCurrent()
 		dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT),1, wxSOLID));
 	}
 	else
-		dc.SetPen(wxPen(SetBackgroundColour (wxColour(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour())),1,wxSOLID));
+	  dc.SetPen(wxPen(SetBackgroundColour (wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8))),1,wxSOLID));
     dc.SetBrush (*wxTRANSPARENT_BRUSH);
 
     AdjustDC(dc);
@@ -3019,12 +3035,12 @@ bool wxTreeListMainWindow::Create (wxTreeListCtrl *parent,
 	if ((cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 		SetBackgroundColour (wxSystemSettings::GetSystemColour (wxSYS_COLOUR_LISTBOX));
 	else
-		SetBackgroundColour (wxColour(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour());
+	  SetBackgroundColour (wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8));
 #else
 	if ((cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 		SetBackgroundColour (wxSystemSettings::GetColour (wxSYS_COLOUR_LISTBOX));
 	else
-		SetBackgroundColour (wxColour(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour()));
+	  SetBackgroundColour (wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8)));
 #endif
 
 #ifdef __WXMSW__
@@ -4236,7 +4252,7 @@ int wxTreeListMainWindow::GetLineHeight (wxTreeListItem *item) const {
 //Function that Returns a Dotted String is the cell content overflows the visible cell
 wxString MakeShortString(wxDC& dc, const wxString&StringToModify, int nColumnLen, int nOffset)
 {
-	static const char szThreeDots[] = _T("...");
+  std::string szThreeDots = "...";
 	
 	int nStringLen = (int)StringToModify.Length();
 	wxCoord w,h;
@@ -4244,12 +4260,12 @@ wxString MakeShortString(wxDC& dc, const wxString&StringToModify, int nColumnLen
 
 	if(nStringLen == 0 || w + nOffset <= nColumnLen) return StringToModify;
 	
-	static char szShort[MAX_PATH];
-
-	strcpy(szShort, StringToModify.GetData());
+	std::string szShort;
+	
+	szShort = std::string(wxString(StringToModify.GetData()).mb_str());
 
 	wxCoord wDot,hDot;
-	dc.GetTextExtent(szThreeDots, &wDot,&hDot);
+	dc.GetTextExtent(wxString(szThreeDots.c_str(),wxConvUTF8), &wDot,&hDot);
 	int nAddLen = wDot;
 		
 	wxCoord wTemp,hTemp;
@@ -4257,11 +4273,11 @@ wxString MakeShortString(wxDC& dc, const wxString&StringToModify, int nColumnLen
 	for(int i = nStringLen - 1; i > 0; i--)
 	{
 		szShort[i] = 0;
-		dc.GetTextExtent(szShort, &wTemp,&hTemp);
+		dc.GetTextExtent(wxString(szShort.c_str(),wxConvUTF8), &wTemp,&hTemp);
 		if(wTemp + nOffset + nAddLen <= nColumnLen) break;
 	}	
-	lstrcat(szShort, szThreeDots);	
-	return szShort;
+	szShort = szShort + szThreeDots;	
+	return wxString(szShort.c_str(),wxConvUTF8);
 }
 
 void wxTreeListMainWindow::PaintItem (wxTreeListItem *item, wxDC& dc) {
@@ -4287,7 +4303,7 @@ void wxTreeListMainWindow::PaintItem (wxTreeListItem *item, wxDC& dc) {
     if ((cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 		colTextHilight = wxSystemSettings::GetColour (wxSYS_COLOUR_HIGHLIGHTTEXT);
 	else
-		colTextHilight = wxColour(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour());
+	  colTextHilight = wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour().c_str(),wxConvUTF8));
 #endif
 
     int total_w = m_owner->GetHeaderWindow()->GetWidth();
@@ -4324,7 +4340,7 @@ void wxTreeListMainWindow::PaintItem (wxTreeListItem *item, wxDC& dc) {
 						//dc.SetPen (*wxBLACK_PEN);
 						dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT),1, wxSHORT_DASH));
 					else
-						dc.SetPen(wxPen(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour()),1, wxSHORT_DASH));
+					  dc.SetPen(wxPen(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour().c_str(),wxConvUTF8)),1, wxSHORT_DASH));
 				}
 #endif // !__WXMAC__
             }else{
@@ -4340,7 +4356,7 @@ void wxTreeListMainWindow::PaintItem (wxTreeListItem *item, wxDC& dc) {
 				if ((cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 					dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT),1, wxSOLID));
 				else
-					dc.SetPen(wxPen(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour()),1, wxSOLID));
+				  dc.SetPen(wxPen(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour().c_str(),wxConvUTF8)),1, wxSOLID));
 			else
 				dc.SetPen(*wxTRANSPARENT_PEN);
         }else{
@@ -4443,7 +4459,7 @@ void wxTreeListMainWindow::PaintItem (wxTreeListItem *item, wxDC& dc) {
 						if ((cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 							dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT),1, wxSOLID));
 						else
-							dc.SetPen(wxPen(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour()),1, wxSOLID));
+						  dc.SetPen(wxPen(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour().c_str(),wxConvUTF8)),1, wxSOLID));
 					else
 						dc.SetPen (*wxTRANSPARENT_PEN);
                 }else{
@@ -4534,7 +4550,7 @@ void wxTreeListMainWindow::PaintItem (wxTreeListItem *item, wxDC& dc) {
 					if ((cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 						dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT),1, wxSOLID));
 					else
-						dc.SetPen(wxPen(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour()),1, wxSOLID));
+					  dc.SetPen(wxPen(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour().c_str(),wxConvUTF8)),1, wxSOLID));
 				else
 					dc.SetPen (*(wxWHITE_PEN));
 				//dc.DrawLine(x_colstart+1,text_y,x_colstart+1,text_y+total_h);
@@ -4606,7 +4622,7 @@ void wxTreeListMainWindow::PaintLevel (wxTreeListItem *item, wxDC &dc,
 				if ((cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 					dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT),1, wxSOLID));
 				else
-					dc.SetPen(wxPen(wxColour(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour()),1, wxSOLID));
+				  dc.SetPen(wxPen(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetForegroundColour().c_str(),wxConvUTF8)),1, wxSOLID));
 			else
 				dc.SetPen (*(wxWHITE_PEN));
             dc.DrawLine(0, y_top, total_width, y_top);
@@ -4761,8 +4777,8 @@ void wxTreeListMainWindow::OnPaint (wxPaintEvent &WXUNUSED(event)) {
 
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_pen   = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour();	
+	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient2Colour().c_str(),wxConvUTF8);
+		wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetBackgroundGradient1Colour().c_str(),wxConvUTF8);	
 		//dc.GradientFillLinear( wxRect(0,0,client_w,client_h), c_backg, c_pen, wxSOUTH);
 	}
 
@@ -5154,9 +5170,9 @@ void wxTreeListMainWindow::EditLabel (const wxTreeItemId& item, int column) {
 				this, m_editItem->GetText (column),
 				wxPoint (x, y), wxSize (w, h), style);
 			if (pick_type == wxTR_COLUMN_INT_TEXT)
-				text->SetValidator(wxEditLongValidator(NULL));
+			  text->SetValidator(wxEditLongValidator(NULL));
 			else if (pick_type == wxTR_COLUMN_FLOAT_TEXT)
-				text->SetValidator(wxTextValidator(wxFILTER_NUMERIC,NULL));
+			  text->SetValidator(wxTextValidator(wxFILTER_NUMERIC,NULL));
 			text->SetFocus();
 			return;
 		}

@@ -24,6 +24,7 @@
 
 //#include <stdafx.h>
 
+
 #include <cpw/entity/Entity.h>
 #include <cpw/entity/EntityFactory.h>
 #include <cpw/entity/EntityRegistry.h>
@@ -123,7 +124,7 @@ int DataBase::CreatePersistence()
 
 	AddPersistenceLevel((std::string)"db_columnspertable");
 
-	for(std::vector<std::vector<std::string>>::iterator i= db_columnspertable.begin(); i!=db_columnspertable.end(); i++)
+	for(std::vector<std::vector<std::string> >::iterator i= db_columnspertable.begin(); i!=db_columnspertable.end(); i++)
 	{
 		AddPersistenceLevel((std::string)"db_columns");
 		for(std::vector<std::string>::iterator j = i->begin(); j != i->end(); j++)
@@ -147,14 +148,14 @@ int DataBase::AdaptPersistence(cpw::Node *root)
 	db_name =  (root->GetChildValue("db_name"));
 
 
-	std::vector<cpw::Node *> &root_children = root->GetChildren();
+	std::vector<cpw::Node *> root_children = root->GetChildren();
 	std::vector<cpw::Node *>::iterator i;
 
 	for(i = root_children.begin(); i != root_children.end(); i++)
 	{
 		if ((*i)->GetName() == "db_tablenames")
 		{
-			std::vector<cpw::Node *> &table_children = (*i)->GetChildren();
+			std::vector<cpw::Node *> table_children = (*i)->GetChildren();
 			std::vector<cpw::Node *>::iterator j;
 			for(j = table_children.begin(); j != table_children.end(); j++)
 			{
@@ -167,11 +168,11 @@ int DataBase::AdaptPersistence(cpw::Node *root)
 	{
 		if ((*i)->GetName() == "db_columnspertable")
 		{
-			std::vector<cpw::Node *> &tables_children = (*i)->GetChildren();
+			std::vector<cpw::Node *> tables_children = (*i)->GetChildren();
 			std::vector<cpw::Node *>::iterator j;
 			for(j = tables_children.begin(); j != tables_children.end(); j++)
 			{
-				std::vector<cpw::Node *> &columns_children = (*j)->GetChildren();
+				std::vector<cpw::Node *> columns_children = (*j)->GetChildren();
 				std::vector<cpw::Node *>::iterator k;
 				db_columnspertable.push_back(std::vector<std::string>());
 				for(k = columns_children.begin(); k != columns_children.end(); k++)
@@ -271,7 +272,7 @@ int DataBase::GetDBTables()
 		PQclear(res);
 
 		//Gathering information about the different columns or fiels od each table
-		std::vector<std::vector<std::string>> columnspertable;
+		std::vector<std::vector<std::string> > columnspertable;
 		std::vector<std::string> columnnames;
 
 		//Thos names are obtained for each table
@@ -333,7 +334,7 @@ PGresult   * DataBase::GetDBRecordsfromTable(std::string &fields, std::string &t
 		std::string    db_row;//temp used to save records
 	
 		//Temporal vars are used to save columns etc.
-		std::vector<std::vector<std::string>> columnspertable;
+		std::vector<std::vector<std::string> > columnspertable;
 		std::vector<std::string> columns;
 
 		//The SQL command is composed to get the table information
@@ -653,7 +654,7 @@ void DataBase::ReadTables()
 							//Composing SQL request considering the field names just read from tha table
 							//For the geospatial column:
 							//asewkt gets srid and point    asText erturns only the point. asGml asSvg asKml
-							PGresult   *res=GetDBRecordsfromTable(std::string(consulta),tablenames.at(i));
+							PGresult   *res=GetDBRecordsfromTable((std::string&)consulta,(std::string&)tablenames.at(i));
 
 							//If no null request
 							if (res!=NULL)

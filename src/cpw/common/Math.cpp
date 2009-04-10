@@ -252,28 +252,28 @@ double Plane::Angle(const Plane &plane)
 
 double Plane::Distance(const cpw::Point3d<double> &point)
 {
-	double a = abs((coords[0] * point.x) + (coords[1] * point.y) + (coords[2] * point.z) + coords[3]);
+	double a = fabs((coords[0] * point.x) + (coords[1] * point.y) + (coords[2] * point.z) + coords[3]);
 	double b = sqrt((coords[0] * coords[0]) + (coords[1] * coords[1]) + (coords[2] * coords[2]));
 	return a / b;
 }
 
 double Plane::Distance(const cpw::Point3d<float> &point)
 {
-	double a = abs((coords[0] * point.x) + (coords[1] * point.y) + (coords[2] * point.z) + coords[3]);
+	double a = fabs((coords[0] * point.x) + (coords[1] * point.y) + (coords[2] * point.z) + coords[3]);
 	double b = sqrt((coords[0] * coords[0]) + (coords[1] * coords[1]) + (coords[2] * coords[2]));
 	return a / b;
 }
 
 const double Plane::Distance(const cpw::Point3d<double> &point)const 
 {
-	double a = abs((coords[0] * point.x) + (coords[1] * point.y) + (coords[2] * point.z) + coords[3]);
+	double a = fabs((coords[0] * point.x) + (coords[1] * point.y) + (coords[2] * point.z) + coords[3]);
 	double b = sqrt((coords[0] * coords[0]) + (coords[1] * coords[1]) + (coords[2] * coords[2]));
 	return a / b;
 }
 
 const double Plane::Distance(const cpw::Point3d<float> &point)const 
 {
-	double a = abs((coords[0] * point.x) + (coords[1] * point.y) + (coords[2] * point.z) + coords[3]);
+	double a = fabs((coords[0] * point.x) + (coords[1] * point.y) + (coords[2] * point.z) + coords[3]);
 	double b = sqrt((coords[0] * coords[0]) + (coords[1] * coords[1]) + (coords[2] * coords[2]));
 	return a / b;
 }

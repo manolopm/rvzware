@@ -53,11 +53,11 @@ UISceneTree::UISceneTree(wxWindow *parent) : wxPanel(parent, wxID_ANY), osg_scen
 	tree_ctrl = new wxTreeCtrl(this, -1);
 	tree_ctrl->SetSize(this->GetSize());
 
-	wxButton *button = new wxButton(this, REFRESH_BUTTON, "Refresh");
+	wxButton *button = new wxButton(this, REFRESH_BUTTON, wxT("Refresh"));
 	button->SetMaxSize(wxSize(55, 35));
 	button->SetMinSize(wxSize(55, 35));
 
-	node_count = new wxStaticText(this, wxID_ANY, " Node count 0");
+	node_count = new wxStaticText(this, wxID_ANY, wxT(" Node count 0"));
 		
 	top_sizer->Add(tree_ctrl,1,wxGROW);
 	top_sizer->Add(sub_sizer, 0);//, wxALIGN_CENTER);
@@ -76,7 +76,7 @@ UISceneTree::~UISceneTree()
 {
 }
 
-void UISceneTree::Refresh(wxCommandEvent& WXUNUSED(event))
+void UISceneTree::Refresh(wxCommandEvent &event)
 {
 	osg_scene = (iosg::OsgScene *) cpw::ApplicationScene::GetInstance()->GetScene();
 	tree_ctrl->DeleteAllItems();
@@ -91,7 +91,7 @@ void UISceneTree::Refresh(wxCommandEvent& WXUNUSED(event))
 	
 	total_nodes = 1;
 
-	wxTreeItemId root_id = tree_ctrl->AddRoot(GetTreeText((osg::Node *) root_group));
+	wxTreeItemId root_id = tree_ctrl->AddRoot(wxString(GetTreeText((osg::Node *) root_group).c_str(),wxConvUTF8));
 
 	for (unsigned int i=0; i<root_group->getNumChildren(); i++)
 		AddNode(root_id, root_group->getChild(i));
@@ -101,7 +101,7 @@ void UISceneTree::Refresh(wxCommandEvent& WXUNUSED(event))
 	
 	node_count_ss << total_nodes;
 	std::string node_count_str = " Node count " + node_count_ss.str();
-	node_count->SetLabel(node_count_str);
+	node_count->SetLabel(wxString(node_count_str.c_str(),wxConvUTF8));
 	
 }
 
@@ -109,7 +109,7 @@ void UISceneTree::Refresh(wxCommandEvent& WXUNUSED(event))
 void UISceneTree::AddNode(wxTreeItemId &parent_id, osg::Node *osg_node)
 {
 	total_nodes++;
-	wxTreeItemId id = tree_ctrl->AppendItem(parent_id, GetTreeText(osg_node));
+	wxTreeItemId id = tree_ctrl->AppendItem(parent_id, wxString(GetTreeText(osg_node).c_str(),wxConvUTF8));
 
 	std::string class_name = osg_node->className();
 
@@ -126,7 +126,7 @@ void UISceneTree::AddNode(wxTreeItemId &parent_id, osg::Node *osg_node)
 			text = drawable->className();
 			text += ", ";
 			text += drawable->getName();
-			tree_ctrl->AppendItem(id, text);
+			tree_ctrl->AppendItem(id, wxString(text.c_str(),wxConvUTF8));
 			total_nodes++;
 		}
 	}
@@ -149,12 +149,12 @@ std::string UISceneTree::GetTreeText(osg::Node *node)
 	out = node->className();
 	out += ", " + node->getName();
 	
-	wxString str = node->getName();
+	wxString str = wxString(node->getName().c_str(),wxConvUTF8);
 	if (!str.empty())
 	{
 		if (entity_registry != NULL)
 		{
-			cpw::TypeId id(str.c_str());
+		  cpw::TypeId id(std::string(str.mb_str()));
 			cpw::Entity *entity = entity_registry->GetEntity(id);
 		
 			if (entity != NULL)

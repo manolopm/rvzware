@@ -55,17 +55,17 @@ BEGIN_EVENT_TABLE(UILayerTreePanel, wxPanel)
 	EVT_MENU	 ( EDIT_MODIFY_PROPERTIES, UILayerTreePanel::ModifyProperties )
 	EVT_MENU	 ( GOTO, UILayerTreePanel::GoTo )
 
-	EVT_TREE_SEL_CHANGED(LAYER_TREE_PANEL, EvtTreeItemSelChanged)
-	EVT_TREE_ITEM_EXPANDED(LAYER_TREE_PANEL, EvtTreeItemExpanded)
-	EVT_TREE_ITEM_COLLAPSED(LAYER_TREE_PANEL, EvtTreeItemCollapsed)
+EVT_TREE_SEL_CHANGED(LAYER_TREE_PANEL, UILayerTreePanel::EvtTreeItemSelChanged)
+EVT_TREE_ITEM_EXPANDED(LAYER_TREE_PANEL, UILayerTreePanel::EvtTreeItemExpanded)
+EVT_TREE_ITEM_COLLAPSED(LAYER_TREE_PANEL, UILayerTreePanel::EvtTreeItemCollapsed)
 	
-	EVT_TREE_ITEM_RIGHT_CLICK(LAYER_TREE_PANEL, OnRightClick)
-	EVT_TREE_BEGIN_DRAG(LAYER_TREE_PANEL, OnStartDragAndDrop)
-	EVT_TREE_END_DRAG(LAYER_TREE_PANEL, OnEndDragAndDrop)
-	EVT_TREE_KEY_DOWN(LAYER_TREE_PANEL, OnTreeKeyDown)
+EVT_TREE_ITEM_RIGHT_CLICK(LAYER_TREE_PANEL, UILayerTreePanel::OnRightClick)
+EVT_TREE_BEGIN_DRAG(LAYER_TREE_PANEL, UILayerTreePanel::OnStartDragAndDrop)
+EVT_TREE_END_DRAG(LAYER_TREE_PANEL, UILayerTreePanel::OnEndDragAndDrop)
+EVT_TREE_KEY_DOWN(LAYER_TREE_PANEL, UILayerTreePanel::OnTreeKeyDown)
 
-	EVT_MOUSE_CAPTURE_LOST(OnMouseCaptureLost)
-	EVT_MOTION(OnMouseMotion)
+EVT_MOUSE_CAPTURE_LOST(UILayerTreePanel::OnMouseCaptureLost)
+EVT_MOTION(UILayerTreePanel::OnMouseMotion)
 END_EVENT_TABLE()
 
 
@@ -78,12 +78,12 @@ UILayerTreePanel::UILayerTreePanel(UIApplicationMainFrame* main_frame, cpw::INav
 	SetSizer(top_sizer);
 
 	tree_ctrl = new wxTreeListCtrl(this, LAYER_TREE_PANEL, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS | wxTR_HAS_VARIABLE_ROW_HEIGHT | wxTR_FULL_ROW_HIGHLIGHT | wxTR_EDIT_LABELS);//wxTR_SINGLE| wxTR_HAS_BUTTONS /*| wxTR_HIDE_ROOT*/ );
-	icondefault = new wxIcon(_T(cpw::ApplicationConfiguration::GetInstance()->GetUIIconDirectory()+"default.png"), wxBITMAP_TYPE_ANY);
+	icondefault = new wxIcon(wxString((cpw::ApplicationConfiguration::GetInstance()->GetUIIconDirectory()+"default.png").c_str(),wxConvUTF8), wxBITMAP_TYPE_ANY);
 	
 	if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-		wxColour c_foreg = cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour();
-		wxColour c_backg = cpw::ApplicationConfiguration::GetInstance()->GetPageColour();	
+	  wxColour c_foreg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8);
+	  wxColour c_backg = wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8);	
 		tree_ctrl->SetBackgroundColour(c_backg);
 		tree_ctrl->SetForegroundColour(c_foreg);
 	}
@@ -129,12 +129,12 @@ void UILayerTreePanel::FillTree()
 	}
 	
 	if(!tree_ctrl->GetRootItem().IsOk())
-		tree_ctrl->AddRoot("root node");
+	  tree_ctrl->AddRoot(wxT("root node"));
 
 	root_id = tree_ctrl->GetRootItem();
 
 	
-	tree_ctrl->SetItemText(root_id, layer_tree->GetTopLayer()->GetName());
+	tree_ctrl->SetItemText(root_id, wxString(layer_tree->GetTopLayer()->GetName().c_str(),wxConvUTF8));
 	entity_tree_relation.insert(std::make_pair(layer_tree->GetTopLayer()->GetId(), root_id));
 
 	AddIcon(layer_tree->GetTopLayer()->GetIcon(), root_id);
@@ -181,7 +181,7 @@ void UILayerTreePanel::FillTree()
 void UILayerTreePanel::FillTree(cpw::Entity *entity, wxTreeItemId parent_id)
 {
 	std::string debug = entity->GetName();
-	wxTreeItemId id = tree_ctrl->AppendItem(parent_id, wxString(entity->GetName()));
+	wxTreeItemId id = tree_ctrl->AppendItem(parent_id, wxString(entity->GetName().c_str(),wxConvUTF8));
 	tree_ctrl->SetItemType(id,0,wxCheckboxItemType);
 	entity_tree_relation.insert(std::make_pair(entity->GetId(), id));
 	if (entity->isVisible()) 
@@ -268,7 +268,7 @@ void UILayerTreePanel::AddIcon(const std::string &icon_filename, wxTreeItemId id
 {
 	if (id.IsOk())
 	{
-		wxIcon icon(wxT(icon_filename), wxBITMAP_TYPE_ANY);
+	  wxIcon icon(wxString(icon_filename.c_str(),wxConvUTF8), wxBITMAP_TYPE_ANY);
 		int img_index;
 		if (icon.IsOk())
 			img_index = img_list->Add(icon);
@@ -644,7 +644,7 @@ void UILayerTreePanel::Delete(wxCommandEvent& event)
 		if(aux.IsOk())
 		{
 
-			wxMessageDialog message1(NULL,wxString("Are you sure you want to remove this item?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES |wxNO);
+			wxMessageDialog message1(NULL,wxT("Are you sure you want to remove this item?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES |wxNO);
 			if(message1.ShowModal() == wxID_YES)
 			{
 				mainframe->Delete(GetItemId(item_selected), GetItemId(aux));
@@ -668,7 +668,7 @@ void UILayerTreePanel::Delete(wxCommandEvent& event)
 	{
 		if(!item_selected.IsOk()) return;
 
-		wxMessageDialog message1(NULL,wxString("Are you sure you want to remove all items?"), wxString("Warning"),wxICON_EXCLAMATION |wxYES |wxNO);
+		wxMessageDialog message1(NULL,wxT("Are you sure you want to remove all items?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES |wxNO);
 		if(message1.ShowModal() == wxID_YES)
 		{
 			tree_ctrl->DeleteChildren(tree_ctrl->GetRootItem());
@@ -785,25 +785,30 @@ void UILayerTreePanel::ModifyProperties(wxCommandEvent& event)
 
 void UILayerTreePanel::ModifySelection() 
 {
-	ModifyProperties(wxCommandEvent());
+  wxCommandEvent tmp = wxCommandEvent();
+  ModifyProperties((wxCommandEvent &) tmp);
 }
 
 void UILayerTreePanel::CutSelection() 
 {
-	Cut(wxCommandEvent());
+    wxCommandEvent tmp = wxCommandEvent();
+	Cut((wxCommandEvent &) tmp);
 }
 
 void UILayerTreePanel::CopySelection() 
 {
-	Copy(wxCommandEvent());
+    wxCommandEvent tmp = wxCommandEvent();
+	Copy((wxCommandEvent &) tmp);
 }
 
 void UILayerTreePanel::PasteSelection() 
 {
-	Paste(wxCommandEvent());
+    wxCommandEvent tmp = wxCommandEvent();
+	Paste((wxCommandEvent &) tmp);
 }
 
 void UILayerTreePanel::DeleteSelection() 
 {
-	Delete(wxCommandEvent());
+    wxCommandEvent tmp = wxCommandEvent();
+	Delete((wxCommandEvent &) tmp);
 }

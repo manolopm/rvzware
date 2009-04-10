@@ -145,7 +145,7 @@ void OsgLineCallback::SetGeometry(osg::Geometry* g)
 
 }
 
-void OsgLineCallback::SetNewInitialVertex(const std::vector<cpw::Point3d<float>> &draw_array)
+void OsgLineCallback::SetNewInitialVertex(const std::vector<cpw::Point3d<float> > &draw_array)
 {
 	if(!orig.empty())
 		orig.clear();
