@@ -162,15 +162,17 @@ bool Application::OnInit()
 	main_frame->Maximize(true);
 	main_frame->ShowSplash();
 
-		RegisterAllPlugins();
+	RegisterAllPlugins();
 	EntitiesToRegisterFromPlugins();
+	
 
-	bool file_error = InitCpwEntities();
+       	bool file_error = InitCpwEntities();
 
 	//Remote initialization stuff
 	int listen_port = cpw::ApplicationConfiguration::GetInstance()->GetListenPort();
+
 	remote_controller = new cpw::controllers::RemoteController(main_frame, &layer_tree, listen_port);
-	
+
 	main_frame->InitGUIContents(layer_tree, remote_controller->GetRemoteProtocol(), navigator_manager);
 
 
@@ -489,6 +491,7 @@ bool Application::InitCpwEntities()
 	new_fire->SetPersistentCallBack(new cpw::PersistentFileCallBack);
 	new_fire->SetAnimateCallBack((cpw::ParticleSystemCallBack *) new cpw::utils::GraphicFireCallBack);
 	new_fire->SetName("Fire");
+	
 	new_fire->SetGraphicFactory(graphic_factory);
 	cpw::EntityFactory::GetInstance()->RegisterBasic(new_fire);
 
@@ -498,18 +501,19 @@ bool Application::InitCpwEntities()
 
 	cpw::EntityFactory::GetInstance()->RegisterBasic(wms_layer);
 
-
-
 	bool result = project_controller->OpenProject(cpw::ApplicationConfiguration::GetInstance()->GetSceneFile(), 
-								    GetDefaultPath(), status_controller, layer_tree, graphic_factory);
+						      GetDefaultPath(),
+						      status_controller,
+						      layer_tree,
+						      graphic_factory);
+
 
 	std::string title = project_controller->GetProjectFullName();
 	if (title!="")
-{
-		
-std::string tmp = (title+" - Capaware");
-main_frame->SetTitle((const wxString&)tmp);
- }
+	  {
+	    main_frame->SetTitle(wxString((title+" - Capaware").c_str(),
+					  wxConvUTF8));
+	  }
 
 	navigator_manager->SetAllNavigatorsToInitialPosition();
 
@@ -1312,8 +1316,7 @@ void Application::OpenProject()
 		std::string title = project_controller->GetProjectFullName();
 		if (title!="")
 		{
-			std::string tmp = title+" - Capaware";
-			main_frame->SetTitle((const wxString&)tmp);
+		  main_frame->SetTitle(wxString((title + " - Capaware").c_str(),wxConvUTF8));
 		}
 
 		navigator_manager->SetAllNavigatorsToInitialPosition();

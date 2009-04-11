@@ -54,75 +54,74 @@ bool ProjectController::GetCloseApplication()
 }
 
 
-bool ProjectController::OpenProject(const std::string &url, const std::string &default_path, cpw::IStatusController *status_controller, 
-									cpw::LayerTree &layer_tree, cpw::IGraphicFactory *graphic_factory)
+bool ProjectController::OpenProject(const std::string &url,
+				    const std::string &default_path,
+				    cpw::IStatusController *status_controller, 
+				    cpw::LayerTree &layer_tree,
+				    cpw::IGraphicFactory *graphic_factory)
 {
-	cpw::controllers::RelativeDirectory path(url);
+  cpw::controllers::RelativeDirectory path(url);
 
-	if(path.IsValid())
+  if(path.IsValid())
+    {
+      project_fullname = url;
+      std::string filename = path.GetFilename();
+       //TODO: BUG POR AQUI
+
+      cpw::controllers::CwsLoader cws_loader(filename);
+
+      project_name = filename;
+
+      cpw::ISceneLoader *scene_loader = graphic_factory->CreateSceneLoader();
+      void *scene_data;
+      scene_data = scene_loader->LoadScene(filename);
+      
+      delete scene_loader;		
+      
+      cpw::ApplicationScene *appScene  = cpw::ApplicationScene::GetInstance();
+      appScene->GetScene()->InitScene();
+      
+      if (scene_data != NULL)	
 	{
-		project_fullname = url;
-
-		std::string filename = path.GetFilename();
-
-		cpw::controllers::CwsLoader cws_loader(filename);
-
-		project_name = filename;
-
-		cpw::ISceneLoader *scene_loader = graphic_factory->CreateSceneLoader();
-
-		void *scene_data;
-	
-		scene_data = scene_loader->LoadScene(filename);
-
-		delete scene_loader;		
-		
-		cpw::ApplicationScene *appScene  = cpw::ApplicationScene::GetInstance();
-		appScene->GetScene()->InitScene();
-
-		
-
-		if (scene_data != NULL)	
-		{
-			if(appScene->GetScene()->SetSceneData((cpw::IScene *)scene_data))
-			{
-
-				cpw::controllers::EntityController ec(status_controller);
-
-				controllers::RelativeDirectory path(cws_loader.GetTopLayer());
-				std::string filename2 = path.GetActualPath()+"/";
-
-				srs = cws_loader.GetSRS();
-		
-				ec.InitLayerTree(cws_loader.GetTopLayer(), layer_tree);			
-
-				appScene->GetScene()->InitializeTextures();
-
-				
-
-				cpw::ApplicationConfiguration* appconfig = cpw::ApplicationConfiguration::GetInstance();
-
-				appconfig->SetSceneFile(filename);
-				appconfig->SetEntityDirectory(filename2);
-
-				return true;
-			}
-			else
-				return false;
-		}
-		else
-		{	
-			return false;
-		}
+	  if(appScene->GetScene()->SetSceneData((cpw::IScene *)scene_data))
+	    {
+	      
+	      cpw::controllers::EntityController ec(status_controller);
+	      
+	      controllers::RelativeDirectory path(cws_loader.GetTopLayer());
+	      std::string filename2 = path.GetActualPath()+"/";
+	      
+	      srs = cws_loader.GetSRS();
+	      
+	      ec.InitLayerTree(cws_loader.GetTopLayer(), layer_tree);	
+	      appScene->GetScene()->InitializeTextures();
+	      
+	      cpw::ApplicationConfiguration* appconfig = cpw::ApplicationConfiguration::GetInstance();
+	      
+	      appconfig->SetSceneFile(filename);
+	      appconfig->SetEntityDirectory(filename2);
+	      
+	      return true;
+	    }
+	  else
+	    return false;
 	}
+      else
+	{	
+	  return false;
+	}
+    }
 
-	return false;
+  return false;
 
 }
 
 
-bool ProjectController::OpenProject(wxWindow* parent, const std::string &default_path, cpw::IStatusController *status_controller, 
-									cpw::LayerTree &layer_tree, cpw::IGraphicFactory *graphic_factory)
+bool ProjectController::OpenProject(wxWindow* parent,
+				    const std::string &default_path,
+				    cpw::IStatusController *status_controller, 
+				    cpw::LayerTree &layer_tree,
+				    cpw::IGraphicFactory *graphic_factory)
 {
   std::string &project_path = ApplicationConfiguration::GetInstance()->GetDataDirectory();
   std::string str = "Project(*.cws)|*.cws|All files(*.*)|*.*";

@@ -31,27 +31,29 @@ using namespace cpw::controllers;
 
 CwsLoader::CwsLoader(const std::string &filecws)
 {
-	std::ifstream cws_file(filecws.c_str());
-	toplayer = "";
-	srs = "";
-	if (cws_file.is_open())
+  std::ifstream cws_file(filecws.c_str());
+  toplayer = "";
+  srs = "";
+  
+  if (cws_file.is_open())
+    {
+      while (!cws_file.eof())
 	{
-		while (!cws_file.eof())
-		{
-			std::string tag;
-			cws_file >> tag;
+	  std::string tag;
 
-			if(tag == "[TOPLAYER]") 
-			{
-				cws_file >> toplayer;
-			}
-			if(tag == "[SRS]") 
-			{
-				cws_file >> srs;
-			}
-		}
-		cws_file.close();
+	  cws_file >> tag;
+	  
+	  if(tag == "[TOPLAYER]") 
+	    {
+	      cws_file >> toplayer;
+	    }
+	  if(tag == "[SRS]") 
+	    {
+	      cws_file >> srs;
+	    }
 	}
+      cws_file.close();
+    }
 }
 
 CwsLoader::~CwsLoader()
