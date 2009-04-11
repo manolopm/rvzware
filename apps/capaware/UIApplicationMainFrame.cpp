@@ -192,13 +192,14 @@ UIApplicationMainFrame::UIApplicationMainFrame(Application *app, const wxChar *t
 
 	  
 
-	  load_splash = new UILoadSplash(this, wxID_ANY, (wxString &)"Capaware", (wxString &)"resources/application_splash.png");
+	  load_splash = new UILoadSplash(this, wxID_ANY, wxString(((std::string)("Capaware")).c_str(),wxConvUTF8), wxString(((std::string)("resources/application_splash.png")).c_str(),wxConvUTF8));
+
 	//load_splash->Show(true);
 	  InitMenus();
 
-	InitGUI();
-	  m_mgr.Update();
+	  InitGUI();
 
+	  m_mgr.Update();
 	//this->Show(true);
 	//load_splash->Show(false);
 	////pasar a application
@@ -338,21 +339,23 @@ void UIApplicationMainFrame::RegisterMenu(const int id, const std::string &title
 
 wxMenuItem *UIApplicationMainFrame::GetMenuItem(const int id, wxMenu *parent, const wxString& helpString, const wxString& bitmapUrl, wxMenu* subMenu)
 {
+
 	std::map<int, std::string>::iterator i = menus.find(id);
 
 	if(i != menus.end())
-	{
+	  {
+
 		std::string tmp = i->second.c_str();
 		wxMenuItem *menu_item = new wxMenuItem(parent, i->first, (const wxString&)tmp, helpString, wxITEM_NORMAL, subMenu);
-		if (bitmapUrl!=(wxString &)"")
+		if (bitmapUrl!=wxT(""))
 		{
 			menu_item->SetBitmap(wxBitmap(wxImage(bitmapUrl)));
 		}
 		return menu_item;
 	}
 	else 
-
-		return NULL;
+	  return NULL;
+	  
 }
 
 void UIApplicationMainFrame::Update() 
@@ -375,33 +378,38 @@ void UIApplicationMainFrame::InitGUI () {
 	int ic_size = cpw::ApplicationConfiguration::GetInstance()->GetIconSize();
 	int bic_size = cpw::ApplicationConfiguration::GetInstance()->GetBigIconSize();
 
-	std::string tmp=icon_path + "geviemer3.ico";
-	this->SetIcon((wxIcon &)(wxIconLocation &)(wxString &)tmp);
+
+	  this->SetIcon(wxString((icon_path + "geviemer3.ico").c_str(),wxConvUTF8));
 	this->SetMinSize(wxSize(800,600));
 	
 	wxMenuBar *menu_bar = new wxMenuBar();
+	  
 
 	//file menu
 	file_menu = new wxMenu;
 	//file_menu->Append(GetMenuItem(FILE_NEW, file_menu,_T("Ctrl+N"), _T(icon_path + "page_white_add.png")));
-	tmp = "Ctrl+O";
-        std::string tmp2 = icon_path + "folder.png";
-	file_menu->Append(GetMenuItem(FILE_OPEN, file_menu,(const wxString &)tmp, (const wxString &)tmp2));
-        tmp = "";
-        tmp2 = icon_path + "clode_doc.png";
-	file_menu->Append(GetMenuItem(FILE_CLOSE, file_menu,(const wxString &)tmp, (const wxString &)tmp2));
+	  
+	file_menu->Append(GetMenuItem(FILE_OPEN, file_menu,
+				      wxString(((std::string)("Ctrl+O")).c_str(),wxConvUTF8),
+				      wxString((icon_path + "folder.png").c_str(),wxConvUTF8)));
+
+	  file_menu->Append(GetMenuItem(FILE_CLOSE, file_menu,
+					wxT(""),
+					wxString((icon_path + "close_doc.png").c_str(),wxConvUTF8)));
+
 	//file_menu->Append(GetMenuItem(FILE_CLOSE, file_menu,_T(""), _T(icon_path + "folder_delete.png")));
 	//file_menu->AppendSeparator();
-	tmp = "Ctrl+S";
-        tmp2 = icon_path + "disk.png";
-	file_menu->Append(GetMenuItem(FILE_SAVE, file_menu,(const wxString &)tmp,(const wxString &) tmp2));
+
+	  std::string tmp = "Ctrl+S";
+	  std::string tmp2 = icon_path + "disk.png";
+	  file_menu->Append(GetMenuItem(FILE_SAVE, file_menu,(const wxString &)tmp,(const wxString &) tmp2));
 	//file_menu->Append(GetMenuItem(FILE_SAVE_ALL, file_menu,_T("Ctrl+Mayús+S"), _T(icon_path + "disk_multiple.png")));
 	file_menu->AppendSeparator();
 	tmp = "";
 	tmp2 = icon_path + "cross.png";
 	file_menu->Append(GetMenuItem(FILE_EXIT, file_menu,(const wxString &)tmp, (const wxString &)tmp2));
-        tmp = "File";
-	menu_bar->Append(file_menu, (const wxString &)tmp);
+
+	menu_bar->Append(file_menu, wxT("File"));
 
 	//edit menu
 	edit_menu = new wxMenu;
@@ -420,8 +428,8 @@ void UIApplicationMainFrame::InitGUI () {
 	//edit_menu->AppendSeparator();
 	//edit_menu->Append(GetMenuItem(EDIT_SELECT_ALL, edit_menu,_T(""), _T(icon_path + "page_white_stack.png")));
 	//edit_menu->Append(GetMenuItem(EDIT_FIND, edit_menu,_T("Ctrl+F"), _T(icon_path + "page_white_magnify.png")));
-	tmp = "Edit";
-	menu_bar->Append(edit_menu, (const wxString &)tmp);
+
+	menu_bar->Append(edit_menu, wxT("Edit"));
 
 	//navigation mode submenu
 	navigation_mode_menu = new wxMenu;
@@ -483,12 +491,14 @@ void UIApplicationMainFrame::InitGUI () {
 		view_menu->AppendCheckItem(VIEW_LOG, (const wxString &)tmp)->Check();
 	else
 		view_menu->AppendCheckItem(VIEW_LOG, (const wxString &)tmp)->Check(false);
-	
+
 	tmp = "Help";
 	view_menu->AppendCheckItem(VIEW_HELP, (const wxString &) tmp)->Check();
+
 	tmp = "";
 	tmp2 = icon_path + "eye.png";
 	view_menu->Append(GetMenuItem(VIEW_SHOWALL, view_menu,(const wxString &)tmp, (const wxString &)tmp2));
+
 	tmp = "";
 	tmp2 = icon_path + "eye_crossed.png";
 	view_menu->Append(GetMenuItem(VIEW_HIDEALL, view_menu,(const wxString &)tmp,(const wxString &)tmp2));
@@ -500,8 +510,8 @@ void UIApplicationMainFrame::InitGUI () {
 	tmp = "";
 	tmp2 = icon_path + "default_ui_config.png";
 	view_menu->Append(GetMenuItem(VIEW_DEFAULT_CONFIG, view_menu,(const wxString &)tmp, (const wxString &)tmp2));
-	tmp = "View";
-	menu_bar->Append(view_menu, (const wxString &)tmp);
+
+	menu_bar->Append(view_menu, wxT("View"));
 	view_menu->UpdateUI();
 
 	//Project menu
@@ -550,8 +560,7 @@ void UIApplicationMainFrame::InitGUI () {
 	tmp = "";
 	tmp2 = icon_path + "add_new.png";
 	project_menu->Append(GetMenuItem(ADD_NEW, project_menu,(const wxString &)tmp, (const wxString &)tmp2,project_submenu_add_new));
-	tmp2 =  "Project";
-	menu_bar->Append(project_menu, (const wxString &)tmp2);
+	menu_bar->Append(project_menu, wxT("Project"));
 
 	//Element menu	
 	element_menu = new wxMenu;
@@ -573,8 +582,7 @@ void UIApplicationMainFrame::InitGUI () {
 	tmp = "Edit properties";
 	tmp2 = icon_path + "properties.png";
 	element_menu->Append(GetMenuItem(ELEMENT_PROPERTIES, project_menu, (const wxString &)tmp, (const wxString &)tmp2));
-	tmp2 = "Element";
-	menu_bar->Append(element_menu, (const wxString &)tmp2);
+	menu_bar->Append(element_menu, wxT("Element"));
 
 	//Tools menu
 	tools_menu = new wxMenu;
@@ -585,21 +593,18 @@ void UIApplicationMainFrame::InitGUI () {
 	tmp = "";
 	tmp2 = icon_path + "calculator.png";
 	tools_menu->Append(GetMenuItem(TOOLS_CALCULATE, project_menu,(const wxString &)tmp, (const wxString &)tmp2,tools_submenu_calculate));
-	tmp2 = "Tools";
-	menu_bar->Append(tools_menu, (const wxString &)tmp2);
+	menu_bar->Append(tools_menu, wxT("Tools"));
 
 	//plugins menu
 	plugins_menu = new wxMenu;
-	tmp2 = "Plugins";
-	menu_bar->Append(plugins_menu, (const wxString &)tmp2);
+	menu_bar->Append(plugins_menu, wxT("Plugins"));
 
 	//Help menu
 	wxMenu *help_menu = new wxMenu;
 	tmp = "";
 	tmp2 = icon_path + "help.png";
 	help_menu->Append(GetMenuItem(HELP, help_menu,(const wxString &)tmp, (const wxString &)tmp2));
-	tmp2 = "Help";
-	menu_bar->Append(help_menu, (const wxString &)tmp2);
+	menu_bar->Append(help_menu, wxT("Help"));
 
 	//////ToolBars
 	tmp = "File";
@@ -614,14 +619,21 @@ void UIApplicationMainFrame::InitGUI () {
 	tool_bar_help    = new wxToolBar(this, PANE_HELP, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
 	tmp = "Application Status";
 	tool_bar_status  = new UIStatusBar(application, this, PANE_STATUS, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp); //*
-	tmp = "Animation Controls";
-	tool_bar_sim = new UIVideoController(&m_mgr, this, PANE_ANIMATION_CONTROLS, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
+
+	tool_bar_sim = new UIVideoController(&m_mgr,
+					     this,
+					     PANE_ANIMATION_CONTROLS,
+					     wxDefaultPosition, wxDefaultSize,
+					     wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, wxT("Animation Controls"));
+
 	tmp = "Sun Configuration";
 	tool_bar_sun = new UISunConfiguration(&m_mgr, this, PANE_SUN_CONFIG, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
+
 	tmp = "Project";
 	tool_bar_project = new wxToolBar(this, PANE_PROJECT, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
 	tmp = "Tools";
 	tool_bar_tools = new wxToolBar(this, PANE_TOOLS, wxDefaultPosition, wxDefaultSize, wxTB_HORIZONTAL|wxTB_FLAT|wxTB_NODIVIDER, (const wxString &)tmp);
+
 	tool_bar_file->SetToolBitmapSize(wxSize(bic_size,bic_size));
 	tool_bar_edit->SetToolBitmapSize(wxSize(bic_size,bic_size));
 	tool_bar_project->SetToolBitmapSize(wxSize(bic_size,bic_size));
@@ -661,7 +673,7 @@ void UIApplicationMainFrame::InitGUI () {
 	tmp = "Save";
 	tool_bar_file->AddTool(FILE_SAVE, (const wxString &)tmp, wxBitmap(wxImage(((const wxString &)tmp2 ))), (const wxString &)tmp);
 	//tool_bar_file->AddTool(FILE_SAVE_ALL, _T("Save All"), wxBitmap(wxImage(wxT(icon_path + "disk_multiple.png"))), _T("Save All"));
-	
+
 	//tool_bar_edit
 	tmp2 = icon_path + "cut.png";
 	tmp = "Cut";
@@ -676,7 +688,7 @@ void UIApplicationMainFrame::InitGUI () {
 	tmp = "Delete";
 	tool_bar_edit->AddTool(EDIT_DELETE, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp);
 	//tool_bar_edit->AddTool(EDIT_FIND, _T("Find"),  wxBitmap(wxImage(wxT(icon_path + "page_white_magnify.png"))), _T("Find"));
-	
+
 	//tool_bar_project
 
 	tmp2 = icon_path + "folder_brick.png";
@@ -704,7 +716,7 @@ void UIApplicationMainFrame::InitGUI () {
 	tmp3 = "Add firewall";	  
 	tool_bar_project->AddTool(NEW_FIREWALL, (const wxString &)tmp, wxBitmap(wxImage((const wxString &)tmp2)), (const wxString &)tmp3);
 
-	
+
 	//tool_bar_vis
 	//tool_bar_vis->AddTool(VIEW_SELECTVIEWMODE, _T("Select View Mode"), wxBitmap(wxImage(wxT(icon_path + "image.png"))), _T("Select View Mode"));
 	tmp2 = icon_path + "chart_line.png";
@@ -761,32 +773,109 @@ void UIApplicationMainFrame::InitGUI () {
 	tool_bar_help->Realize();
 	tool_bar_status->Realize();
 
-	  
-	tmp = "File";
-	m_mgr.AddPane(tool_bar_file,    wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_FILE));
-	tmp = "Edit";
-        m_mgr.AddPane(tool_bar_edit,    wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_EDIT));
-	tmp = "View";
-	m_mgr.AddPane(tool_bar_vis,     wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_VIS));
-	tmp = "Project";  
-	m_mgr.AddPane(tool_bar_project, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_PROJECT));
-	tmp = "Element";
-	m_mgr.AddPane(tool_bar_element, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_ELEMENT));
-	tmp = "Tools";  
-	m_mgr.AddPane(tool_bar_tools,   wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_TOOLS));
+
+
+	m_mgr.AddPane(tool_bar_file,
+		      wxAuiPaneInfo().
+		      ToolbarPane().
+		      Top().Gripper().
+		      Floatable().
+		      Caption(wxT("File")).
+		      PaneBorder(false).
+		      Name(wxString(((std::string)NAME_TOOL_BAR_FILE).c_str(),wxConvUTF8)));
+
+        m_mgr.AddPane(tool_bar_edit,
+		      wxAuiPaneInfo().
+		      ToolbarPane().
+		      Top().Gripper().
+		      Floatable().
+		      Caption(wxT("Edit")).
+		      PaneBorder(false).
+		      Name(wxString(((std::string)NAME_TOOL_BAR_EDIT).c_str(),wxConvUTF8)));
+	
+
+	m_mgr.AddPane(tool_bar_vis,
+		      wxAuiPaneInfo().
+		      ToolbarPane().
+		      Top().Gripper().
+		      Floatable().
+		      Caption(wxT("View")).
+		      PaneBorder(false).
+		      Name(wxString(((std::string)NAME_TOOL_BAR_VIS).c_str(),wxConvUTF8)));
+
+
+	m_mgr.AddPane(tool_bar_project,
+		      wxAuiPaneInfo().
+		      ToolbarPane().
+		      Top().Gripper().
+		      Floatable().
+		      Caption(wxT("Project")).
+		      PaneBorder(false).
+		      Name(wxString(((std::string)NAME_TOOL_BAR_PROJECT).c_str(),wxConvUTF8)));
+	
+
+	m_mgr.AddPane(tool_bar_element,
+		      wxAuiPaneInfo().
+		      ToolbarPane().
+		      Top().Gripper().
+		      Floatable().
+		      Caption(wxT("Element")).
+		      PaneBorder(false).
+		      Name(wxString(((std::string)NAME_TOOL_BAR_ELEMENT).c_str(),wxConvUTF8)));
+
+
+	m_mgr.AddPane(tool_bar_tools,
+		      wxAuiPaneInfo().
+		      ToolbarPane().
+		      Top().Gripper().
+		      Floatable().
+		      Caption(wxT("Tools")).
+		      PaneBorder(false).
+		      Name(wxString(((std::string)NAME_TOOL_BAR_TOOLS).c_str(),wxConvUTF8)));
+
 
 	int width,height;
 	GetClientSize(&width,&height);
-	tmp = "Application Status";  
-	m_mgr.AddPane(tool_bar_status,  wxAuiPaneInfo().ToolbarPane().Bottom().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_STATUS)); //*
-	tmp = "Animation Controls";
-	m_mgr.AddPane(tool_bar_sim, wxAuiPaneInfo().ToolbarPane().Bottom().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_SIM));
-	tmp = "Sun Configuration";
-	m_mgr.AddPane(tool_bar_sun, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_SUN));
-	tmp = "Help";
-	m_mgr.AddPane(tool_bar_help, wxAuiPaneInfo().ToolbarPane().Top().Gripper().Floatable().Caption((const wxString &)tmp).PaneBorder(false).Name((const wxString &)NAME_TOOL_BAR_HELP));
+
+	m_mgr.AddPane(tool_bar_status,
+		      wxAuiPaneInfo().
+		      ToolbarPane().
+		      Bottom().Gripper().
+		      Floatable().
+		      Caption(wxT("Application Status")).
+		      PaneBorder(false).
+		      Name(wxString(((std::string)NAME_TOOL_BAR_STATUS).c_str(),wxConvUTF8)));
+
+	m_mgr.AddPane(tool_bar_sim,
+		      wxAuiPaneInfo().
+		      ToolbarPane().
+		      Bottom().Gripper().
+		      Floatable().
+		      Caption(wxT("Animation Controls")).
+		      PaneBorder(false).
+		      Name(wxString(((std::string)NAME_TOOL_BAR_SIM).c_str(),wxConvUTF8)));
+		   
+	m_mgr.AddPane(tool_bar_sun,
+		      wxAuiPaneInfo().
+		      ToolbarPane().
+		      Top().Gripper().
+		      Floatable().
+		      Caption(wxT("Sun Configuration")).
+		      PaneBorder(false).
+		      Name(wxString(((std::string)NAME_TOOL_BAR_SUN).c_str(),wxConvUTF8)));
+
+	m_mgr.AddPane(tool_bar_help,
+		      wxAuiPaneInfo().
+		      ToolbarPane().
+		      Top().Gripper().
+		      Floatable().
+		      Caption(wxT("Help")).
+		      PaneBorder(false).
+		      Name(wxString(((std::string)NAME_TOOL_BAR_HELP).c_str(),wxConvUTF8)));
 	
+
 	SetMenuBar(menu_bar);
+
 	menu_bar->Refresh();
 
 	RegisterMenu(EDIT_SELECT_ALL, "Select All\tCtrl+A");

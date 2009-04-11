@@ -56,15 +56,22 @@ END_EVENT_TABLE()
 UIVideoController::UIVideoController(wxAuiManager *m_mgr_,wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name)
 : wxToolBar(parent, id, pos, size, style, name), cpw::Observer(), parent_(parent), mult(1), multiplier(NULL), init(false), m_mgr(m_mgr_)
 {
+
 	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
 
 	AddTool(ANIMATION_CURRENTTIME, _T("CURRET DATE & TIME"),  wxBitmap(wxImage(wxString((icon_path + "date_next.png").c_str(),wxConvUTF8))), _T("CURRENTTIME"));
+
 	app_Time.Date = new wxDatePickerCtrl(this, APPLICATION_DATE, wxDefaultDateTime, wxDefaultPosition, wxSize(80,19), wxDP_DEFAULT | wxDP_SHOWCENTURY | wxDP_DROPDOWN);
+
 	AddControl(app_Time.Date);
 	wxString dt = MyTimeCtrl::GetCurrentTime();
-	app_Time.Hour = new MyTimeCtrl(this, APPLICATION_HOUR, dt, wxDefaultPosition, wxSize(50,19));
+
+	app_Time.Hour = new MyTimeCtrl(this, APPLICATION_HOUR,
+				       dt, wxDefaultPosition,
+				       wxSize(50,19));
 	AddControl(app_Time.Hour);
 	AddSeparator();
+
 	AddTool(ANIMATION_START, _T("START"),  wxBitmap(wxImage(wxString((icon_path + "control_start_blue.png").c_str(),wxConvUTF8))), _T("START"));
 	AddTool(ANIMATION_REWIND, _T("REWIND"), wxBitmap(wxImage(wxString((icon_path + "control_rewind_blue.png").c_str(),wxConvUTF8))), _T("REWIND"));
 	AddTool(ANIMATION_PLAY, _T("PLAY"), wxBitmap(wxImage(wxString((icon_path + "control_play_blue.png").c_str(),wxConvUTF8))), _T("PLAY"));

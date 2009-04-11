@@ -48,6 +48,7 @@ UILoadSplash::UILoadSplash(wxWindow *parent, wxWindowID id, const wxString &titl
 	}
 
 	CreateGUIControls();
+	
 }
 
 UILoadSplash::~UILoadSplash()

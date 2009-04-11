@@ -377,11 +377,11 @@ MyTimeCtrl::MyTimeCtrl(wxWindow *parent, wxWindowID id,
 	
 	tc->SetWindowStyle(wxTE_PROCESS_TAB);
 	tc->SetMaxLength(8);
-	
+
 	//wxSize bestsize = DoGetBestSize();
 	//DoMoveWindow(pos.x, pos.y, bestsize.x, bestsize.y);
 	DoMoveWindow(pos.x, pos.y, size.x, size.y);
-	
+
 	// prevent the time picker from intercepting events
 	wxControl::Enable(FALSE);
 	
@@ -431,13 +431,14 @@ bool MyTimeCtrl::Enable(bool enable)
 
 void MyTimeCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
-	wxControl::DoMoveWindow(x, y, width, height);
-	
+  //TODO: WHY DOES A CRITICAL?
+  wxControl::DoMoveWindow(x, y, width, height);
+
 	//wxSize buttonsize = sb->GetBestSize();
 	//int textwidth = width - (buttonsize.x + SPACING);
 	
 	//tc->SetSize(x, y, textwidth, height);
-	tc->SetSize(x, y, width, height);
+		tc->SetSize(x, y, width, height);
 	//AJ
 	//sb->SetSize(x + textwidth + SPACING, y, -1, height);
 }

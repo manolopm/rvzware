@@ -851,13 +851,15 @@ void Application::RegisterAllPlugins()
 {
 	std::ifstream plugins_file(cpw::ApplicationConfiguration::GetInstance()->GetPluginsFile().c_str());	
 	if (plugins_file.is_open())
-	{
+	  {
+
 		while (!plugins_file.eof())
 		{
 			std::string plugin;
 			plugins_file >> plugin;
-	
 			DynamicLibrary *library = new DynamicLibrary();
+			if (plugin=="")
+			  continue;
 			library->Load(plugin);
 			if (library->GetH() != NULL)
 			{
