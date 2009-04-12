@@ -32,7 +32,7 @@ using namespace cpw::gui;
 
 
 UISplitterCanvas::UISplitterCanvas(wxSplitterWindow* parent, cpw::INavigatorManager *navigator_manager)
-												: mainParent_(parent), navigator_manager_(navigator_manager)
+  : mainParent_(parent), navigator_manager_(navigator_manager)
 {
 	active_navigators = 0;
 	old_navigators = 0;
@@ -40,7 +40,7 @@ UISplitterCanvas::UISplitterCanvas(wxSplitterWindow* parent, cpw::INavigatorMana
 
 UISplitterCanvas::~UISplitterCanvas()
 {
-	ClearSubsplitters();
+  ClearSubsplitters();
 }
 
 void UISplitterCanvas::Obliviate()
@@ -86,7 +86,7 @@ void UISplitterCanvas::ClearSubsplitters()
 }
 
 wxSplitterWindow * UISplitterCanvas::CreateCanvasField(wxWindow* parent, wxWindowID id, const wxPoint& point, 
-															  const wxSize& size, long style, const wxString& name)
+						       const wxSize& size, long style, const wxString& name)
 {
 	wxSplitterWindow *splitter_field = new wxSplitterWindow(parent, id, point, size, style, name);
 	splitter_field->SetMinimumPaneSize(120);
@@ -96,9 +96,9 @@ wxSplitterWindow * UISplitterCanvas::CreateCanvasField(wxWindow* parent, wxWindo
 }
 
 wxSplitterWindow * UISplitterCanvas::CreateCanvas(wxWindow* parent, wxWindowID id, wxWindow **canvas1, 
-														 cpw::INavigatorManager *navigator_manager, int viewID, 
-														 const wxPoint& point, const wxSize& size, long style, 
-														 const wxString& name)
+						  cpw::INavigatorManager *navigator_manager, int viewID, 
+						  const wxPoint& point, const wxSize& size, long style, 
+						  const wxString& name)
 {
 	wxSplitterWindow *splitter_canvas1 = new wxSplitterWindow(parent, id, point, size, style);
 	navigator_manager_->DeleteNavigator(viewID);

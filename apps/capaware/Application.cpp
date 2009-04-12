@@ -1341,7 +1341,8 @@ bool Application::CloseProject()
 
 	if(layer_tree.isModified()) 
 	{
-		wxMessageDialog message(NULL,(const wxString &)"Save changes from the layer tree before quit?", (const wxString &)"Warning",wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+	  wxMessageDialog message(NULL,wxT("Save changes from the layer tree before quit?"),
+				  wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
 		int modal = message.ShowModal();
 		if(modal == wxID_YES)
 		{	
@@ -1349,7 +1350,8 @@ bool Application::CloseProject()
 			ferror = controller.Save(layer_tree.GetTopLayer(), true, true);
 			if (ferror != cpw::PERSISTENTOK)
 			{
-				wxMessageDialog message(NULL,(const wxString &)"Some entities from the layer tree could not be saved.", (const wxString &)"Warning",wxICON_EXCLAMATION |wxOK);
+			  wxMessageDialog message(NULL,wxT("Some entities from the layer tree could not be saved."),
+						  wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 				message.ShowModal();
 			}
 

@@ -107,7 +107,7 @@ namespace cpw
 
 				wxSplitterWindow *main_field, *old_field;
 				wxSplitterWindow *mainParent_;
-				std::vector<wxSplitterWindow*> subsplitters;
+				std::vector< wxSplitterWindow* > subsplitters;
 				INavigatorManager *navigator_manager_;
 				int active_navigators, old_navigators;
 

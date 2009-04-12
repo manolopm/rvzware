@@ -168,10 +168,18 @@ UIApplicationMainFrame::UIApplicationMainFrame(Application *app, const wxChar *t
   if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
     {
       wxAuiDockArt* auiArtProvider = m_mgr.GetArtProvider();
-      wxColour backgroundColor = (wxString &)cpw::ApplicationConfiguration::GetInstance()->GetBackgroundColour();
-      wxColour inactiveColor   = (wxString &)cpw::ApplicationConfiguration::GetInstance()->GetTitleBarGradient1Colour();
-      wxColour gradientColor2  = (wxString &)cpw::ApplicationConfiguration::GetInstance()->GetTitleBarGradient2Colour();
-      wxColour fontColor       = (wxString &)cpw::ApplicationConfiguration::GetInstance()->GetFontLightColour();
+      wxColour backgroundColor = wxString(cpw::ApplicationConfiguration::GetInstance()->
+					  GetBackgroundColour().c_str(),
+					  wxConvUTF8);
+      wxColour inactiveColor   = wxString(cpw::ApplicationConfiguration::GetInstance()->
+					  GetTitleBarGradient1Colour().c_str(),
+					  wxConvUTF8);
+      wxColour gradientColor2  = wxString(cpw::ApplicationConfiguration::GetInstance()->
+					  GetTitleBarGradient2Colour().c_str(),
+					  wxConvUTF8);
+      wxColour fontColor       = wxString(cpw::ApplicationConfiguration::GetInstance()->
+					  GetFontLightColour().c_str(),
+					  wxConvUTF8);
 		
       SetBackgroundColour(backgroundColor);
       SetForegroundColour(fontColor);
@@ -1069,13 +1077,20 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::re
 	
   m_mgr.AddPane(animation_scheme_frame, wxBOTTOM, wxT("Animation Entity Scheme")); 
 	
-  m_mgr.GetPane(layer_frame).MinSize(wxSize(100,100)).Name((const wxString &)NAME_LAYER_FRAME);
-  m_mgr.GetPane(properties_frame).MinSize(wxSize(100,100)).Name((const wxString &)NAME_PROPERTIES_FRAME);
-  m_mgr.GetPane(splitter).MinSize(wxSize(240,240)).Name((const wxString &)NAME_SPLITTER);
-  m_mgr.GetPane(log_frame).MinSize(wxSize(100, 100)).Name((const wxString &)NAME_LOG_FRAME); 
-  m_mgr.GetPane(scene_tree_frame).MinSize(wxSize(100, 100)).Name((const wxString &)NAME_SCENE_TREE_FRAME);
-  m_mgr.GetPane(connection_frame).MinSize(wxSize(100,100)).Name((const wxString &)NAME_CONNECTION_FRAME); 
-  m_mgr.GetPane(animation_scheme_frame).MinSize(wxSize(100, 50)).Name((const wxString &)NAME_ANIMATION_SCHEME_FRAME); 
+  m_mgr.GetPane(layer_frame).MinSize(wxSize(100,100)).
+    Name(wxString(((std::string)NAME_LAYER_FRAME).c_str(),wxConvUTF8));
+  m_mgr.GetPane(properties_frame).MinSize(wxSize(100,100)).
+    Name(wxString(((std::string)NAME_PROPERTIES_FRAME).c_str(),wxConvUTF8));
+  m_mgr.GetPane(splitter).MinSize(wxSize(240,240)).
+    Name(wxString(((std::string)NAME_SPLITTER).c_str(),wxConvUTF8));
+  m_mgr.GetPane(log_frame).MinSize(wxSize(100, 100)).
+    Name(wxString(((std::string)NAME_LOG_FRAME).c_str(),wxConvUTF8));
+  m_mgr.GetPane(scene_tree_frame).MinSize(wxSize(100, 100)).
+    Name(wxString(((std::string)NAME_SCENE_TREE_FRAME).c_str(),wxConvUTF8));
+  m_mgr.GetPane(connection_frame).MinSize(wxSize(100,100)).
+    Name(wxString(((std::string)NAME_CONNECTION_FRAME).c_str(),wxConvUTF8));
+  m_mgr.GetPane(animation_scheme_frame).MinSize(wxSize(100, 50)).
+    Name(wxString(((std::string)NAME_ANIMATION_SCHEME_FRAME).c_str(),wxConvUTF8));
 	
   m_mgr.Update();
 

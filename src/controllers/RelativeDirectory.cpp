@@ -35,7 +35,7 @@ RelativeDirectory::RelativeDirectory(const std::string &url)
 	previous_path = boost::filesystem::current_path();
 	actual_path   = (directory.has_root_name())? directory : previous_path / directory;
 
-	if(boost::filesystem::exists(actual_path))
+	if ((boost::filesystem::exists(actual_path))&&(boost::filesystem::is_directory(actual_path)==false))
 	{
 		actual_path = boost::filesystem::current_path();
 

@@ -14,6 +14,10 @@ all: capaware
 
 clean:
 	rm -f capaware
+	rm *.o
+
+mrpropper: clean
+	   rm $(OFILES)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
