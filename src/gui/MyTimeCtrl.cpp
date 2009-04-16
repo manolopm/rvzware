@@ -1,3 +1,5 @@
+
+
 /*
  * CAPAWARE 3D Geographical Multilayer Framework Free Software
  * Copyright (C) 2009 Instituto Tecnológico de Canarias (ITC) and Universidad de Las Palmas de Gran Canaria (ULPGC)
@@ -374,17 +376,18 @@ MyTimeCtrl::MyTimeCtrl(wxWindow *parent, wxWindowID id,
 	tc = new MyTextCtrl(this, value);
 	//AJ
 	//sb = new MySpinButton(this);
-	
+
 	tc->SetWindowStyle(wxTE_PROCESS_TAB);
 	tc->SetMaxLength(8);
 
 	//wxSize bestsize = DoGetBestSize();
 	//DoMoveWindow(pos.x, pos.y, bestsize.x, bestsize.y);
-	DoMoveWindow(pos.x, pos.y, size.x, size.y);
+	//MPM : REMOVED DOMOVEWINDOW BELOW
+	//DoMoveWindow(pos.x, pos.y, size.x, size.y);
 
 	// prevent the time picker from intercepting events
 	wxControl::Enable(FALSE);
-	
+
 	Show(TRUE);
 }
 
@@ -436,9 +439,9 @@ void MyTimeCtrl::DoMoveWindow(int x, int y, int width, int height)
 
 	//wxSize buttonsize = sb->GetBestSize();
 	//int textwidth = width - (buttonsize.x + SPACING);
-	
+  
 	//tc->SetSize(x, y, textwidth, height);
-		tc->SetSize(x, y, width, height);
+  tc->SetSize(x, y, width, height);
 	//AJ
 	//sb->SetSize(x + textwidth + SPACING, y, -1, height);
 }
@@ -489,8 +492,10 @@ wxString MyTimeCtrl::GetCurrentTime()
 	//	hour %= 12;
 	//}
 	
-	wxString result = wxString::Format(wxT("%.2d"), hour) + wxT(":") + wxString::Format(wxT("%.2d"), minute) + wxT(":") +
-		wxString::Format(wxT("%.2d"), second); //AJ + wxT(" ") + ampm;
-		
+        wxString result = wxString::Format(wxT("%.2d"), hour) + wxT(":") +
+	  wxString::Format(wxT("%.2d"), minute) + wxT(":") +
+	  wxString::Format(wxT("%.2d"), second); //AJ + wxT(" ") + ampm;
+
 	return result;
+		
 }

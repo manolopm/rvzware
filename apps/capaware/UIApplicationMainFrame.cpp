@@ -200,15 +200,22 @@ UIApplicationMainFrame::UIApplicationMainFrame(Application *app, const wxChar *t
 
 	  
 
-  load_splash = new UILoadSplash(this, wxID_ANY, wxString(((std::string)("Capaware")).c_str(),wxConvUTF8), wxString(((std::string)("resources/application_splash.png")).c_str(),wxConvUTF8));
+  load_splash = new UILoadSplash(this, wxID_ANY,
+				 wxString(((std::string)("Capaware")).c_str(),
+					  wxConvUTF8),
+				 wxString(((std::string)
+					   ("resources/application_splash.png"))
+					  .c_str(),wxConvUTF8));
+ 
+  
+  //  load_splash->Show(true);
 
-  //load_splash->Show(true);
   InitMenus();
 
   InitGUI();
 
   m_mgr.Update();
-  //this->Show(true);
+  //this->Show(true);  
   //load_splash->Show(false);
   ////pasar a application
 }
@@ -330,7 +337,7 @@ void UIApplicationMainFrame::OnPaneClose(wxAuiManagerEvent& event)
 {
   view_menu->UpdateUI();
 
-  std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
+  std::string icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
   int id = event.pane->window->GetId();
   wxString nombre = FindWindow(id)->GetName();
   int pane_id = view_menu->FindItem(nombre);
@@ -382,8 +389,8 @@ void UIApplicationMainFrame::Update()
 void UIApplicationMainFrame::InitGUI () {
 
   cpw::ApplicationConfiguration *app_config = cpw::ApplicationConfiguration::GetInstance();
-  std::string &icon_path = app_config->GetUIIconDirectory();
-
+  std::string icon_path = app_config->GetUIIconDirectory();
+  
   int ic_size = cpw::ApplicationConfiguration::GetInstance()->GetIconSize();
   int bic_size = cpw::ApplicationConfiguration::GetInstance()->GetBigIconSize();
 
@@ -392,7 +399,7 @@ void UIApplicationMainFrame::InitGUI () {
   this->SetMinSize(wxSize(800,600));
 	
   wxMenuBar *menu_bar = new wxMenuBar();
-	  
+
 
   //file menu
   file_menu = new wxMenu;
@@ -482,7 +489,7 @@ view_menu->Append(GetMenuItem(VIEW_WIREFRAME, view_menu,
   view_menu->AppendCheckItem(VIEW_ANIMATION_CONTROLS, wxT("Animation Controls"))->Check();
   view_menu->AppendCheckItem(VIEW_ANIMATION_SCHEME, wxT("Animation Entity Scheme"))->Check();
   view_menu->AppendCheckItem(VIEW_APPLICATION_STATUS, wxT("Application Status"))->Check();
-	
+
   if (SHOW_ADDITIONAL_WINDOWS)
     view_menu->AppendCheckItem(VIEW_LOG, wxT("Log"))->Check();
   else
@@ -818,7 +825,7 @@ view_menu->Append(GetMenuItem(VIEW_WIREFRAME, view_menu,
   tool_bar_help->AddTool(HELP,wxT("Help"),
 			 wxString((icon_path + "help.png").c_str(),wxConvUTF8),
 			 wxT("Help"));
-	
+
   tool_bar_file->Realize();
   tool_bar_edit->Realize();
   tool_bar_project->Realize();
@@ -940,12 +947,14 @@ view_menu->Append(GetMenuItem(VIEW_WIREFRAME, view_menu,
 
   CreateStatusBar();
   SetStatusText( _T(" ") );
+
 }
 
 void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::remote::RemoteProtocol *protocol,
 					     cpw::INavigatorManager *navigator_manager)
 {
-  std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();	
+  std::string icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
+  
   int width, height;
   GetClientSize(&width, &height);
 
@@ -1076,7 +1085,7 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::re
     m_mgr.AddPane(connection_frame, wxLEFT, wxT("Connection Tree"));
 	
   m_mgr.AddPane(animation_scheme_frame, wxBOTTOM, wxT("Animation Entity Scheme")); 
-	
+
   m_mgr.GetPane(layer_frame).MinSize(wxSize(100,100)).
     Name(wxString(((std::string)NAME_LAYER_FRAME).c_str(),wxConvUTF8));
   m_mgr.GetPane(properties_frame).MinSize(wxSize(100,100)).
@@ -1096,15 +1105,24 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::re
 
 
   //trick
-  m_mgr.GetPane(layer_frame).Float().Hide();
+  /*m_mgr.GetPane(layer_frame).Float().Hide();
   m_mgr.GetPane(properties_frame).Float().Hide();
   m_mgr.GetPane(log_frame).Float().Hide(); 
   m_mgr.GetPane(scene_tree_frame).Float().Hide();
   m_mgr.GetPane(connection_frame).Float().Hide();
-
   m_mgr.GetPane(animation_scheme_frame).Float().Hide(); 
-	
+  */
+  
+  //MPM
+  m_mgr.GetPane(layer_frame).Hide();
+  m_mgr.GetPane(properties_frame).Hide();
+  m_mgr.GetPane(log_frame).Hide(); 
+  m_mgr.GetPane(scene_tree_frame).Hide();
+  m_mgr.GetPane(connection_frame).Hide();
+  m_mgr.GetPane(animation_scheme_frame).Hide(); 
+  
   m_mgr.Update();
+
   m_mgr.GetPane(layer_frame).Dock().Show();
   m_mgr.GetPane(properties_frame).Dock().Show();
   m_mgr.GetPane(animation_scheme_frame).Dock().Show();
@@ -1125,12 +1143,13 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::re
 	
 	
   m_mgr.Update();
-      
+  
+
   wxSizeEvent event = wxSizeEvent();
   OnSize((wxSizeEvent &)event);
-	
+
   ui_default_config = m_mgr.SavePerspective();
-	
+
   wxString gui_config(ApplicationConfiguration::GetInstance()->GetUIConfiguration().c_str(),wxConvUTF8);
   if (!gui_config.empty())
     m_mgr.LoadPerspective(gui_config);
@@ -1363,9 +1382,9 @@ void UIApplicationMainFrame::ViewProperties(wxCommandEvent& WXUNUSED(event))
 
 void UIApplicationMainFrame::TogglePaneVisibility(int win_id, const wxString& pane_name)
 {
-  std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();	
+  std::string icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();	
   wxWindow *window = FindWindow(win_id);
-	
+
   if (m_mgr.GetPane(window).IsShown()) 
     m_mgr.GetPane(window).Hide();
   else
@@ -1377,7 +1396,7 @@ void UIApplicationMainFrame::TogglePaneVisibility(int win_id, const wxString& pa
 
 void UIApplicationMainFrame::ViewShowAll(wxCommandEvent& WXUNUSED(event))
 {
-  std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();	
+  std::string icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();	
   wxWindow *window;
   wxString nombre;
   for (int i = FIRST_PANE ; i<=LAST_PANE; i++)
@@ -1395,7 +1414,7 @@ void UIApplicationMainFrame::ViewShowAll(wxCommandEvent& WXUNUSED(event))
 }
 void UIApplicationMainFrame::ViewHideAll(wxCommandEvent& WXUNUSED(event))
 {
-  std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();	
+  std::string icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();	
   wxWindow *window;
   wxString nombre;
   for (int i = FIRST_PANE ; i<=LAST_PANE; i++)
@@ -1520,7 +1539,7 @@ void UIApplicationMainFrame::OnLeftDoubleClick(wxMouseEvent &event)
 int UIApplicationMainFrame::AddPluginMenu(const std::string &new_plugin)
 {
   int new_id = plugins_ids;
-  std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
+  std::string icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
 
   
   RegisterMenu(new_id, new_plugin);
@@ -1737,7 +1756,7 @@ void UIApplicationMainFrame::SetDefaultConfig(wxCommandEvent& WXUNUSED(event))
 
 void UIApplicationMainFrame::CheckVisibility()
 {
-  std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();	
+  std::string icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();	
   wxWindow *window;
   wxString nombre;
   for (int i = FIRST_PANE ; i<=LAST_PANE; i++)

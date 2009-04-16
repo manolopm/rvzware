@@ -32,23 +32,29 @@
 using namespace cpw::gui;
 
 BEGIN_EVENT_TABLE(UILoadSplash,wxDialog)  
-	EVT_PAINT		(UILoadSplash::OnPaint)
-	EVT_CLOSE     (UILoadSplash::OnClose)
-	EVT_MOVE      (UILoadSplash::OnMove)
+EVT_PAINT     (UILoadSplash::OnPaint)
+EVT_CLOSE     (UILoadSplash::OnClose)
+EVT_MOVE      (UILoadSplash::OnMove)
 END_EVENT_TABLE()
 
-UILoadSplash::UILoadSplash(wxWindow *parent, wxWindowID id, const wxString &title, const wxString &bk_image, const wxPoint &position, const wxSize& size, long style)
-: wxDialog(parent, id, title, position, size, style), paren(parent), background_image(bk_image)
+UILoadSplash::UILoadSplash(wxWindow *parent, wxWindowID id,
+			   const wxString &title, const wxString &bk_image,
+			   const wxPoint &position, const wxSize& size,
+			   long style)
+: wxDialog(parent, id, title,
+	   position, size, style),
+  paren(parent),
+  background_image(bk_image)
 {
-	if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
-	{
-		SetFont(paren->GetFont());
-		SetForegroundColour(paren->GetForegroundColour());
-		SetBackgroundColour(paren->GetBackgroundColour());
-	}
-
-	CreateGUIControls();
-	
+  
+  if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
+    {
+      SetFont(paren->GetFont());
+      SetForegroundColour(paren->GetForegroundColour());
+      SetBackgroundColour(paren->GetBackgroundColour());
+    }
+  
+  CreateGUIControls();
 }
 
 UILoadSplash::~UILoadSplash()
@@ -57,18 +63,17 @@ UILoadSplash::~UILoadSplash()
 
 void UILoadSplash::CreateGUIControls()
 {
-	SetTitle(wxT(""));
-	SetIcon(wxNullIcon);
-
-	m_bmp = wxBitmap(wxImage(wxString(background_image.c_str(),wxConvUTF8)));
-	
-	SetSize(8,8,m_bmp.GetWidth(),m_bmp.GetHeight());
-	Center();
+  SetTitle(wxT("CAPAWARE"));
+  SetIcon(wxNullIcon);
+  
+  m_bmp = wxBitmap(wxImage(background_image));
+  SetSize(8,8,m_bmp.GetWidth(),m_bmp.GetHeight());
+  Center();
 }
 
 void UILoadSplash::OnClose(wxCloseEvent& /*event*/)
 {
-	this->EndDialog(wxID_CANCEL);	
+  this->EndDialog(wxID_CANCEL);	
 }
 
 void UILoadSplash::OnMove(wxMoveEvent& event)
@@ -77,13 +82,13 @@ void UILoadSplash::OnMove(wxMoveEvent& event)
 
 void UILoadSplash::OnPaint(wxPaintEvent& event)
 {
-	wxPaintDC dc(this);
-	render(dc);
+  wxPaintDC dc(this);
+  render(dc);
 }
 
 void UILoadSplash::render(wxDC& dc)
 {
-	dc.DrawBitmap(m_bmp, 0, 0, false);
+  dc.DrawBitmap(m_bmp, 0, 0, false);
 }
 
 

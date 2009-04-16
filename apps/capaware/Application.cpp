@@ -557,11 +557,12 @@ void Application::Draw()
 		scene->ShowWmsLayers(false);
 
 
-	
+
 
 	if (navigator_manager!=NULL)
-	{		
-		navigator_manager->Draw();
+	  {
+	    //MPM: TOBE FIXED
+	  //		navigator_manager->Draw();
 	}
 
 	handler_controller.Update();
