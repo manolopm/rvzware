@@ -219,7 +219,9 @@ void OsgNavigatorManager::Draw()
 	bool reset_textures = false;
 
 	if (navigator_vector.empty())
-		return;
+	  
+	  return;
+	
 
 	std::vector<OsgNavigator *>::iterator i=navigator_vector.begin();
 	for (;i!=navigator_vector.end(); i++)
@@ -228,7 +230,8 @@ void OsgNavigatorManager::Draw()
 	}
 
 	osg::Camera *camera =  osg_composite_viewer->getCameraWithFocus();
-
+	
+		
 	if (camera == NULL)
 	{
 		osgViewer::ViewerBase::Cameras vcam;
@@ -256,7 +259,7 @@ void OsgNavigatorManager::Draw()
 	else
 		opt_cont++;*/
 
-	
+
 	osg_composite_viewer->advance();
 	osg_composite_viewer->eventTraversal();
 	osg_composite_viewer->updateTraversal();
@@ -310,10 +313,15 @@ void OsgNavigatorManager::Draw()
 
 		
 		cpw::ApplicationScene::GetInstance()->GetScene()->UpdateTextures (cx, cy, eye, center, up, punto_mira, application->GetWmsBlendingFactor(), application->GetFireViewMode());
+		
+
 	}
 
-
+	
+	//TODO: TO BE FIXED: THIS IS THE PROBLEM
+	return;
 	osg_composite_viewer->renderingTraversals();
+
 
 	//std::stringstream ss;
 	//ss << "active navigator = " << active_navigator;

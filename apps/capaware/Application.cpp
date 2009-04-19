@@ -562,7 +562,8 @@ void Application::Draw()
 	if (navigator_manager!=NULL)
 	  {
 	    //MPM: TOBE FIXED
-	  //		navigator_manager->Draw();
+	    //OSG_NAVIGATION_MANAGER?
+	    navigator_manager->Draw();
 	}
 
 	handler_controller.Update();

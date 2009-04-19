@@ -4,7 +4,7 @@ LIB_FILES =  OsgCamera.cpp OsgIconSizeUpdaterVisitor.cpp OsgNavigator.cpp OsgNav
 INCLUDE = -I/usr/include -I../../include -I/usr/include/postgresql/ -I/usr -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__ 
 
 LFLAGS = -fPIC -lcurl -lpq -lOpenThreads -lboost_filesystem -lexpat -losg
-CFLAGS = -fPIC
+CFLAGS = -fPIC -g
 CC = g++
 LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
 
