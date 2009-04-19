@@ -12,6 +12,7 @@
 */
 #include <wcs/wcsReferenced.h>
 #include <wcs/wcsNotify.h>
+#include <typeinfo>
 
 wcsReferenced::~wcsReferenced()
 {

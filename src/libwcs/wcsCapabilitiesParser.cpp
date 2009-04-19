@@ -14,7 +14,8 @@
 #include <fstream>
 #include <map>
 #include <vector>
-#include <expat/expat.h>
+#include <expat.h>
+#include <string.h>
 #include <wcs/wcsCapabilitiesParser.h>
 #include <wcs/wcsCapabilitiesState.h>
 #include <wcs/wcsCapabilitiesRoot.h>

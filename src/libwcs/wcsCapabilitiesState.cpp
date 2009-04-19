@@ -11,6 +11,7 @@
  * libwms Public License for more details.
 */
 #include <iterator>
+#include <stdlib.h>
 #include <wcs/wcsCapabilitiesState.h>
 
 std::ostream& operator <<(std::ostream& out, const wcsCapabilitiesState& src)

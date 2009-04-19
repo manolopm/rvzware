@@ -14,14 +14,15 @@
 #include <fstream>
 #include <map>
 #include <vector>
-#include <expat/expat.h>
+#include <expat.h>
 #include <wms/wmsCapabilitiesParser.h>
 #include <wms/wmsCapabilitiesState.h>
 #include <wms/wmsCapabilitiesRoot.h>
 #include <wms/wmsStyle.h>
 #include <wms/wmsMemoryStream.h>
 #include <wms/iso8601.h>
-
+#include <string.h>
+#include <stdlib.h>
 wmsCapabilitiesParser::wmsCapabilitiesParser()
 {
    theRoot = NULL;

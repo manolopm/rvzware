@@ -12,6 +12,8 @@
 */
 #include <iterator>
 #include <wms/wmsCapabilitiesState.h>
+#include <stdlib.h>
+
 
 std::ostream& operator <<(std::ostream& out, const wmsCapabilitiesState& src)
 {

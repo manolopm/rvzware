@@ -14,6 +14,7 @@
 #include <wcs/wcsNotify.h>
 #include <fstream>
 #include <sstream>
+#include <stdlib.h>
 
 struct wcsCurlMemoryStreamStruct
 {
@@ -135,7 +136,7 @@ bool wcsCurlMemoryStream::download(const std::string& filename)
       curl_easy_setopt(theCurl, CURLOPT_PROXY,theProxyHost.c_str());
       if(!theProxyPort.empty())
       {
-         curl_easy_setopt(theCurl, CURLOPT_PROXYPORT, std::atoi(theProxyPort.c_str()));
+         curl_easy_setopt(theCurl, CURLOPT_PROXYPORT, atoi(theProxyPort.c_str()));
       }
    }
   

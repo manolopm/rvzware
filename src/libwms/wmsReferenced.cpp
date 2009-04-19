@@ -12,6 +12,7 @@
 */
 #include <wms/wmsReferenced.h>
 #include <wms/wmsNotify.h>
+#include <typeinfo>
 
 wmsReferenced::~wmsReferenced()
 {

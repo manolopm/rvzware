@@ -13,6 +13,7 @@
 #include <wms/wmsMemoryStream.h>
 #include <iostream>
 #include <iterator>
+#include <string.h>
 
 wmsMemoryBufferStream::wmsMemoryBufferStream()
 {

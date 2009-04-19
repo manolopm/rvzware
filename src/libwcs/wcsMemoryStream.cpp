@@ -13,6 +13,7 @@
 #include <wcs/wcsMemoryStream.h>
 #include <iostream>
 #include <iterator>
+#include <string.h>
 
 wcsMemoryBufferStream::wcsMemoryBufferStream()
 {
