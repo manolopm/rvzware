@@ -10,7 +10,7 @@ LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
 all: libwms.so
 
 clean:
-	rm -f $(LIBOFILES)
+	rm -f $(LIBOFILES) libwms.so
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

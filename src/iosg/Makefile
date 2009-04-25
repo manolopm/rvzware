@@ -11,7 +11,7 @@ LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
 all: libiosg.so
 
 clean:
-	rm -f $(LIBOFILES)
+	rm -f $(LIBOFILES) libiosg.so
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

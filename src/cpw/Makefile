@@ -9,7 +9,7 @@ LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
 all: libcpw.so
 
 clean:
-	rm -f $(LIBOFILES)
+	rm -f $(LIBOFILES) libcpw.so
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

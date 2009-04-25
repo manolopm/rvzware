@@ -11,7 +11,7 @@ LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
 all: libwxremote.so
 
 clean:
-	rm -f $(LIBOFILES)
+	rm -f $(LIBOFILES) libwxremote.so
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

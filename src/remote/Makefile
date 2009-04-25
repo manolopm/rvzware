@@ -10,7 +10,7 @@ LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
 all: libremote.so
 
 clean:
-	rm -f $(LIBOFILES)
+	rm -f $(LIBOFILES) libremote.so
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

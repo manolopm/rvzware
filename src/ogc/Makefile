@@ -9,7 +9,7 @@ LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
 all: libogc.so
 
 clean:
-	rm -f $(LIBOFILES)
+	rm -f $(LIBOFILES) libogc.so
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

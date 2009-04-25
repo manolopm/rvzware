@@ -10,7 +10,7 @@ LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
 all: libwcs.so
 
 clean:
-	rm -f $(LIBOFILES)
+	rm -f $(LIBOFILES) libwcs.so
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
