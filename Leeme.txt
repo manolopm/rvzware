@@ -2,3 +2,8 @@ Rvzware version 0.001
 
 Este programa está basado en CAPAWARE 3D (http://www.capaware.org).
 
+Pretende ser un fork multiplataforma y basado en Qt. Intentaré
+solucionar algunos fallos y recodificar algunas partes del
+código. Esté trabajo lo realizaré en estrecha colaboración con el
+equipo de Capaware.
+
