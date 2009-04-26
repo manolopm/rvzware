@@ -21,10 +21,10 @@
 #include <wx/event.h>
 #include <wx/socket.h>
 
-#include "stdafx.h"
+#include <wxremote/stdafx.h>
 
 #include <remote/DataStream.h>
-#include "WxSocketEvent.h"
+#include <wxremote/WxSocketEvent.h>
 
 
 using namespace cpw::wxremote;

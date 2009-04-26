@@ -18,9 +18,9 @@
  * The Rvzware development team
  */
 
-#include "WmsNetManager.h"
+#include <ogc/wms/WmsNetManager.h>
 
-#include "WmsLayerController.h"
+#include <ogc/wms/WmsLayerController.h>
 
 using namespace cpw::ogc;
 

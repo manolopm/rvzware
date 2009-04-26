@@ -18,9 +18,8 @@
  * The Rvzware development team
  */
 
-//#include "stdafx.h"
 
-#include "WmsLayerController.h"
+#include <ogc/wms/WmsLayerController.h>
 
 #include <iostream>
 #include <wms/wmsNotify.h>

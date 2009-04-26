@@ -26,7 +26,7 @@
 
 #include <cpw/common/IResolver.h>
 
-#include "WxRemoteExport.h"
+#include <wxremote/WxRemoteExport.h>
 
 /*!
  *  \file WxResolver.h

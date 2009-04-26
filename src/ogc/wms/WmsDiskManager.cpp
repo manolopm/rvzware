@@ -18,10 +18,10 @@
  * The Rvzware development team
  */
 
-#include "WmsDiskManager.h"
+#include <ogc/wms/WmsDiskManager.h>
 
-#include "WmsNetManager.h"
-#include "WmsLayer.h"
+#include <ogc/wms/WmsNetManager.h>
+#include <ogc/wms/WmsLayer.h>
 
 #include <vector>
 #include <string>

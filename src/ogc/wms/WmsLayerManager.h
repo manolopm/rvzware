@@ -23,11 +23,11 @@
 
 #include <vector>
 
-#include "WmsLayer.h"
+#include <ogc/wms/WmsLayer.h>
 
 #include <cpw/thread/RequestManager.h>
 
-#include "../Export.h"
+#include <ogc/Export.h>
 
 
 namespace cpw 

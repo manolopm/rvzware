@@ -18,7 +18,7 @@
  * The Rvzware development team
  */
 
-#include "WindowsDisk.h"
+#include <ogc/wms/WindowsDisk.h>
 #ifdef WIN32
 #include <windows.h>
 

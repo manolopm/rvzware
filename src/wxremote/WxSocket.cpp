@@ -21,16 +21,16 @@
 #include <wx/event.h>
 #include <wx/socket.h>
 
-#include "stdafx.h"
+#include <wxremote/stdafx.h>
 
 #include <cpw/common/RemoteNode.h>
 #include <remote/DataStream.h>
 #include <remote/ISocket.h>
 
-#include "WxSocket.h"
-#include "WxSocketHandler.h"
-#include "WxClientSocketThread.h"
-#include "WxSocketEvent.h"
+#include <wxremote/WxSocket.h>
+#include <wxremote/WxSocketHandler.h>
+#include <wxremote/WxClientSocketThread.h>
+#include <wxremote/WxSocketEvent.h>
 
 
 

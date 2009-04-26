@@ -22,4 +22,4 @@ mrpropper:
 	@for i in $(SUBDIRS); do \
         echo "Cleaning in $$i..."; \
 	(cd $$i; make clean); done
-	
+

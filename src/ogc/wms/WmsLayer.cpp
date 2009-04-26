@@ -18,7 +18,7 @@
  * The Rvzware development team
  */
 
-#include "WmsLayer.h"
+#include <ogc/wms/WmsLayer.h>
 
 #include <sstream>
 #include <string>

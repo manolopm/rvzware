@@ -24,9 +24,9 @@
 #define _SERVERCONNECTIONCONTROLLER_
 
 #include <wx/wx.h>
-#include "EntityController.h"
-#include "../gui/UIServerConnection.h"
-#include <WmsLayerController.h>
+#include <controllers/EntityController.h>
+#include <gui/UIServerConnection.h>
+#include <ogc/wms/WmsLayerController.h>
 
  
 namespace cpw

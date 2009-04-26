@@ -23,15 +23,15 @@
 #include <wx/socket.h>
 #include <wx/sckstrm.h>
 
-#include "stdafx.h"
+#include <wxremote/stdafx.h>
 
 #include <cpw/common/pstdint.h>
 #include <cpw/common/RemoteNode.h>
 #include <remote/DataStream.h>
 #include <remote/ConnectionManager.h>
 
-#include "WxSocketEvent.h"
-#include "WxClientSocketThread.h"
+#include <wxremote/WxSocketEvent.h>
+#include <wxremote/WxClientSocketThread.h>
 #ifndef TCP_NODELAY
 #define TCP_NODELAY 1
 #endif

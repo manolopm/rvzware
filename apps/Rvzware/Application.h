@@ -43,7 +43,7 @@
 #include <cpw/entity/LayerTree.h>
 #include <cpw/IApplication.h>
 
-#include <WmsLayerManager.h>
+#include <ogc/wms/WmsLayerManager.h>
 
 #include <controllers/EntityController.h>
 #include <controllers/RemoteEntityController.h>

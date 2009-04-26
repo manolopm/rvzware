@@ -21,11 +21,11 @@
 #include <string>
 #include <wx/socket.h>
 
-#include "stdafx.h"
+#include <wxremote/stdafx.h>
 
 #include <cpw/common/IResolver.h>
 
-#include "WxResolver.h"
+#include <wxremote/WxResolver.h>
 
 
 using namespace cpw::wxremote;

@@ -28,8 +28,8 @@
 #include <remote/RemoteProtocol.h>
 #include <remote/DataStream.h>
 
-#include "WxRemoteExport.h"
-#include "WxSocketEvent.h"
+#include <wxremote/WxRemoteExport.h>
+#include <wxremote/WxSocketEvent.h>
 
 /*!
  *  \file WxSocketHandler.h

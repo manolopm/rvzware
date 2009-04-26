@@ -24,7 +24,7 @@
 #include <vector>
 #include <string>
 
-#include "Export.h"
+#include <ogc/Export.h>
 
 namespace cpw 
 { 

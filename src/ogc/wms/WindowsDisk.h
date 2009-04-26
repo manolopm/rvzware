@@ -21,8 +21,8 @@
 #ifndef _WINDOWSDISK_
 #define _WINDOWSDISK_
 
-#include "../IDisk.h"
-#include "../Export.h"
+#include <ogc/IDisk.h>
+#include <ogc/Export.h>
 
 
 namespace cpw 

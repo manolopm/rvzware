@@ -31,7 +31,7 @@
 #include <wms/wmsCapabilitiesState.h>
 #include <cpw/entity/Entity.h>
 #include <cpw/entity/EntityFactory.h>
-#include <ogc/WmsLayer.h>
+#include <ogc/wms/WmsLayer.h>
 
 #include <cpw/common/constants.h>
 #include <cpw/common/LatLong-UTMconversion.h>

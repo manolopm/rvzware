@@ -29,9 +29,9 @@
 #include <remote/DataStream.h>
 #include <remote/ISocket.h>
 
-#include "WxRemoteExport.h"
-#include "WxSocketHandler.h"
-#include "WxClientSocketThread.h"
+#include <wxremote/WxRemoteExport.h>
+#include <wxremote/WxSocketHandler.h>
+#include <wxremote/WxClientSocketThread.h>
 
 /*!
  *  \file WxSocket.h

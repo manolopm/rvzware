@@ -28,8 +28,8 @@
 
 #include <cpw/thread/RequestThread.h>
 
-#include "WindowsDisk.h"
-#include "../Export.h"
+#include <ogc/wms/WindowsDisk.h>
+#include <ogc/Export.h>
 
 
 

@@ -24,8 +24,8 @@
 #include <wms/wmsClient.h>
 #include <wms/wmsCapabilitiesRoot.h>
 
-#include "WmsLayer.h"
-#include "../Export.h"
+#include <ogc/wms/WmsLayer.h>
+#include <ogc/Export.h>
 
 #include <vector>
 #include <string>

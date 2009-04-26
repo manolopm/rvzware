@@ -21,14 +21,14 @@
 #include <wx/event.h>
 #include <wx/socket.h>
 
-#include "stdafx.h"
+#include <wxremote/stdafx.h>
 
 #include <remote/ISocketFactory.h>
 #include <remote/ISocket.h>
 #include <remote/RemoteProtocol.h>
 
-#include "WxSocket.h"
-#include "WxSocketFactory.h"
+#include <wxremote/WxSocket.h>
+#include <wxremote/WxSocketFactory.h>
 
 
 

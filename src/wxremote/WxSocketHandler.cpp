@@ -22,15 +22,15 @@
 #include <wx/socket.h>
 #include <wx/wx.h>
 
-#include "stdafx.h"
+#include <wxremote/stdafx.h>
 
 #include <cpw/common/RemoteNode.h>
 #include <remote/RemoteProtocol.h>
 #include <remote/DataStream.h>
 
-#include "WxSocket.h"
-#include "WxSocketEvent.h"
-#include "WxSocketHandler.h"
+#include <wxremote/WxSocket.h>
+#include <wxremote/WxSocketEvent.h>
+#include <wxremote/WxSocketHandler.h>
 
 
 using namespace cpw::wxremote;

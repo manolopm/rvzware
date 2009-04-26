@@ -25,10 +25,10 @@
 #include <wx/socket.h>
 #include <wx/thread.h>
 
-#include "msgqueue.h"
+#include <wxremote/msgqueue.h>
 
 #include <remote/DataStream.h>
-#include "WxSocketEvent.h"
+#include <wxremote/WxSocketEvent.h>
 
 /*!
  *  \file WxClientSocketThread.h

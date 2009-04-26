@@ -24,7 +24,7 @@
 
 #include <cpw/thread/RequestThread.h>
 
-#include "../Export.h"
+#include <ogc/Export.h>
 
 
 

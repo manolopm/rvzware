@@ -27,8 +27,8 @@
 #include <remote/ISocketFactory.h>
 #include <remote/RemoteProtocol.h>
 #include <remote/ISocket.h>
-#include "WxRemoteExport.h"
-#include "WxSocketHandler.h"
+#include <wxremote/WxRemoteExport.h>
+#include <wxremote/WxSocketHandler.h>
 
 
 /*!
