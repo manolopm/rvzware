@@ -1810,7 +1810,8 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	 {
 	 case WM_CTLCOLORBTN :
 
-		 SetBkColor(GetDC(hwnd),(COLORREF) RGB(255, 0, 0));
+	   wxWindow dc;
+		 SetBkColor(&dc,(COLORREF) RGB(255, 0, 0));
 		 break;
 	 }
 	 return 0;
@@ -1879,7 +1880,8 @@ HWND wxTreeListHeaderWindow::DoCreateHeader(HWND hwndParent)
 	//////////	   CreateSolidBrush(bgColor);
 	//////////#endif        
 	//////////////---------------
-	SetBkColor(GetDC(hwndHeader),(COLORREF) RGB(255, 0, 0));
+	wxWindow dc;
+	SetBkColor(&dc,(COLORREF) RGB(255, 0, 0));
 	
 
 	hwndHeader;

@@ -75,7 +75,7 @@ namespace cpw
 			int	 GetValue		()					{return value;}
 			int	 GetStep		()					{return step;}	
 			std::string GetLabel()					{return label;}	
-			virtual bool GetModal()					{return (modalTraceableItem!=NULL);};
+			virtual bool GetModal()					{return (modalTraceableItem!=0);};
 			TraceableData GetModalTraceableItem();
 
 			void Init			(const int &id);

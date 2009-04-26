@@ -39,7 +39,7 @@
 //#include <iostream>
 ///////////////////// end builder //////////////////
 
-#include <ogc/WmsLayerController.h>
+#include <WmsLayerController.h>
 
 //////PJ
 #include <string>

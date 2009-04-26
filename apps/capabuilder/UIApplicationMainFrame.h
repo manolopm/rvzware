@@ -232,8 +232,6 @@ namespace cpw
 				void EnableGUI(const bool &value);
 				void UpdateAnimableUI();
 
-				wxDC *GetDC() {wxWindowDC dc; return &dc;};
-				
 				void OnFileOpen(wxCommandEvent& WXUNUSED(event));
 				void OnFileClose(wxCommandEvent& WXUNUSED(event));
 				void EventoQuit(wxCommandEvent& WXUNUSED(event));

@@ -56,7 +56,7 @@
 #include <cpw/common/IdGenerator.h>
 
 
-#include <ogc/WmsDiskManager.h>
+#include <WmsDiskManager.h>
 #include <wms/wms.h>
 
 #include <cpw/ApplicationConfiguration.h>

@@ -36,7 +36,7 @@
 #include <controllers/ServerConnectionController.h>
 #include <gui/UIEAttributes.h>
 
-#include <ogc/WmsLayerController.h>
+#include <WmsLayerController.h>
 
 
 namespace cpw 

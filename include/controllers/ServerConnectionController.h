@@ -26,7 +26,7 @@
 #include <wx/wx.h>
 #include "EntityController.h"
 #include "../gui/UIServerConnection.h"
-#include <ogc/WmsLayerController.h>
+#include <WmsLayerController.h>
 
  
 namespace cpw

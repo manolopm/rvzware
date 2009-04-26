@@ -32,7 +32,7 @@
 #include <cpw/graphic/AerialCameraController.h>
 #include <cpw/entity/EntityRegistry.h>
 #include <cpw/common/ApplicationLog.h>
-#include <ogc/WmsLayer.h>
+#include <WmsLayer.h>
 
 #include <iosg/OsgObjectRegistrySingleton.h>
 
