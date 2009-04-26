@@ -21,7 +21,7 @@
 #include <osg/MatrixTransform>
 #include <osg/Vec3>
 
-#include "stdafx.h"
+#include <iosg/stdafx.h>
 
 #include <cpw/graphic/ApplicationScene.h>
 

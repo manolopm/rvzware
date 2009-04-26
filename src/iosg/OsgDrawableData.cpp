@@ -29,7 +29,7 @@
 #include <osgDB/ReadFile>
 
 
-#include "stdafx.h"
+#include <iosg/stdafx.h>
 
 
 #include <cpw/graphic/ApplicationScene.h>

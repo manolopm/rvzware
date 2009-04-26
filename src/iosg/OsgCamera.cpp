@@ -23,7 +23,7 @@
 #include <osg/Node>
 #include <osg/Depth>
 
-#include "stdafx.h"
+#include <iosg/stdafx.h>
 
 #include <cpw/graphic/ApplicationScene.h>
 #include <cpw/common/ApplicationLog.h>

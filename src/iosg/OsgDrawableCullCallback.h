@@ -26,7 +26,7 @@
 #include <osg/Timer>
 #include <osg/Vec3>
 
-#include <Export.h>
+#include <iosg/Export.h>
 
 #include <cpw/common/types.h>
 

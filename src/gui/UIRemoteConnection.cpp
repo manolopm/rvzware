@@ -187,8 +187,8 @@ dc.SetTextForeground(wxColour(wxString(cpw::ApplicationConfiguration::GetInstanc
 
 #include <wx/wx.h>
 
-#include <gui/UIRemoteConnection.h"
-#include <controllers/RemoteController.h"
+#include <gui/UIRemoteConnection.h>
+#include <controllers/RemoteController.h>
 
 
 using namespace cpw::gui;
