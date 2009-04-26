@@ -7,3 +7,8 @@ Garrett Potts
 
 Norman Vine
   
+Capaware team
+     Adapted libwms to capaware project
+     
+Manuel Padrón Martínez
+     Adapted libwms from capaware project to rvzware project     

@@ -1,10 +1,12 @@
 ###
-# libwms README.txt file
+# libwcs README.txt file
 # 
-# $Id: README.txt 11732 2007-09-17 14:05:37Z dburken $
 ###
 
-libwms requires:
+LIBWCS is an adapt of lib wms to work with wcs data. This work has
+been maded by capaware team and adapted to rvzware by Manuel Padrón Martínez
+
+libwcs requires:
 - curl
 - expat
 

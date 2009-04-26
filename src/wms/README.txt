@@ -4,6 +4,11 @@
 # $Id: README.txt 11732 2007-09-17 14:05:37Z dburken $
 ###
 
+
+This IS NOT the original libwms. This libwms has been adapted by
+capaware team to capaware and modified by Manuel Padrón Martínez to be
+used in rvzware fork.
+
 libwms requires:
 - curl
 - expat

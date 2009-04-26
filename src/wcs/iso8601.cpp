@@ -18,7 +18,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
-#include "wcs/iso8601.h"
+#include <wcs/iso8601.h>
 
 bool operator<(const wcsMyTime & a, const wcsMyTime & b)
 {
