@@ -1,15 +1,12 @@
 /*
- * CAPAWARE 3D Geographical Multilayer Framework Free Software
- * Copyright (C) 2009 Instituto Tecnológico de Canarias (ITC) and Universidad de Las Palmas de Gran Canaria (ULPGC)
+ * Rvzware based in CAPAWARE 3D
  *
- * This file is part of CAPAWARE.
- *
- * CAPAWARE is free software; you can redistribute it and/or modify it under
+ * Rvzware is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
  *
- * CAPAWARE is distributed in the hope that it will be useful, but WITHOUT
+ * Rvzware is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
@@ -18,8 +15,9 @@
  * along with this application; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * The CAPAWARE development team
+ * The Rvzware development team
  */
+
 #include "stdafx.h"
 
 #include "UIApplicationMainFrame.h"
@@ -201,7 +199,7 @@ UIApplicationMainFrame::UIApplicationMainFrame(Application *app, const wxChar *t
 	  
 
   load_splash = new UILoadSplash(this, wxID_ANY,
-				 wxString(((std::string)("Capaware")).c_str(),
+				 wxString(((std::string)("Rvzware")).c_str(),
 					  wxConvUTF8),
 				 wxString(((std::string)
 					   ("resources/application_splash.png"))
@@ -964,7 +962,7 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::re
   tool_bar_sun->Update_SunPos();
 
   //Help Window
-  help_window = new UIHelp(this, wxID_ANY, wxT("Capaware"), wxT("resources/application_help.png"), wxT("http://www.capaware.org"), wxT("Capaware 2008"), wxT("Version 1.0.0"));
+  help_window = new UIHelp(this, wxID_ANY, wxT("Rvzware"), wxT("resources/application_help.png"), wxT("http://www.capaware.org"), wxT("Rvzware 2009"), wxT("Version 1.0.0"));
   help_window->Show(false);
 
   //Layer Tree

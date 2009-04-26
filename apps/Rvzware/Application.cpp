@@ -1,15 +1,12 @@
 /*
- * CAPAWARE 3D Geographical Multilayer Framework Free Software
- * Copyright (C) 2009 Instituto Tecnológico de Canarias (ITC) and Universidad de Las Palmas de Gran Canaria (ULPGC)
+ * Rvzware based in CAPAWARE 3D
  *
- * This file is part of CAPAWARE.
- *
- * CAPAWARE is free software; you can redistribute it and/or modify it under
+ * Rvzware is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation; either version 2.1 of the License, or (at your option)
  * any later version.
  *
- * CAPAWARE is distributed in the hope that it will be useful, but WITHOUT
+ * Rvzware is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
@@ -18,8 +15,8 @@
  * along with this application; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
- * The CAPAWARE development team
-*/
+ * The Rvzware development team
+ */
 
 #include <wx/wx.h>
 #include <sstream>
@@ -157,7 +154,7 @@ bool Application::OnInit()
 	cpw::controllers::ConfigurationController config;
 	config.Load(appConfig);
 
-	main_frame = new cpw::gui::UIApplicationMainFrame(this, wxString(_T("Capaware")), 0,0 , 1024, 768, (wxBORDER_SUNKEN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN));
+	main_frame = new cpw::gui::UIApplicationMainFrame(this, wxString(_T("Rvzware")), 0,0 , 1024, 768, (wxBORDER_SUNKEN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN));
 	main_frame->Show(false);
 	main_frame->Maximize(true);
 	main_frame->ShowSplash();
@@ -511,7 +508,7 @@ bool Application::InitCpwEntities()
 	std::string title = project_controller->GetProjectFullName();
 	if (title!="")
 	  {
-	    main_frame->SetTitle(wxString((title+" - Capaware").c_str(),
+	    main_frame->SetTitle(wxString((title+" - Rvzware").c_str(),
 					  wxConvUTF8));
 	  }
 
@@ -1318,7 +1315,7 @@ void Application::OpenProject()
 		std::string title = project_controller->GetProjectFullName();
 		if (title!="")
 		{
-		  main_frame->SetTitle(wxString((title + " - Capaware").c_str(),wxConvUTF8));
+		  main_frame->SetTitle(wxString((title + " - Rvzware").c_str(),wxConvUTF8));
 		}
 
 		navigator_manager->SetAllNavigatorsToInitialPosition();
@@ -1375,7 +1372,7 @@ bool Application::CloseProject()
 
 		DeleteControllers();
 
-		main_frame->SetTitle((const wxString&)"Capaware");
+		main_frame->SetTitle((const wxString&)"Rvzware");
 		project_controller->CloseProject(layer_tree);
 
 		navigator_manager->GetFocusedOrFirstNavigator()->ShowHUD(false);

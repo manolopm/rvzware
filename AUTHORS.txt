@@ -1,3 +1,7 @@
+The Rvzware is based in Capaware (Original AUTHORS below).
+
+Manuel Padrón Martínez ............. Rvzware author 
+
 The Capaware proyect is an initiative from the Instituto Tecnológico de Canarias(ITC) with the collaboration of 
 the Universidad de Las Palmas de Gran Canaria (ULPGC). The Capaware development team consists of:
 

@@ -10,10 +10,10 @@ CFLAGS = -rdynamic -pthread -Wl,-Bsymbolic-functions -D_FILE_OFFSET_BITS=64 -D_L
 
 CC = g++
 
-all: capaware
+all: Rvzware
 
 clean:
-	rm -f capaware
+	rm -f Rvzware
 	rm *.o
 
 mrpropper: clean
@@ -22,7 +22,7 @@ mrpropper: clean
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
-capaware: $(OFILES)
+Rvzware: $(OFILES)
 	$(CC) $(INCLUDE) $(LFLAGS) $(OFILES) -o $@
 
 
