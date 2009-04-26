@@ -16,8 +16,9 @@ clean:
 	rm -f Rvzware
 	rm *.o
 
-mrpropper: clean
-	   rm $(OFILES)
+mrpropper:
+	rm $(OFILES)
+	make clean
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
