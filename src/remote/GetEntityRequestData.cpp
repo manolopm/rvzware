@@ -22,7 +22,7 @@
 */
 #include <vector>
 
-#include "stdafx.h"
+#include <remote/stdafx.h>
 
 #include <cpw/common/pstdint.h>
 #include <cpw/common/TypeId.h>

@@ -33,7 +33,7 @@
 #include <sys/stat.h>
 #endif
 
-#include "stdafx.h"
+#include <remote/stdafx.h>
 
 #include <cpw/ApplicationConfiguration.h>
 #include <cpw/common/Sha1.h>

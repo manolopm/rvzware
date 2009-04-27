@@ -20,18 +20,20 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _SENDCHANGESDATA_
-#define _SENDCHANGESDATA_
+#ifndef _GETENTITYREQUESTDATA_
+#define _GETENTITYREQUESTDATA_
+
+#include <vector>
+#include <ctime>
 
 #include <cpw/common/pstdint.h>
 #include <cpw/common/TypeId.h>
-#include <cpw/common/Loggable.h>
-#include "RemoteExport.h"
-#include "DataStream.h"
-#include "MessageData.h"
+#include <remote/RemoteExport.h>
+#include <remote/DataStream.h>
+#include <remote/MessageData.h>
 
 /*!
- *  \file SendChangesData.h
+ *  \file GetEntityRequestData.h
  */
 
 namespace cpw 
@@ -39,59 +41,43 @@ namespace cpw
 	namespace remote
 	{
 		/*!
-		 *  \class SendChangesData SendChangesData.h <remote/messages/SendChangesData.h>
+		 *  \class GetEntityRequestData GetEntityRequestData.h <remote/messages/GetEntityRequestData.h>
 		 *  \ingroup remote
-		 *  \brief Message used to synchronize an entity
+		 *  \brief Message used to request an entity
 		 *
-		 *  Message used to synchronize an entity.
+		 *  Message used to request an entity.
 		 *
 		 *  Stream contents:
-		 *  -  5 bytes - Control data
-		 *  - 16 bytes - Message Id
-		 *  - 16 bytes - Entity's id
-		 *  -  8 bytes - Timestamp of last change
-		 *  -  4 bytes - Number of changes
-		 *  -  4 bytes - Size of field string
-		 *  -  ? bytes - Field string
-		 *  -  4 bytes - Size of value string
-		 *  -  ? bytes - Value string
-		 *  -  8 bytes - Timestamp of change
+		 *   -  6 bytes - Control data
+		 *   - 16 bytes - Entity's id
+		 *   -  1 bytes - Send entity
 		 */
-		class REMOTE_EXPORT SendChangesData : public MessageData
+		class REMOTE_EXPORT GetEntityRequestData : public MessageData
 		{
 		public:
-			SendChangesData();
+			GetEntityRequestData();
 
 			bool IsRequest();
 			bool IsResponse();
 
 			DataStream Code();
 			bool Decode(const DataStream &_data);
-			
+
 			const cpw::TypeId &GetEntityId();
-			const std::vector<cpw::Change> &GetChanges();
-			uint64_t GetLastSynchro();
-			const cpw::TypeId &GetMessageId();
+			bool GetSendEntity();
 			
 			const cpw::TypeId &GetEntityId() const;
-			const std::vector<cpw::Change> &GetChanges() const;
-			uint64_t GetLastSynchro() const;
-			const cpw::TypeId &GetMessageId() const;
+			bool GetSendEntity() const;
 
-			void SetEntityId(const cpw::TypeId &_id);
-			void SetChanges(const std::vector<cpw::Change> &_changes);
-			void SetLastSynchro(uint64_t ts);
-			void SetMessageId(const cpw::TypeId &_id);
+			void SetEntityId(const cpw::TypeId &id);
+			void SetSendEntity(bool send);
 
 		private:
-			cpw::TypeId message_id;
 			cpw::TypeId entity_id;
-			std::vector<cpw::Change> changes;
-			uint64_t last_synchro;
+			bool send;
 		};
 
 	}
 
 }
-
 #endif

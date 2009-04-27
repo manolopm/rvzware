@@ -13,7 +13,7 @@
 #ifndef wcs_HEADER
 #define wcs_HEADER
 #include <string>
-#include "wcsExport.h"
+#include <wcs/wcsExport.h>
 
 /**
  *  \defgroup libwcs Libwcs library

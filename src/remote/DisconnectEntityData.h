@@ -20,59 +20,56 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _REMOTEMODIFIER_
-#define _REMOTEMODIFIER_
+#ifndef _DISCONNECTENTITYDATA_
+#define _DISCONNECTENTITYDATA_
 
-#include <string>
-
-#include <cpw/common/pstdint.h>
-#include <cpw/common/Observer.h>
-#include <cpw/persistent/Persistent.h>
-
-#include "RemoteExport.h"
-#include "RemoteProtocol.h"
-
+#include <cpw/common/TypeId.h>
+#include <remote/RemoteExport.h>
+#include <remote/DataStream.h>
+#include <remote/MessageData.h>
 
 /*!
- *  \file RemoteModifier.h
+ *  \file DisconnectEntityData.h
  */
 
 namespace cpw 
 { 
 	namespace remote
 	{
-		class RemoteProtocol;
-
 		/*!
-		 *  \class RemoteModifier RemoteModifier.h <remote/RemoteModifier.h>
-		 *  \brief Observer to an entity shared with a remote node
+		 *  \class DisconnectEntityData DisconnectEntityData.h <remote/messages/DisconnectEntityData.h>
 		 *  \ingroup remote
+		 *  \brief Message used to disconnect from an entity
 		 *
-		 *  Observer to an entity shared with a remote node.
+		 *  Message used to disconnect from an entity.
 		 *
-		 *  This class is used to received modification events on an Entity, so the changes can be sent
-		 *  other nodes inmediatly.
-		 *
-		 *  There should be an object of this class for every Entity shared with at least one connection.
+ 		 *  Stream contents:
+		 *  -  5 bytes - Control data
+		 *  - 16 bytes - Entity's id
 		 */
-		class REMOTE_EXPORT RemoteModifier : public cpw::Observer
+		class REMOTE_EXPORT DisconnectEntityData : public MessageData
 		{
 		public:
-			RemoteModifier(cpw::Persistent *_persistent, RemoteProtocol *_protocol);
-			virtual ~RemoteModifier();
+			DisconnectEntityData();
 
-			void SetExecuteNext(bool e);
+			bool IsRequest();
+			bool IsResponse();
 
-			void Update(bool subject_deleted = false);
+			DataStream Code();
+			bool Decode(const DataStream &_data);
 
-			void SetValue(const std::string &field, const std::string &value, const uint64_t ts);
+			const cpw::TypeId &GetEntityId();
+			
+			const cpw::TypeId &GetEntityId() const;
+
+			void SetEntityId(const cpw::TypeId &id);
 
 		private:
-			cpw::Persistent *subject;
-			RemoteProtocol *protocol;
-			bool execute_next_update;
+			cpw::TypeId entity_id;
 		};
+
 	}
+
 }
 
 #endif

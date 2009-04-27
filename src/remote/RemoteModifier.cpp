@@ -22,7 +22,7 @@
 */
 #include <string>
 
-#include "stdafx.h"
+#include <remote/stdafx.h>
 
 #include <cpw/common/IdGenerator.h>
 #include <cpw/common/pstdint.h>

@@ -19,6 +19,15 @@ libremote.so: $(LIBOFILES)
 	rm -f $@
 	g++ -shared -Wl,-soname, $(LIBOFILES) -o $@
 
+install:
+	cp libremote.so /usr/lib
+	mkdir /usr/include/remote
+	cp *.h /usr/include/remote/
+
+uninstall:
+	rm  /usr/lib/libremote.so
+	rm -rf /usr/include/remote
+
 
 
 

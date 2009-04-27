@@ -32,23 +32,23 @@
 #include <cpw/common/RemoteNode.h>
 #include <cpw/entity/LayerTree.h>
 
-#include "RemoteExport.h"
-#include "IRemoteCallback.h"
-#include "MessageData.h"
-#include "ConnectionData.h"
-#include "DisconnectionData.h"
-#include "GetPublishedRequestData.h"
-#include "GetPublishedResponseData.h"
-#include "GetEntityRequestData.h"
-#include "GetEntityResponseData.h"
-#include "RequestSynchroData.h"
-#include "SendChangesData.h"
-#include "SetValueData.h"
-#include "DisconnectEntityData.h"
-#include "Connection.h"
-#include "ISocketFactory.h"
-#include "ConnectionManager.h"
-#include "RemoteModifier.h"
+#include <remote/RemoteExport.h>
+#include <remote/IRemoteCallback.h>
+#include <remote/MessageData.h>
+#include <remote/ConnectionData.h>
+#include <remote/DisconnectionData.h>
+#include <remote/GetPublishedRequestData.h>
+#include <remote/GetPublishedResponseData.h>
+#include <remote/GetEntityRequestData.h>
+#include <remote/GetEntityResponseData.h>
+#include <remote/RequestSynchroData.h>
+#include <remote/SendChangesData.h>
+#include <remote/SetValueData.h>
+#include <remote/DisconnectEntityData.h>
+#include <remote/Connection.h>
+#include <remote/ISocketFactory.h>
+#include <remote/ConnectionManager.h>
+#include <remote/RemoteModifier.h>
 
 /*!
  *	\namespace cpw { namespace remote \brief Remote core package

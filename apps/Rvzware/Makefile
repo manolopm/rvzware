@@ -2,7 +2,7 @@ SRC =  main.cpp Application.cpp  ApplicationTime.cpp  DynamicLibrary.cpp stdafx.
 
 
 INCLUDE = -I/usr/include/postgresql -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -I ../../include/ -I . -I ../../src
-LFLAGS = -ldl -lOpenThreads -lwx_gtk2u_richtext-2.8 -lwx_gtk2u_aui-2.8 -lwx_gtk2u_xrc-2.8 -lwx_gtk2u_qa-2.8 -lwx_gtk2u_html-2.8 -lwx_gtk2u_adv-2.8 -lwx_gtk2u_core-2.8 -lwx_baseu_xml-2.8 -lcpw  -lwx_baseu_net-2.8 -lwx_baseu-2.8 -lcpwutils  -lboost_filesystem  -lwms -logc -L../../src/remote -lremote  -lwxremote -liosg -L../../src/ogcwcs -logc_wcs  -lwcs -losg -lcurl -losgGA -losgDB -losgText -losgParticle -losgViewer -lpq -lwx_gtk2u_gl-2.8
+LFLAGS = -ldl -lOpenThreads -lwx_gtk2u_richtext-2.8 -lwx_gtk2u_aui-2.8 -lwx_gtk2u_xrc-2.8 -lwx_gtk2u_qa-2.8 -lwx_gtk2u_html-2.8 -lwx_gtk2u_adv-2.8 -lwx_gtk2u_core-2.8 -lwx_baseu_xml-2.8 -lcpw  -lwx_baseu_net-2.8 -lwx_baseu-2.8 -lcpwutils  -lboost_filesystem  -lwms -logc -lremote  -lwxremote -liosg -L../../src/ogcwcs -logc_wcs  -lwcs -losg -lcurl -losgGA -losgDB -losgText -losgParticle -losgViewer -lpq -lwx_gtk2u_gl-2.8
 OFILES = $(SRC:%.cpp=%.o)
 CFLAGS = -rdynamic -pthread -Wl,-Bsymbolic-functions -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__ -pthread -g
 

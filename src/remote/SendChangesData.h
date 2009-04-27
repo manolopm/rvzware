@@ -20,16 +20,18 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _DISCONNECTENTITYDATA_
-#define _DISCONNECTENTITYDATA_
+#ifndef _SENDCHANGESDATA_
+#define _SENDCHANGESDATA_
 
+#include <cpw/common/pstdint.h>
 #include <cpw/common/TypeId.h>
-#include "RemoteExport.h"
-#include "DataStream.h"
-#include "MessageData.h"
+#include <cpw/common/Loggable.h>
+#include <remote/RemoteExport.h>
+#include <remote/DataStream.h>
+#include <remote/MessageData.h>
 
 /*!
- *  \file DisconnectEntityData.h
+ *  \file SendChangesData.h
  */
 
 namespace cpw 
@@ -37,35 +39,55 @@ namespace cpw
 	namespace remote
 	{
 		/*!
-		 *  \class DisconnectEntityData DisconnectEntityData.h <remote/messages/DisconnectEntityData.h>
+		 *  \class SendChangesData SendChangesData.h <remote/messages/SendChangesData.h>
 		 *  \ingroup remote
-		 *  \brief Message used to disconnect from an entity
+		 *  \brief Message used to synchronize an entity
 		 *
-		 *  Message used to disconnect from an entity.
+		 *  Message used to synchronize an entity.
 		 *
- 		 *  Stream contents:
+		 *  Stream contents:
 		 *  -  5 bytes - Control data
+		 *  - 16 bytes - Message Id
 		 *  - 16 bytes - Entity's id
+		 *  -  8 bytes - Timestamp of last change
+		 *  -  4 bytes - Number of changes
+		 *  -  4 bytes - Size of field string
+		 *  -  ? bytes - Field string
+		 *  -  4 bytes - Size of value string
+		 *  -  ? bytes - Value string
+		 *  -  8 bytes - Timestamp of change
 		 */
-		class REMOTE_EXPORT DisconnectEntityData : public MessageData
+		class REMOTE_EXPORT SendChangesData : public MessageData
 		{
 		public:
-			DisconnectEntityData();
+			SendChangesData();
 
 			bool IsRequest();
 			bool IsResponse();
 
 			DataStream Code();
 			bool Decode(const DataStream &_data);
-
+			
 			const cpw::TypeId &GetEntityId();
+			const std::vector<cpw::Change> &GetChanges();
+			uint64_t GetLastSynchro();
+			const cpw::TypeId &GetMessageId();
 			
 			const cpw::TypeId &GetEntityId() const;
+			const std::vector<cpw::Change> &GetChanges() const;
+			uint64_t GetLastSynchro() const;
+			const cpw::TypeId &GetMessageId() const;
 
-			void SetEntityId(const cpw::TypeId &id);
+			void SetEntityId(const cpw::TypeId &_id);
+			void SetChanges(const std::vector<cpw::Change> &_changes);
+			void SetLastSynchro(uint64_t ts);
+			void SetMessageId(const cpw::TypeId &_id);
 
 		private:
+			cpw::TypeId message_id;
 			cpw::TypeId entity_id;
+			std::vector<cpw::Change> changes;
+			uint64_t last_synchro;
 		};
 
 	}

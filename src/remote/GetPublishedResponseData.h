@@ -27,10 +27,10 @@
 #include <string>
 
 #include <cpw/common/pstdint.h>
-#include "RemoteExport.h"
-#include "DataStream.h"
-#include "MessageData.h"
-#include "PublishedTree.h"
+#include <remote/RemoteExport.h>
+#include <remote/DataStream.h>
+#include <remote/MessageData.h>
+#include <remote/PublishedTree.h>
 
 /*!
  *  \file GetPublishedResponseData.h

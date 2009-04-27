@@ -22,7 +22,7 @@
 */
 #include <string>
 
-#include "stdafx.h"
+#include <remote/stdafx.h>
 
 #include <remote/DataStream.h>
 #include <remote/SetValueData.h>

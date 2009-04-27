@@ -25,7 +25,7 @@
 #include <vector>
 #include <map>
 
-#include "stdafx.h"
+#include <remote/stdafx.h>
 
 #include <cpw/common/Subject.h>
 #include <cpw/common/Remote.h>

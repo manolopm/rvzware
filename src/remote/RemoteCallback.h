@@ -23,10 +23,10 @@
 #ifndef _REMOTECALLBACK_
 #define _REMOTECALLBACK_
 
-#include "RemoteExport.h"
-#include "IRemoteCallback.h"
-#include "Connection.h"
-#include "MessageData.h"
+#include <remote/RemoteExport.h>
+#include <remote/IRemoteCallback.h>
+#include <remote/Connection.h>
+#include <remote/MessageData.h>
 
 /*!
  *  \file RemoteCallback.h

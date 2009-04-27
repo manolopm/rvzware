@@ -23,7 +23,7 @@
 #include <list>
 #include <string>
 
-#include "stdafx.h"
+#include <remote/stdafx.h>
 
 #include <cpw/common/pstdint.h>
 #include <remote/DataStream.h>

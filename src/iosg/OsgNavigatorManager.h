@@ -36,8 +36,8 @@
 #include <iosg/OsgNavigator.h>
 #include <iosg/gui/OsgHUDController.h>
 
-//#include "../geviemer/Application.h"
-//#include "../cpw::controllers/include/Application.h"
+//#include <../geviemer/Application.h>
+//#include <../cpw::controllers/include/Application.h>
 
 #include <iosg/Export.h>
 

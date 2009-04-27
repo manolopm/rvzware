@@ -26,7 +26,7 @@
 #include <list>
 #include <algorithm>
 
-#include "stdafx.h"
+#include <remote/stdafx.h>
 
 #include <cpw/ApplicationConfiguration.h>
 #include <cpw/common/IdGenerator.h>

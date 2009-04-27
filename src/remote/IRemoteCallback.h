@@ -20,17 +20,16 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _DISCONNECTIONDATA_
-#define _DISCONNECTIONDATA_
+#ifndef _IREMOTECALLBACK_
+#define _IREMOTECALLBACK_
 
-#include <string>
 
-#include "RemoteExport.h"
-#include "DataStream.h"
-#include "MessageData.h"
+#include <remote/RemoteExport.h>
+#include <remote/Connection.h>
+#include <remote/MessageData.h>
 
 /*!
- *  \file DisconnectionData.h
+ *  \file IRemoteCallback.h
  */
 
 namespace cpw 
@@ -38,26 +37,33 @@ namespace cpw
 	namespace remote
 	{
 		/*!
-		 *  \class DisconnectionData DisconnectionData.h <remote/messages/DisconnectionData.h>
-		 *  \brief Dummy class used only for RemoteCallback objects
+		 *  \interface IRemoteCallback IRemoteCallback.h <remote/utils/IRemoteCallback.h>
+		 *  \brief Remote callback interface
 		 *  \ingroup remote
 		 *
-		 *  Dummy class used only for RemoteCallback objects.
+		 *  This abstract class is used to register functors of type RemoteCallback in the 
+		 *  remote package.
 		 */
-		class REMOTE_EXPORT DisconnectionData : public MessageData
+		class REMOTE_EXPORT IRemoteCallback
 		{
 		public:
-			DisconnectionData();
-			bool IsRequest();
-			bool IsResponse();
+			virtual ~IRemoteCallback() { }
 
-			DataStream Code();
-			bool Decode(const DataStream &_data);
+			/*!
+			 *  \brief Calls the method on the object stored in the object
+			 *  \param connection The Connection triggering the event
+			 *  \param msg_data The message involved
+			 *
+			 *  Calls the method on the object stored in the object.
+			 */
+			virtual void operator()(const Connection *connection, const MessageData *msg_data) = 0;
+
 		};
 
 	}
 
 }
+
 
 #endif
 

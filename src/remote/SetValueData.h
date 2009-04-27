@@ -25,9 +25,9 @@
 
 #include <cpw/common/pstdint.h>
 #include <cpw/common/TypeId.h>
-#include "RemoteExport.h"
-#include "DataStream.h"
-#include "MessageData.h"
+#include <remote/RemoteExport.h>
+#include <remote/DataStream.h>
+#include <remote/MessageData.h>
 
 /*!
  *  \file SetValueData.h

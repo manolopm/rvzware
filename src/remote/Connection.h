@@ -30,9 +30,9 @@
 #include <cpw/common/Loggable.h>
 #include <cpw/common/RemoteNode.h>
 
-#include "RemoteExport.h"
-#include "MessageData.h"
-#include "ISocket.h"
+#include <remote/RemoteExport.h>
+#include <remote/MessageData.h>
+#include <remote/ISocket.h>
 
 /*!
  *  \file Connection.h

@@ -23,9 +23,9 @@
 #ifndef _ISOCKETFACTORY_
 #define _ISOCKETFACTORY_
 
-#include "RemoteExport.h"
-#include "RemoteProtocol.h"
-#include "ISocket.h"
+#include <remote/RemoteExport.h>
+#include <remote/RemoteProtocol.h>
+#include <remote/ISocket.h>
 
 /*!
  *  \file ISocketFactory.h

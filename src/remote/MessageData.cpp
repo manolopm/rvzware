@@ -20,7 +20,7 @@
  *
  * The CAPAWARE development team
 */
-#include "stdafx.h"
+#include <remote/stdafx.h>
 
 #include <remote/MessageData.h>
 

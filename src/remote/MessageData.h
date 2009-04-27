@@ -23,8 +23,8 @@
 #ifndef _MESSAGEDATA_
 #define _MESSAGEDATA_
 
-#include "RemoteExport.h"
-#include "DataStream.h"
+#include <remote/RemoteExport.h>
+#include <remote/DataStream.h>
 
 /*!
  *  \file MessageData.h

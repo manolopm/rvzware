@@ -22,7 +22,7 @@
 */
 #include <string>
 
-#include "stdafx.h"
+#include <remote/stdafx.h>
 
 #include <cpw/common/pstdint.h>
 #include <cpw/common/RemoteNode.h>

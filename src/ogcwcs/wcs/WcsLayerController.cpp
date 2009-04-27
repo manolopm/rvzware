@@ -20,7 +20,7 @@
  *
  * The CAPAWARE development team
 */
-//#include "stdafx.h"
+
 
 #include <ogcwcs/WcsLayerController.h>
 

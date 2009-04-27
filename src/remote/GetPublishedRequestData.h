@@ -23,9 +23,9 @@
 #ifndef _GETPUBLISHEDREQUESTDATA_
 #define _GETPUBLISHEDREQUESTDATA_
 
-#include "RemoteExport.h"
-#include "DataStream.h"
-#include "MessageData.h"
+#include <remote/RemoteExport.h>
+#include <remote/DataStream.h>
+#include <remote/MessageData.h>
 
 /*!
  *  \file GetPublishedRequestData.h

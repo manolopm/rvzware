@@ -13,7 +13,7 @@
 #ifndef wms_HEADER
 #define wms_HEADER
 #include <string>
-#include "wmsExport.h"
+#include <wms/wmsExport.h>
 
 /**
  *  \defgroup libwms Libwms library

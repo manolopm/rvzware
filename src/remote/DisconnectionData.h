@@ -20,17 +20,17 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _ISOCKET_
-#define _ISOCKET_
+#ifndef _DISCONNECTIONDATA_
+#define _DISCONNECTIONDATA_
 
 #include <string>
 
-#include <cpw/common/RemoteNode.h>
-#include "RemoteExport.h"
-#include "DataStream.h"
+#include <remote/RemoteExport.h>
+#include <remote/DataStream.h>
+#include <remote/MessageData.h>
 
 /*!
- *  \file ISocket.h
+ *  \file DisconnectionData.h
  */
 
 namespace cpw 
@@ -38,45 +38,26 @@ namespace cpw
 	namespace remote
 	{
 		/*!
-		 *  \interface ISocket ISocket.h <remote/ISocket.h>
+		 *  \class DisconnectionData DisconnectionData.h <remote/messages/DisconnectionData.h>
+		 *  \brief Dummy class used only for RemoteCallback objects
 		 *  \ingroup remote
-		 *  \brief Socket interface
 		 *
-		 *  Socket interface.
-		 *
-		 *  This abstract class represents the interface of any Socket implementation
+		 *  Dummy class used only for RemoteCallback objects.
 		 */
-		class REMOTE_EXPORT ISocket
+		class REMOTE_EXPORT DisconnectionData : public MessageData
 		{
 		public:
-			virtual ~ISocket() {}
+			DisconnectionData();
+			bool IsRequest();
+			bool IsResponse();
 
-			/*!
-			 *  \brief Sends a stream to the remote node
-			 *  \param data The data to be sent
-			 *
-			 *  Sends a stream to the remote node.
-			 */
-			virtual void Send(const DataStream &data) = 0;
-
-			/*!
-			 *  \brief Connects to the specified remote node
-			 *  \param node The identifier of the remote node
-			 *
-			 *  Connects to the specified remote node.
-			 */
-			virtual void ConnectTo(const cpw::RemoteNode &node) = 0;
-
-			/*!
-			 *  \brief Disconnects from the remote node
-			 *
-			 *  Disconnects from the remote node.
-			 */
-			virtual void Disconnect() = 0;
+			DataStream Code();
+			bool Decode(const DataStream &_data);
 		};
 
 	}
 
 }
+
 #endif
 

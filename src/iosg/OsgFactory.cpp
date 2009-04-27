@@ -18,7 +18,7 @@
  * The Rvzware development team
  */
 
-#include "stdafx.h"
+#include <iosg/stdafx.h>
 
 #include <iosg/OsgFactory.h>
 #include <iosg/OsgValidator.h>

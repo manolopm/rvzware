@@ -1,4 +1,8 @@
 /**
+ * MODIFIED BY Manuel Padrón Martínez
+ *
+ * MODIFIED BY CAPAWARE TEAM
+ *  
  ****************************************************************************
  * <P> XML.c - implementation file for basic XML parser written in ANSI C++
  * for portability. It works by using recursion and a node tree for breaking
@@ -77,7 +81,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "stdafx.h"
+#include <remote/stdafx.h>
 
 
 #ifndef _CRT_SECURE_NO_DEPRECATE

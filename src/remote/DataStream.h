@@ -27,7 +27,7 @@
 
 #include <cpw/common/pstdint.h>
 #include <cpw/common/TypeId.h>
-#include "RemoteExport.h"
+#include <remote/RemoteExport.h>
 
 /*!
  *  \file DataStream.h

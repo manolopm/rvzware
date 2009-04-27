@@ -30,10 +30,10 @@
 #include <cpw/common/Subject.h>
 #include <cpw/common/RemoteNode.h>
 #include <cpw/common/TypeId.h>
-#include "RemoteExport.h"
-#include "ISocket.h"
-#include "ISocketFactory.h"
-#include "Connection.h"
+#include <remote/RemoteExport.h>
+#include <remote/ISocket.h>
+#include <remote/ISocketFactory.h>
+#include <remote/Connection.h>
 
 
 /*!
