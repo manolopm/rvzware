@@ -1,7 +1,7 @@
 LIB_FILES = iso8601.cpp wcsCapabilitiesRoot.cpp wcsClient.cpp wcsCurlMemoryStream.cpp wcsNotify.cpp wcsStyle.cpp wcsCapabilitiesParser.cpp wcsCapabilitiesState.cpp wcs.cpp wcsMemoryStream.cpp wcsReferenced.cpp wcsUrl.cpp
 
 
-INCLUDE = -I/usr/include -I../../include -I/usr/include/postgresql/ -I/usr -I../
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I/usr -I../
 LFLAGS = -fPIC -lcurl -lpq -lOpenThreads -lboost_filesystem -lexpat
 CFLAGS = -fPIC
 CC = g++

@@ -1,6 +1,6 @@
 LIB_FILES = ogc.cpp wms/WindowsDisk.cpp  wms/WmsDiskManager.cpp  wms/WmsLayerController.cpp  wms/WmsLayer.cpp  wms/WmsLayerManager.cpp  wms/WmsNetManager.cpp
 
-INCLUDE = -I/usr/include -I../../include -I/usr/include/postgresql/ -I/usr -I ../
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I/usr -I ../
 LFLAGS = -fPIC -lcurl -lpq -lOpenThreads -lboost_filesystem -lexpat
 CFLAGS = -fPIC
 CC = g++

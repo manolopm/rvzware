@@ -1,6 +1,6 @@
 LIB_FILES = cpwutils.cpp FireAnimation.cpp Fire.cpp GraphicFireCallBack.cpp
 
-INCLUDE = -I/usr/include -I../../include -I/usr/include/postgresql/ -I../
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I../
 LFLAGS = -fPIC -lcurl -lpq -lOpenThreads -lboost_filesystem
 CFLAGS = -fPIC
 CC = g++

@@ -1,7 +1,7 @@
 LIB_FILES =   wmsCapabilitiesParser.cpp  wmsCapabilitiesState.cpp  wms.cpp wmsMemoryStream.cpp  wmsReferenced.cpp  wmsUrl.cpp iso8601.cpp  wmsCapabilitiesRoot.cpp wmsClient.cpp wmsCurlMemoryStream.cpp  wmsNotify.cpp wmsStyle.cpp
 
 
-INCLUDE = -I/usr/include -I../../include -I/usr/include/postgresql/ -I/usr -I../
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I/usr -I../
 LFLAGS = -fPIC -lcurl -lpq -lOpenThreads -lboost_filesystem -lexpat
 CFLAGS = -fPIC
 CC = g++

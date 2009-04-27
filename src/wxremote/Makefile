@@ -1,7 +1,7 @@
 LIB_FILES = stdafx.cpp  WxClientSocketThread.cpp  WxResolver.cpp  WxSocket.cpp  WxSocketEvent.cpp  WxSocketFactory.cpp  WxSocketHandler.cpp
 
 
-INCLUDE = -I/usr/include -I../../include -I/usr/include/postgresql/ -I/usr -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__ -I ../
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I/usr -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__ -I ../
 
 LFLAGS = -fPIC `curl-config --libs --cflags` -lpq -lOpenThreads -lboost_filesystem -lexpat 
 CFLAGS = -fPIC
