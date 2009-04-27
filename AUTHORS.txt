@@ -1,6 +1,7 @@
 The Rvzware is based in Capaware (Original AUTHORS below).
 
-Manuel Padrón Martínez ............. Rvzware author 
+Manuel Padrón Martínez
+(manolopm at gmail dot com) ............. Rvzware author 
 
 
 -------------------------------------------------------------
