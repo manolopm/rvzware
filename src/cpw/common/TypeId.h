@@ -24,7 +24,7 @@
 #define _TYPEID_
 
 #include <string>
-#include "pstdint.h"
+#include <cpw/common/pstdint.h>
 #include <cpw/Export.h>
 
 #define TYPEID_SIZE 16

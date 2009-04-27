@@ -23,7 +23,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include "LatLong-UTMconversion.h"
+#include <cpw/common/LatLong-UTMconversion.h>
 
 using namespace cpw;
 

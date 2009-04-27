@@ -25,7 +25,7 @@
 
 #include <string>
 
-#include "IFileManager.h"
+#include <cpw/persistent/file/IFileManager.h>
 #include <cpw/Export.h>
 
 

@@ -1,7 +1,7 @@
 LIB_FILES = Connection.cpp  ConnectionManager.cpp  DisconnectEntityData.cpp  GetEntityRequestData.cpp   GetPublishedRequestData.cpp   MessageData.cpp     RemoteProtocol.cpp      SendChangesData.cpp  stdafx.cpp ConnectionData.cpp  DataStream.cpp         DisconnectionData.cpp     GetEntityResponseData.cpp  GetPublishedResponseData.cpp  RemoteModifier.cpp  RequestSynchroData.cpp  SetValueData.cpp     xmlParser.cpp
 
 
-INCLUDE = -I/usr/include -I../../include -I/usr/include/postgresql/ -I/usr
+INCLUDE = -I/usr/include -I../../include -I/usr/include/postgresql/ -I/usr -I../
 LFLAGS = -fPIC -lcurl -lpq -lOpenThreads -lboost_filesystem -lexpat
 CFLAGS = -fPIC
 CC = g++

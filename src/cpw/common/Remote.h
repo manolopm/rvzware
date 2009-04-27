@@ -29,9 +29,9 @@
 #include <ctime>
 
 #include <cpw/Export.h>
-#include "Sorted.h"
-#include "RemoteNode.h"
-#include "pstdint.h"
+#include <cpw/common/Sorted.h>
+#include <cpw/common/RemoteNode.h>
+#include <cpw/common/pstdint.h>
 
 namespace cpw
 {

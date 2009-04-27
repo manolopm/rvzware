@@ -21,7 +21,7 @@
  * The CAPAWARE development team
 */
 
-//#include "stdafx.h"
+//#include <cpw/stdafx.h>
 
 //#include <iosg/OsgCurveAdapter.h>
 //#include <iosg/OsgIntersectorHeightCalculator.h>

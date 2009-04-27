@@ -23,7 +23,7 @@
 #ifndef _SORTED_
 #define _SORTED_
 
-#include "Loggable.h"
+#include <cpw/common/Loggable.h>
 #include <cpw/Export.h>
 
 #include <string>

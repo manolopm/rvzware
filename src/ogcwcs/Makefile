@@ -1,7 +1,7 @@
 LIB_FILES =  ogc_wcs.cpp wcs/WcsDiskManager.cpp  wcs/WcsLayerController.cpp wcs/WcsLayer.cpp  wcs/WcsLayerManager.cpp  wcs/WcsNetManager.cpp  wcs/WindowsDisk.cpp
 
 
-INCLUDE = -I/usr/include -I../../include -I/usr/include/postgresql/ -I/usr
+INCLUDE = -I/usr/include -I../../include -I/usr/include/postgresql/ -I/usr -I../
 LFLAGS = -fPIC -lcurl -lpq -lOpenThreads -lboost_filesystem -lexpat
 CFLAGS = -fPIC
 CC = g++

@@ -20,36 +20,55 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _ROTATIONGIZMO_
-#define _ROTATIONGIZMO_
+#ifndef _RASTERLAYER_
+#define _RASTERLAYER_
 
+#include <string>
+#include <vector>
+#include <cpw/entity/Layer.h>
 #include <cpw/Export.h>
-#include "Gizmo.h"
 
-namespace cpw
-{
+
+namespace cpw {
+
+
 	/** 
 		\brief Por comentar ....
 		\ingroup cpw
 	*/
-	class CPWEXPORT RotationGizmo : public Gizmo
+	class CPWEXPORT RasterLayer: public Layer
 	{
-		public:
 
-			RotationGizmo(void);
-			~RotationGizmo(void);
+	public:
 
-			virtual bool MouseDrag(const int &x0, const int &y0, const int &x1, const int &y1, const cpw::MouseButtonsState &mbs);
-			virtual void Update(bool subject_deleted = false);
-			virtual void Reset();
+		RasterLayer(const cpw::TypeId id = cpw::TypeId(), const std::string &class_name = std::string("RasterLayer"));
 
-			
-		private:
+		RasterLayer(std::string nam, std::string prim, std::string htm,	
+			  bool dyn, std::string desc,
+			  std::vector<Attribute> &attr);
 
-			cpw::Point3d<float> accumulative_rotation;
+
+		RasterLayer(const RasterLayer &layer);
+
+		virtual ~RasterLayer();
+
+		RasterLayer &operator = (const RasterLayer &layer);
+
+		virtual void SetValue(const std::string &f, const std::string &v);
+
+		virtual Entity* Clone() {return new RasterLayer(*this);}
+
+	protected:
+
+		virtual int CreatePersistence();
+		virtual int AdaptPersistence(Node *root);
+
+	private:
 
 
 	};
+
 }
 
-#endif
+
+#endif 

@@ -20,35 +20,46 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _SCALEGIZMO_
-#define _SCALEGIZMO_
+#ifndef _RESOURCEMANAGER_
+#define _RESOURCEMANAGER_
 
+#include <map>
+#include <set>
+#include <string>
+
+#include <cpw/thread/RequestThread.h>
 #include <cpw/Export.h>
-#include "Gizmo.h"
 
 namespace cpw
 {
+
 	/** 
-		\brief Por comentar ....
+		\brief 
 		\ingroup cpw
 	*/
-	class CPWEXPORT ScaleGizmo : public Gizmo
+	class CPWEXPORT ResourceManager: public RequestThread
 	{
-		public:
+
+	public:
+
+		ResourceManager(IRequestReceiver *in_thread, int npet);
+
+		~ResourceManager(void);
+
+		virtual void Process(cpw::Request &request);
+
+		virtual void ProcessReturnRequest(cpw::Request &request);
+
+		virtual void PreProcess(){}
 
 
-			ScaleGizmo(void);
-			~ScaleGizmo(void);
+	private:
 
-			virtual bool MouseDrag(const int &x0, const int &y0, const int &x1, const int &y1, const cpw::MouseButtonsState &mbs);
-			virtual void Update(bool subject_deleted = false);
-	
-		
-		private:
-
-		
+		virtual void AddNewLayer(cpw::TypeId &layer);
 
 	};
+
+
 }
 
 #endif

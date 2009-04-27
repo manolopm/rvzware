@@ -20,47 +20,60 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _IDGENERATOR_
-#define _IDGENERATOR_
+#ifndef _IGRAPHICCALLBACK_
+#define _IGRAPHICCALLBACK_
 
-#include <string>
-
-#include "TypeId.h"
+#include <cpw/callback/ICallBack.h>
+#include <cpw/common/types.h>
 #include <cpw/Export.h>
-
 
 namespace cpw
 {
+	class CPWEXPORT Callable;
+
 	/** 
-		\brief Allows to create unique Id's for the entities of the application
+		\brief Interface for the graphic callback entities
 		\ingroup cpw
 	*/
-	class CPWEXPORT IdGenerator
+	class CPWEXPORT IGraphicCallBack : public ICallBack
 	{
 		public:
 
-			/** Constructor */
-			IdGenerator(void);
+			/** Destructor initialized empty */
+			virtual ~IGraphicCallBack(){};
 
-			/** Destructor */
-			~IdGenerator(void);
-
-			/** Introduce a new namespace for the Id generator
-				\param namespc
+			/** Inserts ...
+				\param callable
 			*/
-			static void SetNamespace(std::string namespc);
-			
-			/** Returns a new unique ID */
-			cpw::TypeId GetNewId();
-			
-		private:
+			virtual void Insert(const cpw::Callable* callable) {};
 
-			static time_t last_id_generated;  
-			
-			static TypeId namespc;	///< keeps the actual namespace
-			
+			/** Inserts ...
+				\param callable
+			*/
+			virtual void Update(cpw::Callable* callable) {};
+
+			/** Inserts ...
+				\param callable
+			*/
+			virtual void Delete(cpw::Callable* callable) {};
+
+			/** Inserts ...
+				\param callable
+				\param time
+			*/
+			virtual void Animate(cpw::Callable* callable, cpw::cpwTime &time) {};
+
+			/** Visualizes ...
+				\param callable
+				\param value
+			*/
+			virtual void Visualize(cpw::Callable* callable, const bool &value) {};
+
+			/** Virtual function to implement the prototype pattern */
+			virtual ICallBack* Clone() = 0;
+
 	};
 }
-#endif
 
+#endif
 

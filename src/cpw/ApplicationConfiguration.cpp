@@ -23,7 +23,7 @@
 #include <cstdlib>
 #include <fstream>
 
-#include "stdafx.h"
+#include <cpw/stdafx.h>
 
 #include <cpw/ApplicationConfiguration.h>
 

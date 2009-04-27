@@ -20,32 +20,43 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _TRASLATIONGIZMO_
-#define _TRASLATIONGIZMO_
+#ifndef _XMLCPWPARSER_
+#define _XMLCPWPARSER_
 
+#include <string>
+
+#include <cpw/persistent/file/xmlParser.h>
+#include <cpw/common/Composite.h>
 #include <cpw/Export.h>
-#include "Gizmo.h"
 
-namespace cpw
-{
+
+namespace cpw{
+
+
 	/** 
 		\brief Por comentar ....
 		\ingroup cpw
 	*/
-	class CPWEXPORT TraslationGizmo : public Gizmo
+	class CPWEXPORT XmlCpwParser
 	{
-		public:
 
-			TraslationGizmo(void);
-			~TraslationGizmo(void);
+	public:
 
-			virtual bool MouseDrag(const int &x0, const int &y0, const int &x1, const int &y1, const cpw::MouseButtonsState &mbs);
+		XmlCpwParser(void);
+		~XmlCpwParser(void);
 
-			virtual void Update(bool subject_deleted = false);
-		
-		private:
+		cpw::Node * XmlToEntity(const std::string &xml_string);
+		int EntityToXml(const cpw::Node* root, std::string &xml_string);
+
+
+	private:
+
+		int EntityToXml(const Node *parent, XMLNode *xml_node);
+		int XmlToEntity(const XMLNode &xml_node, Node* parent);
 
 	};
+
 }
+
 
 #endif

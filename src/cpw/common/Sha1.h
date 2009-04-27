@@ -17,7 +17,7 @@
 #ifndef _SHA1_H_
 #define _SHA1_H_
 
-#include "pstdint.h"
+#include <cpw/common/pstdint.h>
 #include <cpw/Export.h>
 
 

@@ -23,13 +23,13 @@
 #ifndef _IGRAPHICFACTORY_
 #define _IGRAPHICFACTORY_
 
-#include "IScene.h"
-#include "IValidator.h"
-#include "ISceneLoader.h"
-#include "IGraphicObjectLoader.h"
+#include <cpw/graphic/IScene.h>
+#include <cpw/graphic/IValidator.h>
+#include <cpw/graphic/ISceneLoader.h>
+#include <cpw/graphic/IGraphicObjectLoader.h>
 #include <cpw/graphic/INavigatorManager.h>
-#include "ICamera.h"
-#include "IOverlayImage.h"
+#include <cpw/graphic/ICamera.h>
+#include <cpw/graphic/IOverlayImage.h>
 #include <cpw/Export.h>
 
 namespace cpw 

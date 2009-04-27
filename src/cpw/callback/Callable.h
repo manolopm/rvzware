@@ -24,8 +24,8 @@
 #define _CALLABLE_
 
 #include <vector>
-#include "ICallBack.h"
-#include "IGraphicCallBack.h"
+#include <cpw/callback/ICallBack.h>
+#include <cpw/callback/IGraphicCallBack.h>
 #include <cpw/common/types.h>
 #include <cpw/Export.h>
 

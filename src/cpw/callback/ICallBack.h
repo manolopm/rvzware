@@ -20,43 +20,53 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _XMLCPWPARSER_
-#define _XMLCPWPARSER_
+#ifndef _ICALLBACK_
+#define _ICALLBACK_
 
-#include <string>
-
-#include "xmlParser.h"
-#include <cpw/common/Composite.h>
+#include <cpw/callback/Callable.h>
 #include <cpw/Export.h>
 
-
-namespace cpw{
-
+namespace cpw
+{
+	class CPWEXPORT Callable;
 
 	/** 
-		\brief Por comentar ....
+		\brief Interface for the callback entities
 		\ingroup cpw
 	*/
-	class CPWEXPORT XmlCpwParser
+	class ICallBack
 	{
+		public:
+			
+			/** Destructor initialized empty */
+			virtual ~ICallBack() {};
 
-	public:
-
-		XmlCpwParser(void);
-		~XmlCpwParser(void);
-
-		cpw::Node * XmlToEntity(const std::string &xml_string);
-		int EntityToXml(const cpw::Node* root, std::string &xml_string);
-
-
-	private:
-
-		int EntityToXml(const Node *parent, XMLNode *xml_node);
-		int XmlToEntity(const XMLNode &xml_node, Node* parent);
+			/** Inserts ...
+				\param callable
+			*/
+			virtual void Insert(const cpw::Callable* callable) {}
+			
+			/** Inserts ...
+				\param callable
+			*/
+			virtual void Update(cpw::Callable* callable) {}
+			
+			/** Inserts ...
+				\param callable
+			*/
+			virtual void Delete(cpw::Callable* callable) {}
+			
+			/** Inserts ...
+				\param callable
+				\param value
+			*/
+			virtual void Visualize(cpw::Callable* callable, const bool &value) {}
+			
+			/** Virtual function to implement the prototype pattern */
+			virtual ICallBack* Clone() {return NULL;}
 
 	};
-
 }
 
-
 #endif
+

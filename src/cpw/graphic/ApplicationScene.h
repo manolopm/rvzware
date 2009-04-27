@@ -20,60 +20,45 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _IGRAPHICCALLBACK_
-#define _IGRAPHICCALLBACK_
+#ifndef _APPLICATIONSCENE_
+#define _APPLICATIONSCENE_
 
-#include "ICallBack.h"
-#include <cpw/common/types.h>
+#include <cpw/graphic/IScene.h>
+#include <cpw/graphic/INavigatorManager.h>
 #include <cpw/Export.h>
+
+//Singleton class to handle the application scene
 
 namespace cpw
 {
-	class CPWEXPORT Callable;
 
 	/** 
-		\brief Interface for the graphic callback entities
+		\brief Por comentar ....
 		\ingroup cpw
 	*/
-	class CPWEXPORT IGraphicCallBack : public ICallBack
+	class CPWEXPORT ApplicationScene
 	{
 		public:
+			
+			static ApplicationScene *GetInstance();
+			static void             ReleaseInstance();
 
-			/** Destructor initialized empty */
-			virtual ~IGraphicCallBack(){};
+			void SetScene(IScene *scen);
+			IScene *GetScene();
 
-			/** Inserts ...
-				\param callable
-			*/
-			virtual void Insert(const cpw::Callable* callable) {};
+			void SetNavigatorManager(INavigatorManager *_navigator_manager);
+			INavigatorManager * GetNavigatorManager();
+			
+		private:
+			
+			ApplicationScene();
+			~ApplicationScene();
 
-			/** Inserts ...
-				\param callable
-			*/
-			virtual void Update(cpw::Callable* callable) {};
+			static ApplicationScene *instance;
+			//static OpenThreads::Mutex constructor_lock;
 
-			/** Inserts ...
-				\param callable
-			*/
-			virtual void Delete(cpw::Callable* callable) {};
-
-			/** Inserts ...
-				\param callable
-				\param time
-			*/
-			virtual void Animate(cpw::Callable* callable, cpw::cpwTime &time) {};
-
-			/** Visualizes ...
-				\param callable
-				\param value
-			*/
-			virtual void Visualize(cpw::Callable* callable, const bool &value) {};
-
-			/** Virtual function to implement the prototype pattern */
-			virtual ICallBack* Clone() = 0;
-
+			IScene *scene;
+			INavigatorManager *navigator_manager;
 	};
 }
-
-#endif
-
+#endif 
