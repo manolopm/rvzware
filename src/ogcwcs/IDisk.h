@@ -20,35 +20,34 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _WINDOWSDISKWCS_
-#define _WINDOWSDISKWCS_
+#ifndef _IDISKWCS_
+#define _IDISKWCS_
 
-#include "IDisk.h"
-#include "Export.h"
+#include <vector>
+#include <string>
 
+#include <ogcwcs/Export.h>
 
 namespace cpw 
 { 
 	namespace ogcwcs
 	{
 
-		/** \brief Implementation of the IDisk interface for the Windows system
+		/** 
+			\brief Interface for disk management 
 			\ingroup ogcwcs
 		*/
-		class OGCWCSEXPORT WindowsDisk: public IDisk
+		class OGCWCSEXPORT IDisk
 		{
 
 		public:
-
-			WindowsDisk();
-			virtual ~WindowsDisk();
-			virtual int Dir(const std::string &dir, std::vector<std::string> &files);
-			virtual int Save(const std::string &name, const std::string &data);
-			virtual int Load(const std::string &name, std::string &data);
-			virtual int RemoveFile(const std::string &name);
-			virtual int RemoveDir(const std::string &name);
-			virtual int MakeDir(const std::string &name);
-
+			virtual ~IDisk(){}
+			virtual int Dir(const std::string &dir, std::vector<std::string> &files) = 0;
+			virtual int Save(const std::string &name, const std::string &data) = 0;
+			virtual int Load(const std::string &name, std::string &data) = 0;
+			virtual int RemoveFile(const std::string &name) = 0;
+			virtual int RemoveDir(const std::string &name) = 0;
+			virtual int MakeDir(const std::string &name) = 0;
 		};
 
 	}

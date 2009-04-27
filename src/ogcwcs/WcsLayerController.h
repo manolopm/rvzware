@@ -26,8 +26,8 @@
 #include <wcs/wcsClient.h>
 #include <wcs/wcsCapabilitiesRoot.h>
 
-#include "WcsLayer.h"
-#include "Export.h"
+#include <ogcwcs/WcsLayer.h>
+#include <ogcwcs/Export.h>
 
 #include <vector>
 #include <string>

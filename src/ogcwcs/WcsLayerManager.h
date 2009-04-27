@@ -20,43 +20,54 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _WCSNETMANAGER_
-#define _WCSNETMANAGER_
+#ifndef _WCSLAYERMANAGER_
+#define _WCSLAYERMANAGER_
+
+#include <vector>
+
+#include <ogcwcs/WcsLayer.h>
+
+#include <cpw/thread/RequestManager.h>
+
+#include <ogcwcs/Export.h>
 
 
-#include <cpw/thread/RequestThread.h>
-
-#include "Export.h"
-
-
-
-namespace cpw { 
-	
-	namespace ogcwcs
+namespace cpw 
+{ 
+	namespace ogcwcs 
 	{
 
-		/** \brief Thread that resolves WCS petitions through the net
+		/** \brief Thread that attends WCS petitions from the scene
 			\ingroup ogcwcs
 		*/
-		class OGCWCSEXPORT WcsNetManager: public cpw::RequestThread
+		class OGCWCSEXPORT WcsLayerManager: public cpw::RequestManager
 		{
 
 		public:
 
-			WcsNetManager(IRequestReceiver *in_thread, int npet);
+			WcsLayerManager(cpw::IRequestReceiver *visual, int npet = 30000, cpw::IStatusController *status = NULL);
 
-			~WcsNetManager(void){}
+			virtual ~WcsLayerManager(void);
 
 			virtual void Process(cpw::Request &request);
 
-			virtual void PreProcess(){}
+			virtual void ProcessReturn(cpw::Request &request);
+
+			void SetSRS(std::string _srs) {srs = _srs;}
+
+			int NumPetitions();
 
 
 		private:
 
+			bool TestBoundingBox(cpw::Request &request, WcsLayer* layer);
+			std::string srs;
+
 
 
 		};
+
+
 	}
 
 }

@@ -32,7 +32,7 @@
 #include <cpw/entity/RasterLayer.h>
 #include <cpw/entity/Entity.h>
 
-#include "Export.h"
+#include <ogcwcs/Export.h>
 
 /**
 	\namespace cpw { namespace ogcwcs OGC \brief Library for the OGC standard protocols (WMS, WFS, WCS, KMZ)

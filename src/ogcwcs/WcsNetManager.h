@@ -20,60 +20,45 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _WCSDISKMANAGER_
-#define _WCSDISKMANAGER_
-
-#include <map>
-#include <set>
-#include <string>
+#ifndef _WCSNETMANAGER_
+#define _WCSNETMANAGER_
 
 
 #include <cpw/thread/RequestThread.h>
 
-#include "WindowsDisk.h"
-#include "Export.h"
+#include <ogcwcs/Export.h>
 
 
 
-namespace cpw 
-{ 
+namespace cpw { 
+	
 	namespace ogcwcs
 	{
 
-		/** \brief Thead to manage the disk cache with image tiles
+		/** \brief Thread that resolves WCS petitions through the net
 			\ingroup ogcwcs
 		*/
-		class OGCWCSEXPORT WcsDiskManager: public cpw::RequestThread
+		class OGCWCSEXPORT WcsNetManager: public cpw::RequestThread
 		{
 
-			public:
+		public:
 
-				WcsDiskManager(IRequestReceiver *in_thread, int npet);
+			WcsNetManager(IRequestReceiver *in_thread, int npet);
 
-				~WcsDiskManager(void);
+			~WcsNetManager(void){}
 
-				virtual void Process(cpw::Request &request);
+			virtual void Process(cpw::Request &request);
 
-				virtual void ProcessReturn(cpw::Request &request);
-
-				virtual void PreProcess(){}
-
-				virtual void Modify(cpw::Entity *entity);
+			virtual void PreProcess(){}
 
 
-			private:
+		private:
 
-				WindowsDisk disk;
 
-				std::map<cpw::TypeId, std::set<std::string> > layer_tiles;
 
-				void AddNewLayer(cpw::TypeId &layer);
-
-				const std::string FindExtension(const cpw::Entity *layer);
 		};
-
-
 	}
+
 }
 
 #endif

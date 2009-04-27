@@ -20,38 +20,60 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _IDISKWCS_
-#define _IDISKWCS_
+#ifndef _WCSDISKMANAGER_
+#define _WCSDISKMANAGER_
 
-#include <vector>
+#include <map>
+#include <set>
 #include <string>
 
-#include "Export.h"
+
+#include <cpw/thread/RequestThread.h>
+
+#include <ogcwcs/WindowsDisk.h>
+#include <ogcwcs/Export.h>
+
+
 
 namespace cpw 
 { 
 	namespace ogcwcs
 	{
 
-		/** 
-			\brief Interface for disk management 
+		/** \brief Thead to manage the disk cache with image tiles
 			\ingroup ogcwcs
 		*/
-		class OGCWCSEXPORT IDisk
+		class OGCWCSEXPORT WcsDiskManager: public cpw::RequestThread
 		{
 
-		public:
-			virtual ~IDisk(){}
-			virtual int Dir(const std::string &dir, std::vector<std::string> &files) = 0;
-			virtual int Save(const std::string &name, const std::string &data) = 0;
-			virtual int Load(const std::string &name, std::string &data) = 0;
-			virtual int RemoveFile(const std::string &name) = 0;
-			virtual int RemoveDir(const std::string &name) = 0;
-			virtual int MakeDir(const std::string &name) = 0;
+			public:
+
+				WcsDiskManager(IRequestReceiver *in_thread, int npet);
+
+				~WcsDiskManager(void);
+
+				virtual void Process(cpw::Request &request);
+
+				virtual void ProcessReturn(cpw::Request &request);
+
+				virtual void PreProcess(){}
+
+				virtual void Modify(cpw::Entity *entity);
+
+
+			private:
+
+				WindowsDisk disk;
+
+				std::map<cpw::TypeId, std::set<std::string> > layer_tiles;
+
+				void AddNewLayer(cpw::TypeId &layer);
+
+				const std::string FindExtension(const cpw::Entity *layer);
 		};
 
-	}
 
+	}
 }
 
 #endif

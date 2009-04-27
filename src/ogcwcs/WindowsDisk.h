@@ -20,53 +20,36 @@
  *
  * The CAPAWARE development team
 */
-#ifndef _WCSLAYERMANAGER_
-#define _WCSLAYERMANAGER_
+#ifndef _WINDOWSDISKWCS_
+#define _WINDOWSDISKWCS_
 
-#include <vector>
-
-#include "WcsLayer.h"
-
-#include <cpw/thread/RequestManager.h>
-
-#include "Export.h"
+#include <ogcwcs/IDisk.h>
+#include <ogcwcs/Export.h>
 
 
 namespace cpw 
 { 
-	namespace ogcwcs 
+	namespace ogcwcs
 	{
 
-		/** \brief Thread that attends WCS petitions from the scene
+		/** \brief Implementation of the IDisk interface for the Windows system
 			\ingroup ogcwcs
 		*/
-		class OGCWCSEXPORT WcsLayerManager: public cpw::RequestManager
+		class OGCWCSEXPORT WindowsDisk: public IDisk
 		{
 
 		public:
 
-			WcsLayerManager(cpw::IRequestReceiver *visual, int npet = 30000, cpw::IStatusController *status = NULL);
-
-			virtual ~WcsLayerManager(void);
-
-			virtual void Process(cpw::Request &request);
-
-			virtual void ProcessReturn(cpw::Request &request);
-
-			void SetSRS(std::string _srs) {srs = _srs;}
-
-			int NumPetitions();
-
-
-		private:
-
-			bool TestBoundingBox(cpw::Request &request, WcsLayer* layer);
-			std::string srs;
-
-
+			WindowsDisk();
+			virtual ~WindowsDisk();
+			virtual int Dir(const std::string &dir, std::vector<std::string> &files);
+			virtual int Save(const std::string &name, const std::string &data);
+			virtual int Load(const std::string &name, std::string &data);
+			virtual int RemoveFile(const std::string &name);
+			virtual int RemoveDir(const std::string &name);
+			virtual int MakeDir(const std::string &name);
 
 		};
-
 
 	}
 

@@ -19,6 +19,15 @@ libogc_wcs.so: $(LIBOFILES)
 	rm -f $@
 	g++ -shared -Wl,-soname, $(LIBOFILES) -o $@
 
+install:
+	cp libogc_wcs.so /usr/lib
+	mkdir /usr/include/ogcwcs
+	cp *.h /usr/include/ogcwcs/
+
+uninstall:
+	rm  /usr/lib/libogc_wcs.so
+	rm -rf /usr/include/ogcwcs
+
 
 
 
