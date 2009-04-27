@@ -26,8 +26,8 @@
 #include <cpw/common/types.h>
 #include <cpw/graphic/IOverlayImage.h>
 
-#include "Exports.h"
-#include "Fire.h"
+#include <cpwutils/Exports.h>
+#include <cpwutils/Fire.h>
 
 
 

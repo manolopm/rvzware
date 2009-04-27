@@ -31,8 +31,8 @@
 #include <cpw/graphic/IGraphicFactory.h>
 #include <cpw/common/IdGenerator.h>
 
-#include "Exports.h"
-#include "FireAnimation.h"
+#include <cpwutils/Exports.h>
+#include <cpwutils/FireAnimation.h>
 
 
 /**

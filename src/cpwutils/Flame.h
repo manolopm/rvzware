@@ -24,7 +24,7 @@
 #define _FLAME_
 
 #include <cpw/entity/Layer.h>
-#include "Exports.h"
+#include <cpwutils/Exports.h>
 
 namespace cpw 
 { 

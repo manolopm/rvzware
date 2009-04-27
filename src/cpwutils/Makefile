@@ -18,7 +18,14 @@ libcpwutils.so: $(LIBOFILES)
 	rm -f $@
 	g++ -shared -Wl,-soname, $(LIBOFILES) -o $@
 
+install:
+	cp libcpwutils.so /usr/lib
+	mkdir /usr/include/cpwutils
+	cp *.h /usr/include/cpwutils/
 
+uninstall:
+	rm  /usr/lib/libcpwutils.so
+	rm -rf /usr/include/cpwutils
 
 
 
