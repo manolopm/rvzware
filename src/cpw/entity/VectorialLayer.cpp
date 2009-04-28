@@ -18,7 +18,7 @@
  * The Rvzware development team
  */
 
-*///#include <stdafx.h>
+///#include <stdafx.h>
 
 #include <cpw/entity/VectorialLayer.h>
 

@@ -18,7 +18,7 @@
  * The Rvzware development team
  */
 
-*/
+
 #include <ogcwcs/WcsDiskManager.h>
 
 #include <ogcwcs/WcsNetManager.h>

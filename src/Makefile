@@ -10,10 +10,15 @@ all:
 	(cd $$i; make all); done
 
 install:
-	cp $(LIB) /usr/lib
+	@for i in $(SUBDIRS); do \
+        echo "Installing $$i..."; \
+	(cd $$i; make install); done
+
 
 uninstall:
-	rm $(FILES)
+	@for i in $(SUBDIRS); do \
+        echo "Uninstalling $$i..."; \
+	(cd $$i; make uninstall); done
 
 clean:
 	rm $(LIB)
