@@ -18,8 +18,6 @@
  * The Rvzware development team
  */
 
- * The CAPAWARE development team
-*/
 #include <wx/datetime.h>
 
 #include <stdafx.h>
