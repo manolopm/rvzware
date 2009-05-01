@@ -194,7 +194,7 @@ bool FireController::NewFlame(const cpw::Point3d<float> &flame_position, const i
 	new_flame.fire.SetPhi(cpw::Range<float>(360.0f, 0.0f));
 	new_flame.fire.SetTheta(cpw::Range<float>(17.0f, 0.0f));
 	new_flame.fire.SetSize(cpw::Range<float>(60.550f, 0.2262f));
-	new_flame.fire.SetNewParticlesSec(cpw::Range<int>(12.5f, 19.0f));
+	new_flame.fire.SetNewParticlesSec(cpw::Range<int>((int)12.5f, 19));
 	new_flame.fire.SetAdditiveBlend(true);
 	new_flame.fire.SetSenoidalInterpolator(false);
 	new_flame.fire.SetParticlesLife(1.55f);
@@ -555,8 +555,8 @@ void FireController::UpdateFlame(int active_perimeter, int active_flame)
 	flame->fire.SetParticlesLife(fire_life);
 	flame->smoke.SetSize(cpw::Range<float>(smoke_size*SMOKE_SIZE_RANGE_COEF, smoke_size));
 	flame->smoke.SetParticlesLife(smoke_life);
-	flame->fire.SetNewParticlesSec(cpw::Range<int>(intensity_fire*FIRE_PARTICLESSEC_RANGE_COEF, intensity_fire));
-	flame->smoke.SetNewParticlesSec(cpw::Range<int>(intensity_smoke*SMOKE_PARTICLESSEC_RANGE_COEF/2, intensity_smoke));
+	flame->fire.SetNewParticlesSec(cpw::Range<int>((int)(intensity_fire*FIRE_PARTICLESSEC_RANGE_COEF),(int) intensity_fire));
+	flame->smoke.SetNewParticlesSec(cpw::Range<int>((int)(intensity_smoke*SMOKE_PARTICLESSEC_RANGE_COEF/2), (int)intensity_smoke));
 	flame->fire.SetUpdatedInScene(false);
 	flame->smoke.SetUpdatedInScene(false);
 

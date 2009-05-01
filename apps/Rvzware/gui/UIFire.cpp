@@ -1132,7 +1132,7 @@ void UIFire::render(wxDC& dc)
 				}
 				else
 					pos = 0;
-				int ax3 = minx+(pos*timelinesize);
+				int ax3 = (int)( minx+(pos*timelinesize));
 				if (timelineActivePerimeter == i)
 					dc.SetTextForeground(wxColour(235,194,114));
 				else 

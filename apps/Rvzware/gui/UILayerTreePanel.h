@@ -59,7 +59,11 @@ namespace cpw
 		class UILayerTreePanel : public wxPanel, cpw::Observer
 		{
 			public:
-				UILayerTreePanel(UIApplicationMainFrame* main_frame, cpw::INavigatorManager *navigator_manager, cpw::LayerTree &_layer_tree, wxWindow *parent, int xpos, int ypos, int width, int height, wxString &title, long style = wxTAB_TRAVERSAL );
+		  UILayerTreePanel(UIApplicationMainFrame* main_frame,
+				   cpw::INavigatorManager *navigator_manager,
+				   cpw::LayerTree &_layer_tree, wxWindow *parent,
+				   int xpos, int ypos, int width, int height,
+				   wxString &title, long style = wxTAB_TRAVERSAL );
 				~UILayerTreePanel(void);
 
 				void Clear();

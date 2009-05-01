@@ -405,7 +405,7 @@ void UIVideoController::OnMultiplierSpinUp(wxSpinEvent& event)
   std::ostringstream wop; 
   double f; 
   multiplier->GetValue().ToDouble(&f);
-  int value = f+1;
+  int value =(int)( f+1);
   wop << value;  
   multiplier->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 }
@@ -414,7 +414,7 @@ void UIVideoController::OnMultiplierSpinDown(wxSpinEvent& event)
   std::ostringstream wop; 
   double f; 
   multiplier->GetValue().ToDouble(&f);
-  int value = f-1;
+  int value = (int)(f-1);
   wop << value;  
   multiplier->SetValue(wxString(wop.str().c_str(),wxConvUTF8)); 
 }

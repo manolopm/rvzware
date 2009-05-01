@@ -81,7 +81,7 @@ void UIStatusBar::Update(bool subject_deleted)
 				float gifpercent = statusvalue / (float)statusrange;
 				if (gifpercent > 1) gifpercent =1;
 				int gifcount = (animationGauge.GetFrameCount())-1;
-				int frame = gifpercent*(gifcount);
+				int frame =(int)( gifpercent*(gifcount));
 				//frameImage = animationGauge.GetFrame(frame);
 				/*animGauge->SetBitmap(frameImage);
 				*/

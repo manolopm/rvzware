@@ -356,7 +356,7 @@ void UIMovieScheme::GoToCurrent()
 			float s_pos = time->GetTransformedTime().GetTicks() - refpos;
 			float s_pos2 = s_pos / refsize;
 			int scroll_current = scrollBarH->GetRange();
-			scroll_current *= s_pos2;
+			scroll_current *= (int) s_pos2;
 			scrollBarH->SetThumbPosition(scroll_current);
 			Update();
 		}
@@ -384,7 +384,7 @@ void UIMovieScheme::AdjustTimeToWidth()
 		if (endTime > startTime)
 		{
 			int length = endTime - startTime;
-			zoom = ((length)/(float)w)+1;
+			zoom = (int)((length)/(float)w)+1;
 			UpdateZoom();
 			Update();
 		}
@@ -546,7 +546,7 @@ void UIMovieScheme::Update(bool subject_deleted)
 				render(client_dc); //Repaint
 				wxPen temp_pen = virtualCanvas_memoryDC.GetPen();
 				virtualCanvas_memoryDC.SetPen(wxPen(WX_COLOUR_GREEN));
-				virtualCanvas_memoryDC.DrawLine(slider_relative_pos/zoom,0,slider_relative_pos/zoom,h);//slider		
+				virtualCanvas_memoryDC.DrawLine((wxCoord)slider_relative_pos/zoom,0,(wxCoord)slider_relative_pos/zoom,h);//slider		
 				virtualCanvas_memoryDC.SetPen(temp_pen);
 				
 				Flush();
@@ -618,10 +618,10 @@ AnimatedBox::~AnimatedBox()
 
 void AnimatedBox::CalculateRelativeProperties(wxPoint virtualCanvas_pos, int zoom, wxDateTime global_start_time, wxDateTime global_end_time)
 {
-	pos_.x  = (virtual_space_pos_ - global_start_time.GetTicks() - virtualCanvas_pos.x) / (float)zoom;
-	pos_.y  = BOX_SCHEME_VALIGNMENT + row_ * vertical_offset - virtualCanvas_pos.y;
-	size_.x = virtual_space_size / (float)zoom;
-	size_.y = 15;
+  pos_.x  = (int)( (virtual_space_pos_ - global_start_time.GetTicks() - virtualCanvas_pos.x) / (float)zoom);
+  pos_.y  = (int)( BOX_SCHEME_VALIGNMENT + row_ * vertical_offset - virtualCanvas_pos.y);
+  size_.x = (int) (virtual_space_size / (float)zoom);
+  size_.y = 15;
 }
 
 void AnimatedBox::Draw(wxDC &dc)

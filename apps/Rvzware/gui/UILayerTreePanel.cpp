@@ -67,8 +67,21 @@ EVT_MOTION(UILayerTreePanel::OnMouseMotion)
 END_EVENT_TABLE()
 
 
-UILayerTreePanel::UILayerTreePanel(UIApplicationMainFrame* main_frame, cpw::INavigatorManager *navigator_manager, cpw::LayerTree &_layer_tree, wxWindow *parent, int xpos, int ypos, int width, int height, wxString &title, long style)
-			   : wxPanel(parent, wxID_ANY), mainframe(main_frame),nm(navigator_manager),layer_tree(&_layer_tree), paren(parent), dragging(false), escape(false), cut(false), copy(false), duplicate(false) //wxMiniFrame(parent, wxID_ANY, _T(""),wxDefaultPosition, wxDefaultSize, wxBORDER_NONE), layer_tree(&_layer_tree)//layer_tree(&_layer_tree), wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxCAPTION)//wxMiniFrame(parent, wxID_ANY, _T("Properties"), wxDefaultPosition, wxDefaultSize, wxCAPTION /*| wxSTAY_ON_TOP*/ | wxFRAME_SHAPED) //wxPanel(parent, wxID_ANY), layer_tree(&_layer_tree)
+UILayerTreePanel::UILayerTreePanel(UIApplicationMainFrame* main_frame,
+				   cpw::INavigatorManager *navigator_manager,
+				   cpw::LayerTree &_layer_tree,
+				   wxWindow *parent,
+				   int xpos, int ypos, int width, int height,
+				   wxString &title, long style)
+: wxPanel(parent, wxID_ANY), mainframe(main_frame),nm(navigator_manager),
+  layer_tree(&_layer_tree), paren(parent), dragging(false), escape(false),
+  cut(false), copy(false), duplicate(false)
+  //wxMiniFrame(parent, wxID_ANY, _T(""),wxDefaultPosition, wxDefaultSize, wxBORDER_NONE),
+  //layer_tree(&_layer_tree)//layer_tree(&_layer_tree), wxPanel(parent, wxID_ANY,
+  //wxDefaultPosition, wxDefaultSize, wxCAPTION)//wxMiniFrame(parent, wxID_ANY,
+  //_T("Properties"), wxDefaultPosition, wxDefaultSize,
+  //wxCAPTION /*| wxSTAY_ON_TOP*/ | wxFRAME_SHAPED)
+  //wxPanel(parent, wxID_ANY), layer_tree(&_layer_tree)
 {
 	entity_properties_grid = NULL;
 	SetMinSize(wxSize(128, 50));
@@ -89,7 +102,7 @@ UILayerTreePanel::UILayerTreePanel(UIApplicationMainFrame* main_frame, cpw::INav
 	tree_ctrl->SetSize(this->GetSize());
 	this->Connect(LAYER_TREE_PANEL, MyEVT_CHECKBOXCHANGE, (wxObjectEventFunction)(wxEventFunction)(wxCommandEventFunction) &UILayerTreePanel::OnCheckBoxEvent);
 
-	//root_id = tree_ctrl->AddRoot("root node");
+	//	root_id = tree_ctrl->AddRoot(wxT("root node"));
 	last_selected = cpw::TypeId();
 	img_list = new wxImageList(16, 16);
 	tree_ctrl->AssignImageList(img_list);

@@ -32,7 +32,7 @@ StatusController::StatusController()
 	value = 0;
 	step  = 0;
 	label = "";
-	modalTraceableItem = NULL;
+	modalTraceableItem = 0;
 	TraceableList.clear();
 }
 
@@ -125,7 +125,7 @@ void StatusController::Update()
 				modalTraceableItem = iter->first;
 			i++;
 		}
-		if (i > 0) value = (percent/(float)i)*range;
+		if (i > 0) value = (int)( (percent/(float)i)*range);
 	}
 	mutex.unlock();
 
