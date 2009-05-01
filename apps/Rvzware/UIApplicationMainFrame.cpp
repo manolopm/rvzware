@@ -948,7 +948,8 @@ view_menu->Append(GetMenuItem(VIEW_WIREFRAME, view_menu,
 
 }
 
-void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::remote::RemoteProtocol *protocol,
+void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree,
+					     cpw::remote::RemoteProtocol *protocol,
 					     cpw::INavigatorManager *navigator_manager)
 {
   std::string icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
@@ -970,15 +971,20 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree, cpw::re
 				wxDefaultPosition, wxDefaultSize,
 				wxBORDER_NONE | wxTRANSPARENT_WINDOW,
 				_T("Layer Tree"));
+
+    
   wxString tmp2(((std::string)("Layer Tree")).c_str(),wxConvUTF8);
   ui_layer_tree = new cpw::gui::UILayerTreePanel(this,navigator_manager,
 						 layer_tree,
 						 layer_frame, 0, 0, 200, 512,
 						 tmp2);
+  
+
 
   layer_tree.Attach((cpw::Observer *)ui_layer_tree);
   ui_layer_tree->FillTree();
   layer_frame->SetSize(wxSize(200,200));
+
 
   //Layer Tree toolbar
   ui_layer_tree_tb = layer_frame->CreateToolBar(wxNO_BORDER | wxHORIZONTAL | wxTB_FLAT);

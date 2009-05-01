@@ -519,11 +519,12 @@ bool Application::InitCpwEntities()
 
   cpw::EntityFactory::GetInstance()->RegisterBasic(wms_layer);
 
-  bool result = project_controller->OpenProject(cpw::ApplicationConfiguration::GetInstance()->GetSceneFile(), 
-						GetDefaultPath(),
-						status_controller,
-						layer_tree,
-						graphic_factory);
+  bool result = project_controller
+    ->OpenProject(cpw::ApplicationConfiguration::GetInstance()->GetSceneFile(), 
+		  GetDefaultPath(),
+		  status_controller,
+		  layer_tree,
+		  graphic_factory);
 
 
   std::string title = project_controller->GetProjectFullName();
@@ -1316,14 +1317,17 @@ void Application::OpenProject()
       main_frame->Refresh();
       main_frame->Update();
 
-      bool result = project_controller->OpenProject(main_frame, GetDefaultPath(), status_controller, layer_tree, graphic_factory);
+      bool result = project_controller
+	->OpenProject(main_frame, GetDefaultPath(),
+		      status_controller, layer_tree, graphic_factory);
 
       wms_request_manager->SetSRS(project_controller->GetSRS());
 		
       std::string title = project_controller->GetProjectFullName();
       if (title!="")
 	{
-	  main_frame->SetTitle(wxString((title + " - Rvzware").c_str(),wxConvUTF8));
+	  main_frame->SetTitle
+	    (wxString((title + " - Rvzware").c_str(),wxConvUTF8));
 	}
 
       navigator_manager->SetAllNavigatorsToInitialPosition();

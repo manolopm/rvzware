@@ -364,8 +364,9 @@ namespace cpw
 
 				cpw::gui::UISplitterCanvas *viewport_manager;
 				wxSplitterWindow *splitter, *sub_splitter, *viewport_field;
-				wxMiniFrame *layer_frame, *properties_frame, *log_frame, *animation_scheme_frame, *scene_tree_frame,
-					*connection_frame;
+				wxMiniFrame *layer_frame, *properties_frame, *log_frame,
+				  *animation_scheme_frame, *scene_tree_frame,
+				  *connection_frame;
 				UIEntityPropertiesGrid *ui_entity_properties_grid;
 				UILogWindow *ui_log_window;
 				UISceneTree *ui_scene_tree;
