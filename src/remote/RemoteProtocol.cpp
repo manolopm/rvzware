@@ -364,12 +364,15 @@ void RemoteProtocol::DisconnectAllEntities(cpw::Entity *entity)
  */
 void RemoteProtocol::RecvNewConnection(const cpw::RemoteNode &node, ISocket *data)
 {
-	Connection *connection = connection_manager->RecvNewConnection(node, data);
-	if (connection != NULL)
+  Connection *connection = connection_manager->RecvNewConnection(node, data);
+  if (connection != NULL)
+    {
+      if (callbacks.find(msgTypeConnection) != callbacks.end())
 	{
-		if (callbacks.find(msgTypeConnection) != callbacks.end())
-			(*callbacks[msgTypeConnection])(connection, &ConnectionData()); //to show message
+	  ConnectionData *cd = new ConnectionData();
+	  (*callbacks[msgTypeConnection])(connection, cd); //to show message
 	}
+    }
 }
 
 
@@ -381,13 +384,16 @@ void RemoteProtocol::RecvNewConnection(const cpw::RemoteNode &node, ISocket *dat
  */
 void RemoteProtocol::RecvDisconnection(const cpw::RemoteNode &node)
 {
-	Connection *connection = connection_manager->GetConnection(node);
-	if (callbacks.find(msgTypeDisconnection) != callbacks.end())
-		(*callbacks[msgTypeDisconnection])(connection, &DisconnectionData());
-
-	connection_manager->RecvDisconnection(node);
-
-	CleanUpModifiers();
+  Connection *connection = connection_manager->GetConnection(node);
+  if (callbacks.find(msgTypeDisconnection) != callbacks.end())
+    {
+      DisconnectionData *dd = new DisconnectionData();
+      (*callbacks[msgTypeDisconnection])(connection, dd);
+    }
+  
+  connection_manager->RecvDisconnection(node);
+  
+  CleanUpModifiers();
 }
 
 
