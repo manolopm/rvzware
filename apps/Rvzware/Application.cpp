@@ -79,8 +79,22 @@
 
 
 
-Application::Application(void): main_frame(), ec(), ecm(), fc(), evc(),evcm(), fcm(),  navigator_manager(), graphic_factory(), 
-layer_tree(), plugin_map(), three_dimension_camera_controller(NULL), two_dimension_camera_controller(NULL), dc(NULL), plugin_running(false), srs()
+Application::Application(void): main_frame(),
+				ec(),
+				ecm(),
+				fc(),
+				evc(),
+				evcm(),
+				fcm(),
+				navigator_manager(),
+				graphic_factory(), 
+				layer_tree(),
+				plugin_map(),
+				three_dimension_camera_controller(NULL),
+				two_dimension_camera_controller(NULL),
+				dc(NULL),
+				plugin_running(false),
+				srs()
 {
 
 
@@ -108,11 +122,11 @@ Application::~Application(void)
 	
 	std::map<int, DynamicLibrary*>::iterator mi = plugin_map.begin();
 	for( ; mi!=plugin_map.end() ; mi++)
-		delete (*mi).second;
-	delete status_controller;
-	delete sun_controller;
-	delete project_controller;
-	delete remote_entity_controller;
+	  if ((*mi).second)           delete (*mi).second;
+	if (status_controller)        delete status_controller;
+	if (sun_controller)           delete sun_controller;
+	if (project_controller)       delete project_controller;
+	if (remote_entity_controller) delete remote_entity_controller;
 }
 
 void Application::EnableSunConfiguration(const bool &value)
