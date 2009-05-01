@@ -1188,7 +1188,6 @@ void UIApplicationMainFrame::EventoQuit(wxCommandEvent& WXUNUSED(event))
 void UIApplicationMainFrame::OnAppClose(wxCommandEvent& WXUNUSED(event))
 {
   if(application->IsControllerOpen()) return;
-
   application->Close();
 }
 //void UIApplicationMainFrame::OnAppOpen(wxCommandEvent& WXUNUSED(event))

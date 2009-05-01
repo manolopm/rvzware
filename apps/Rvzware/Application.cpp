@@ -167,16 +167,18 @@ bool Application::OnInit()
   graphic_factory = new cpw::iosg::OsgFactory(this);
 	
   //Load the configuration in the Singleton class ApplicationConfiguration
-  cpw::ApplicationConfiguration *appConfig = cpw::ApplicationConfiguration::GetInstance();
+  cpw::ApplicationConfiguration *appConfig =
+    cpw::ApplicationConfiguration::GetInstance();
   cpw::controllers::ConfigurationController config;
   config.Load(appConfig);
 
-  main_frame = new cpw::gui::UIApplicationMainFrame(this,
-						    wxString(_T("Rvzware")),
-						    0,0 , 1024, 768,
-						    (wxBORDER_SUNKEN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX
-						     | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
-						     wxCLOSE_BOX | wxCLIP_CHILDREN));
+  main_frame = new cpw::gui::
+    UIApplicationMainFrame(this,
+			   wxString(_T("Rvzware")),
+			   0,0 , 1024, 768,
+			   (wxBORDER_SUNKEN | wxMINIMIZE_BOX | wxMAXIMIZE_BOX
+			    | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION |
+			    wxCLOSE_BOX | wxCLIP_CHILDREN));
   main_frame->Show(false);
   main_frame->Maximize(true);
   main_frame->ShowSplash();
@@ -188,11 +190,15 @@ bool Application::OnInit()
   bool file_error = InitCpwEntities();
 
   //Remote initialization stuff
-  int listen_port = cpw::ApplicationConfiguration::GetInstance()->GetListenPort();
+  int listen_port = cpw::ApplicationConfiguration::
+    GetInstance()->GetListenPort();
 
-  remote_controller = new cpw::controllers::RemoteController(main_frame, &layer_tree, listen_port);
+  remote_controller = new cpw::controllers::
+    RemoteController(main_frame, &layer_tree, listen_port);
 
-  main_frame->InitGUIContents(layer_tree, remote_controller->GetRemoteProtocol(), navigator_manager);
+  main_frame->InitGUIContents
+    (layer_tree,
+     remote_controller->GetRemoteProtocol(), navigator_manager);
 
 
   InitHandlers();
@@ -243,13 +249,20 @@ void Application::InitHandlers()
 
 	
   //set the axis
-  ((cpw::Gizmo *)traslation_x_handler)->SetTransformationAxis( cpw::Gizmo::AXIS_X );
-  ((cpw::Gizmo *)traslation_y_handler)->SetTransformationAxis( cpw::Gizmo::AXIS_Y );
-  ((cpw::Gizmo *)traslation_z_handler)->SetTransformationAxis( cpw::Gizmo::AXIS_Z );
-  ((cpw::Gizmo *)rotation_x_handler)->SetTransformationAxis( cpw::Gizmo::AXIS_X );
-  ((cpw::Gizmo *)rotation_y_handler)->SetTransformationAxis( cpw::Gizmo::AXIS_Y );
-  ((cpw::Gizmo *)rotation_z_handler)->SetTransformationAxis( cpw::Gizmo::AXIS_Z );
-  ((cpw::Gizmo *)scale_x_handler)->SetTransformationAxis( cpw::Gizmo::AXIS_X );
+  ((cpw::Gizmo *)traslation_x_handler)
+    ->SetTransformationAxis( cpw::Gizmo::AXIS_X );
+  ((cpw::Gizmo *)traslation_y_handler)
+    ->SetTransformationAxis( cpw::Gizmo::AXIS_Y );
+  ((cpw::Gizmo *)traslation_z_handler)
+    ->SetTransformationAxis( cpw::Gizmo::AXIS_Z );
+  ((cpw::Gizmo *)rotation_x_handler)
+    ->SetTransformationAxis( cpw::Gizmo::AXIS_X );
+  ((cpw::Gizmo *)rotation_y_handler)
+    ->SetTransformationAxis( cpw::Gizmo::AXIS_Y );
+  ((cpw::Gizmo *)rotation_z_handler)
+    ->SetTransformationAxis( cpw::Gizmo::AXIS_Z );
+  ((cpw::Gizmo *)scale_x_handler)
+    ->SetTransformationAxis( cpw::Gizmo::AXIS_X );
 	
   //link the gizmos
   traslation_x_handler->AddBrother(traslation_y_handler);
@@ -283,14 +296,22 @@ void Application::InitHandlers()
   two_axis_handler->SetId( two_axis_gizmo_id );
 	
   //add them to the scene
-  scene->AddHandler(traslation_x_gizmo_id, path + std::string("gizmos/gizmo_traslate_x.osg"));
-  scene->AddHandler(traslation_y_gizmo_id, path + std::string("gizmos/gizmo_traslate_y.osg"));
-  scene->AddHandler(traslation_z_gizmo_id, path + std::string("gizmos/gizmo_traslate_z.osg"));
-  scene->AddHandler(two_axis_gizmo_id, path + std::string("gizmos/gizmo_ball.osg"));
-  scene->AddHandler(rotate_x_gizmo_id, path + std::string("gizmos/gizmo_rotate_x.osg"));
-  scene->AddHandler(rotate_y_gizmo_id, path + std::string("gizmos/gizmo_rotate_y.osg"));
-  scene->AddHandler(rotate_z_gizmo_id, path + std::string("gizmos/gizmo_rotate_z.osg"));
-  scene->AddHandler(scale_x_gizmo_id, path + std::string("gizmos/gizmo_scale_all.osg"));
+  scene->AddHandler(traslation_x_gizmo_id, path +
+		    std::string("gizmos/gizmo_traslate_x.osg"));
+  scene->AddHandler(traslation_y_gizmo_id, path +
+		    std::string("gizmos/gizmo_traslate_y.osg"));
+  scene->AddHandler(traslation_z_gizmo_id, path +
+		    std::string("gizmos/gizmo_traslate_z.osg"));
+  scene->AddHandler(two_axis_gizmo_id, path +
+		    std::string("gizmos/gizmo_ball.osg"));
+  scene->AddHandler(rotate_x_gizmo_id, path +
+		    std::string("gizmos/gizmo_rotate_x.osg"));
+  scene->AddHandler(rotate_y_gizmo_id, path +
+		    std::string("gizmos/gizmo_rotate_y.osg"));
+  scene->AddHandler(rotate_z_gizmo_id, path +
+		    std::string("gizmos/gizmo_rotate_z.osg"));
+  scene->AddHandler(scale_x_gizmo_id, path +
+		    std::string("gizmos/gizmo_scale_all.osg"));
 	
   //add them to the handler controller
   handler_controller.InsertHandler(traslation_x_handler);
@@ -308,12 +329,15 @@ void Application::InitHandlers()
   //default handler
   handler_controller.SetDefaultHandler(traslation_x_handler);
 		
-  //link the handler controller to the navigators so it becomes an event receiver
-  cpw::INavigatorManager *nm = cpw::ApplicationScene::GetInstance()->GetNavigatorManager();
+  //link the handler controller to the navigators
+  //so it becomes an event receiver
+  cpw::INavigatorManager *nm =
+    cpw::ApplicationScene::GetInstance()->GetNavigatorManager();
   nm->GetFocusedOrFirstNavigator()->SetEventReceiver(1, &handler_controller);
 
   handler_controller.SetNavigatorManager( nm );
-  handler_controller.SetScene( scene = cpw::ApplicationScene::GetInstance()->GetScene() );
+  handler_controller.SetScene
+    ( scene = cpw::ApplicationScene::GetInstance()->GetScene() );
   handler_controller.SetActiveHandler(traslation_x_gizmo_id);
 }
 
@@ -332,8 +356,9 @@ void Application::SaveAll()
   ferror = controller.Save(layer_tree.GetTopLayer(), true, true);
   if (ferror != cpw::PERSISTENTOK)
     {
-      wxMessageDialog message(NULL,wxT("Some entities from the layer tree could not be saved."),
-			      wxT("Warning"),wxICON_EXCLAMATION |wxOK);
+      wxMessageDialog message
+	(NULL,wxT("Some entities from the layer tree could not be saved."),
+	 wxT("Warning"),wxICON_EXCLAMATION |wxOK);
       message.ShowModal();
     }
 }
@@ -341,12 +366,13 @@ void Application::SaveAll()
 bool Application::Close()
 {
   if(IsControllerOpen()) return false;
-  
+
   bool flag = true;
   bool cancel = false;
   cpw::PersistentError ferror;
-  cpw::ApplicationConfiguration* appconfig = cpw::ApplicationConfiguration::GetInstance();
-	
+  cpw::ApplicationConfiguration* appconfig =
+    cpw::ApplicationConfiguration::GetInstance();
+
   handler_controller.ActivateAllHandlers(false);
   
   appconfig->SetUIConfiguration(main_frame->GetUIConfiguration());
@@ -356,11 +382,12 @@ bool Application::Close()
       cpw::controllers::ConfigurationController config;
       config.Save(appconfig);
     }
-  
+
   if(layer_tree.isModified()) 
     {
-      wxMessageDialog message(NULL,wxT("Save changes from the layer tree before quit?"),
-			      wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+      wxMessageDialog message
+	(NULL,wxT("Save changes from the layer tree before quit?"),
+	 wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
       int modal = message.ShowModal();
       if(modal == wxID_YES)
 	{	
@@ -368,8 +395,10 @@ bool Application::Close()
 	  ferror = controller.Save(layer_tree.GetTopLayer(), true, true);
 	  if (ferror != cpw::PERSISTENTOK)
 	    {
-	      wxMessageDialog message(NULL,wxT("Some entities from the layer tree could not be saved."),
-				      wxT("Warning"),wxICON_EXCLAMATION |wxOK);
+	      wxMessageDialog message
+		(NULL,
+		 wxT("Some entities from the layer tree could not be saved."),
+		 wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 	      message.ShowModal();
 	    }
 	  
@@ -385,7 +414,7 @@ bool Application::Close()
 	  flag = false;
 	}
     }
-	
+
   if (!cancel)
     {
       if (remote_controller)
@@ -393,9 +422,6 @@ bool Application::Close()
       
       DeleteControllers();
       
-      if (navigator_manager)
-	delete navigator_manager;
-      navigator_manager = NULL;
       if (graphic_factory)
 	delete graphic_factory;
       graphic_factory = NULL;
@@ -408,30 +434,32 @@ bool Application::Close()
       if (two_dimension_camera_controller)
 	delete two_dimension_camera_controller;
       two_dimension_camera_controller = NULL;
-      
       video_controller.SetAllowUpdate(false);
+      if (navigator_manager)
+	delete navigator_manager;
+      navigator_manager = NULL;
       
-      if (main_frame)
-	delete main_frame;
       application_time->Off();
       
+
       cpw::EntityRegistry::ReleaseInstance();
       cpw::ApplicationScene::ReleaseInstance();
       cpw::EntityFactory::ReleaseInstance();
       cpw::ApplicationLog::ReleaseInstance();
       cpw::ApplicationConfiguration::ReleaseInstance();
-      
       cpw::controllers::KeyboardControl::ReleaseInstance();
-      
       cpw::ApplicationConfiguration::ReleaseInstance();
-      
       ApplicationTime::ReleaseInstance();
-      
+
       wmsFinalize();
+
       
+      //BUG: TODO: MPM: FIX DELETE MAIN_FRAME
+      /*      if (main_frame)
+	      delete main_frame;*/
+
     }
-  
-  return flag; 
+  return flag;
 }
 
 void Application::DeleteControllers()
@@ -1352,8 +1380,10 @@ bool Application::CloseProject()
 
   if(layer_tree.isModified()) 
     {
-      wxMessageDialog message(NULL,wxT("Save changes from the layer tree before quit?"),
-			      wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
+      wxMessageDialog message
+	(NULL,
+	 wxT("Save changes from the layer tree before quit?"),
+	 wxT("Warning"),wxICON_EXCLAMATION |wxYES_NO |wxCANCEL);
       int modal = message.ShowModal();
       if(modal == wxID_YES)
 	{	
@@ -1361,8 +1391,10 @@ bool Application::CloseProject()
 	  ferror = controller.Save(layer_tree.GetTopLayer(), true, true);
 	  if (ferror != cpw::PERSISTENTOK)
 	    {
-	      wxMessageDialog message(NULL,wxT("Some entities from the layer tree could not be saved."),
-				      wxT("Warning"),wxICON_EXCLAMATION |wxOK);
+	      wxMessageDialog message
+		(NULL,
+		 wxT("Some entities from the layer tree could not be saved."),
+		 wxT("Warning"),wxICON_EXCLAMATION |wxOK);
 	      message.ShowModal();
 	    }
 
@@ -1388,7 +1420,8 @@ bool Application::CloseProject()
       project_controller->CloseProject(layer_tree);
 
       navigator_manager->GetFocusedOrFirstNavigator()->ShowHUD(false);
-      navigator_manager->GetFocusedOrFirstNavigator()->ClearMouseEventCallBack();
+      navigator_manager->GetFocusedOrFirstNavigator()
+	->ClearMouseEventCallBack();
 
       TestDependencies("WmsLayer");
 

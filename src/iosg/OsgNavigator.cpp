@@ -119,34 +119,46 @@ OsgNavigator::OsgNavigator(wxWindow *parent_frame, cpw::IApplication *_applicati
 
 OsgNavigator::~OsgNavigator(void)
 {
-	delete camera;
+  if (camera)
+    delete camera;
 
-	if (camera_controller != NULL)
-		delete camera_controller;
+  if (camera_controller != NULL)
+    delete camera_controller;
 
-	//delete osg_compass;
-	osg::Group *scene_root_node = (osg::Group *) ((OsgScene *)cpw::ApplicationScene::GetInstance()->GetScene())->GetRootNode();
-
-	for (unsigned int i=0; i<scene_root_node->getNumChildren(); i++)
+  //delete osg_compass;
+  if (cpw::ApplicationScene::GetInstance())
+    {
+      OsgScene *AppScene = (OsgScene *)cpw::ApplicationScene::GetInstance()->GetScene();
+      if (AppScene)
 	{
-		if (scene_root_node->getChild(i) == hud_camera_active_switch.get())
+	  osg::Group *scene_root_node = (osg::Group *) AppScene->GetRootNode();
+	  
+	  if (scene_root_node)
+	    {
+	      for (unsigned int i=0; i<scene_root_node->getNumChildren(); i++)
 		{
-			scene_root_node->removeChild(i);
-			i = scene_root_node->getNumChildren();
+		  if (scene_root_node->getChild(i) == hud_camera_active_switch.get())
+		    {
+		      scene_root_node->removeChild(i);
+		      i = scene_root_node->getNumChildren();
+		    }
 		}
+	    }
+	  //hud_camera->setPostDrawCallback(camera_postdraw_callback.get());
 	}
-
-	//hud_camera->setPostDrawCallback(camera_postdraw_callback.get());
-
-	delete osg_hud_controller;
-	delete osg_hud;
+    }
+  if (osg_hud_controller)
+    delete osg_hud_controller;
+  if (osg_hud)
+    delete osg_hud;
 }
 
 void OsgNavigator::NewWindow(wxWindow *parent_frame)
 {
 	osg_hud->SetParentWindow(parent_frame);
-	
-	delete gl_canvas;
+
+	if (gl_canvas)
+	  delete gl_canvas;
 	
 	gl_canvas = new OsgNavigatorWxGLCanvas(parent_frame, wxID_ANY, wxDefaultPosition, wxSize(640, 480));
 
