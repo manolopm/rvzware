@@ -48,7 +48,7 @@ ProjectController::~ProjectController(void)
 
 bool ProjectController::GetCloseApplication() 
 {
-	return close_application;
+  return close_application;
 }
 
 
@@ -64,7 +64,7 @@ bool ProjectController::OpenProject(const std::string &url,
     {
       project_fullname = url;
       std::string filename = path.GetFilename();
-       //TODO: BUG POR AQUI
+      //TODO: BUG POR AQUI
 
       cpw::controllers::CwsLoader cws_loader(filename);
 
@@ -73,8 +73,12 @@ bool ProjectController::OpenProject(const std::string &url,
       cpw::ISceneLoader *scene_loader = graphic_factory->CreateSceneLoader();
       void *scene_data;
       scene_data = scene_loader->LoadScene(filename);
-      
-      delete scene_loader;		
+
+      if (scene_loader)
+	{
+	  delete scene_loader;
+	  scene_loader = NULL;
+	}
       
       cpw::ApplicationScene *appScene  = cpw::ApplicationScene::GetInstance();
       appScene->GetScene()->InitScene();
@@ -132,57 +136,57 @@ bool ProjectController::OpenProject(wxWindow* parent,
 		       wxstr3,
 		       wxEmptyString,
 		       (const wxString &)wxstr );
-	dialog.Center();
+  dialog.Center();
 
-	bool stop;
+  bool stop;
 
-	do
-	{
-		std::string url;
+  do
+    {
+      std::string url;
 
-		if(dialog.ShowModal() == wxID_OK)
-		{						
-			((cpw::gui::UIApplicationMainFrame *)parent)->Refresh();
-			((cpw::gui::UIApplicationMainFrame *)parent)->Update();
-			((cpw::gui::UIApplicationMainFrame *)parent)->RePaint();
-			((cpw::gui::UIApplicationMainFrame *)parent)->UpdateAUIManager();
+      if(dialog.ShowModal() == wxID_OK)
+	{						
+	  ((cpw::gui::UIApplicationMainFrame *)parent)->Refresh();
+	  ((cpw::gui::UIApplicationMainFrame *)parent)->Update();
+	  ((cpw::gui::UIApplicationMainFrame *)parent)->RePaint();
+	  ((cpw::gui::UIApplicationMainFrame *)parent)->UpdateAUIManager();
 
-			url = dialog.GetPath().mb_str();
+	  url = dialog.GetPath().mb_str();
 			
-			bool result = OpenProject(url, default_path, status_controller, layer_tree, graphic_factory);
+	  bool result = OpenProject(url, default_path, status_controller, layer_tree, graphic_factory);
 
-			if(!result) 
-			{
-				wxMessageDialog dlg_error(parent,wxT("Error opening the scene file. Select a new scene from file."), wxT("Warning"),wxICON_EXCLAMATION|wxOK);
-				dlg_error.Center();
-				dlg_error.ShowModal();
-				stop = false;
-			}
-			else 
-			{
-				return true;
-			}
-		}
-		else 
-			return false;
-
-	}while(!stop);
-
+	  if(!result) 
+	    {
+	      wxMessageDialog dlg_error(parent,wxT("Error opening the scene file. Select a new scene from file."), wxT("Warning"),wxICON_EXCLAMATION|wxOK);
+	      dlg_error.Center();
+	      dlg_error.ShowModal();
+	      stop = false;
+	    }
+	  else 
+	    {
+	      return true;
+	    }
+	}
+      else 
 	return false;
+
+    }while(!stop);
+
+  return false;
 
 }
 
 void ProjectController::CloseProject(cpw::LayerTree &layer_tree)
 {
-	cpw::ApplicationConfiguration* appconfig = cpw::ApplicationConfiguration::GetInstance();
+  cpw::ApplicationConfiguration* appconfig = cpw::ApplicationConfiguration::GetInstance();
 
-	appconfig->SetSceneFile("");
+  appconfig->SetSceneFile("");
 
-	layer_tree.Clear();
+  layer_tree.Clear();
 
-	cpw::EntityRegistry::GetInstance()->Clear();
+  cpw::EntityRegistry::GetInstance()->Clear();
 
-	cpw::ApplicationScene::GetInstance()->GetScene()->Clear();
+  cpw::ApplicationScene::GetInstance()->GetScene()->Clear();
 }
 
 

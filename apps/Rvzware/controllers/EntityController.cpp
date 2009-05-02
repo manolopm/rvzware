@@ -56,181 +56,183 @@ EntityController::~EntityController(void)
 
 cpw::TypeId EntityController::GetIdFromFile(const std::string &url, cpw::Node **root)
 {
-	cpw::TypeId id = cpw::TypeId();
+  cpw::TypeId id = cpw::TypeId();
 
-	cpw::PersistentFileManager persistent_manager;
+  cpw::PersistentFileManager persistent_manager;
 
-	cpw::PersistentError error = persistent_manager.Load(url, root);
+  cpw::PersistentError error = persistent_manager.Load(url, root);
 
-	//std::stringstream ss;
-	//ss << id << "\n" << url << "\n" << error << "\n";
+  //std::stringstream ss;
+  //ss << id << "\n" << url << "\n" << error << "\n";
 
-	if (error == cpw::PERSISTENTOK)
+  if (error == cpw::PERSISTENTOK)
+    {
+      //ss << *root << "\n";
+      if(*root != NULL)
 	{
-		//ss << *root << "\n";
-		if(*root != NULL)
-		{
-			std::istringstream str((*root)->GetChildValue("id"));
+	  std::istringstream str((*root)->GetChildValue("id"));
 			
-			str >> id;
+	  str >> id;
 
-			//delete *root;
-		}
+	  //delete *root;
 	}
-	//ss << id;
-	//wxMessageBox(ss.str() , _("Information"), wxICON_INFORMATION);
+    }
+  //ss << id;
+  //wxMessageBox(ss.str() , _("Information"), wxICON_INFORMATION);
 
-	return id;
+  return id;
 
 }
 
 
 cpw::Entity* EntityController::Load(const std::string &url, bool all, cpw::Entity *parent)
 {
-	traceable_id = isc->Attach();
+  traceable_id = isc->Attach();
 
-	isc->SetDetermined(traceable_id, false);
-	isc->SetModal(traceable_id, true);
-	isc->SetRange(traceable_id, 100);
-	isc->SetValue(traceable_id, 0);
-	isc->SetStep(traceable_id, 5);
-	isc->SetLabel(traceable_id, "Loading data..");
-	isc->Pulse(traceable_id);
+  isc->SetDetermined(traceable_id, false);
+  isc->SetModal(traceable_id, true);
+  isc->SetRange(traceable_id, 100);
+  isc->SetValue(traceable_id, 0);
+  isc->SetStep(traceable_id, 5);
+  isc->SetLabel(traceable_id, "Loading data..");
+  isc->Pulse(traceable_id);
 
 
-	cpw::Entity *result = Load2(url, all, parent);
+  cpw::Entity *result = Load2(url, all, parent);
 
-	isc->Detach(traceable_id);
+  isc->Detach(traceable_id);
 	
-	return result;
+  return result;
 }
 cpw::Entity* EntityController::Load2(const std::string &url, bool all, cpw::Entity *parent)
 {
-	controllers::RelativeDirectory path(url);
+  controllers::RelativeDirectory path(url);
 
-	cpw::Entity *entity = NULL;
+  cpw::Entity *entity = NULL;
 
-	if(path.IsValid())
-	{
+  if(path.IsValid())
+    {
 
-		std::string filename = path.GetFilename();
+      std::string filename = path.GetFilename();
 
-		cpw::Node *root=NULL;
-		cpw::TypeId id = GetIdFromFile(filename, &root);
+      cpw::Node *root=NULL;
+      cpw::TypeId id = GetIdFromFile(filename, &root);
 
 		
-		entity = cpw::EntityRegistry::GetInstance()->GetEntity(id); 
+      entity = cpw::EntityRegistry::GetInstance()->GetEntity(id); 
 
-		if(entity == NULL)
+      if(entity == NULL)
+	{
+
+	  if(root != NULL)
+	    {
+	      entity = cpw::EntityFactory::GetInstance()->CreateEntity(root->GetName());
+
+	      if(entity != NULL)
 		{
+		  entity->SetPersistence(root);
+		  entity->SetUrl(filename);
 
-			if(root != NULL)
-			{
-				entity = cpw::EntityFactory::GetInstance()->CreateEntity(root->GetName());
+		  if (parent != NULL)
+		    {
+		      ((cpw::Loggable*)parent)->SetRegisterChanges(false);
+		      parent->Add(entity);
+		      ((cpw::Loggable*)parent)->SetRegisterChanges(true);
+		    }
 
-				if(entity != NULL)
-				{
-					entity->SetPersistence(root);
-					entity->SetUrl(filename);
-
-					if (parent != NULL)
-					{
-						((cpw::Loggable*)parent)->SetRegisterChanges(false);
-						parent->Add(entity);
-						((cpw::Loggable*)parent)->SetRegisterChanges(true);
-					}
-
-					Register(entity);
+		  Register(entity);
 					
-					entity->GraphicInsert();
+		  entity->GraphicInsert();
 
-					if(all && entity->isContainer())
-					{
-						std::vector<cpw::Node *> components = root->GetChildren();
-						std::vector<cpw::Node *>::iterator i = components.begin();
-						while ((i!=components.end()) && ((*i)->GetName() != std::string("components"))) i++;
-						if (i!=components.end())
-						{
-							std::vector<cpw::Node *> comp = (*i)->GetChildren();
-							std::vector<cpw::Node *>::iterator j = comp.begin();
-							for(j;j!=comp.end();j++)
-							{
-								//isc->SetLabel(traceable_id, "Loading data..");								
-								isc->Pulse(traceable_id);
-								cpw::Entity* et = Load2((*j)->GetChildValue("url"), all, entity);
-							}
-						}
-					}
-					entity->Saved();
-				}
-			}
-
-		}
-		else
-		{
-			if (parent != NULL)
+		  if(all && entity->isContainer())
+		    {
+		      std::vector<cpw::Node *> components = root->GetChildren();
+		      std::vector<cpw::Node *>::iterator i = components.begin();
+		      while ((i!=components.end()) && ((*i)->GetName() != std::string("components"))) i++;
+		      if (i!=components.end())
 			{
-				
-				((cpw::Loggable*)parent)->SetRegisterChanges(false);		
-				parent->Add(entity);
-				((cpw::Loggable*)parent)->SetRegisterChanges(true);
+			  std::vector<cpw::Node *> comp = (*i)->GetChildren();
+			  std::vector<cpw::Node *>::iterator j = comp.begin();
+			  for(j;j!=comp.end();j++)
+			    {
+			      //isc->SetLabel(traceable_id, "Loading data..");								
+			      isc->Pulse(traceable_id);
+			      cpw::Entity* et = Load2((*j)->GetChildValue("url"), all, entity);
+			    }
 			}
+		    }
+		  entity->Saved();
 		}
+	    }
 
-		if(root != NULL) 
-			delete root;
-		root = NULL;
+	}
+      else
+	{
+	  if (parent != NULL)
+	    {
+				
+	      ((cpw::Loggable*)parent)->SetRegisterChanges(false);		
+	      parent->Add(entity);
+	      ((cpw::Loggable*)parent)->SetRegisterChanges(true);
+	    }
 	}
 
-	return entity;
+      if(root != NULL)
+	{
+	  delete root;
+	  root = NULL;
+	}
+    }
+
+  return entity;
 }
 
 cpw::Entity* EntityController::Load(wxWindow* parent, cpw::LayerTree &layer_tree)
 {
-	std::string &entity_path = ApplicationConfiguration::GetInstance()->GetEntityDirectory();
-	wxFileDialog dialog ((wxWindow *)parent,(const wxString&)_("Open entity"),
-			     (const wxString&)entity_path,
-			     wxEmptyString,
-			     _("Element(*.cel)|*.cel|Layer(*.cla)|*.cla|All files(*.*)|*.*") );
+  std::string &entity_path = ApplicationConfiguration::GetInstance()->GetEntityDirectory();
+  wxFileDialog dialog ((wxWindow *)parent,(const wxString&)_("Open entity"),
+		       (const wxString&)entity_path,
+		       wxEmptyString,
+		       _("Element(*.cel)|*.cel|Layer(*.cla)|*.cla|All files(*.*)|*.*") );
 
-	cpw::Entity *entity = NULL;
+  cpw::Entity *entity = NULL;
 
-	if(dialog.ShowModal() == wxID_OK)
-	{						
-	  std::string url =(std::string)(dialog.GetPath().mb_str());
+  if(dialog.ShowModal() == wxID_OK)
+    {						
+      std::string url =(std::string)(dialog.GetPath().mb_str());
 
-	entity = Load(url);
+      entity = Load(url);
 	
-	if(entity == NULL)
-	  {
-	    wxMessageDialog message(parent,wxT("Error loading the entity. \nThe file may be corrupted."),
-				    wxT("Error"),
-				    wxICON_WARNING |wxOK);
-	    message.ShowModal();
-	  }
-	
+      if(entity == NULL)
+	{
+	  wxMessageDialog message(parent,wxT("Error loading the entity. \nThe file may be corrupted."),
+				  wxT("Error"),
+				  wxICON_WARNING |wxOK);
+	  message.ShowModal();
 	}
+	
+    }
 
-	return entity;
+  return entity;
 }
 
 
 cpw::PersistentError EntityController::Save(cpw::Entity *entity, bool all, bool overwrite)
 {
 
-	cpw::PersistentError ferror = cpw::PERSISTENTOK;
+  cpw::PersistentError ferror = cpw::PERSISTENTOK;
 	
-	if(entity->isModified()) 
-	{
-		ferror = entity->Save(overwrite);
-	}
-	if(all && entity->isContainer())
+  if(entity->isModified()) 
+    {
+      ferror = entity->Save(overwrite);
+    }
+  if(all && entity->isContainer())
 
-		for(int i = 0; i < entity->GetNumChildren(); i++)
+    for(int i = 0; i < entity->GetNumChildren(); i++)
 
-			Save(entity->GetChild(i), all, overwrite);
+      Save(entity->GetChild(i), all, overwrite);
 
-	return ferror;
+  return ferror;
 }
 
 
@@ -238,29 +240,29 @@ cpw::PersistentError EntityController::Save(cpw::Entity *entity, bool all, bool 
 bool EntityController::AddEntity(wxWindow* parent, cpw::LayerTree &layer_tree)
 {
 
-	cpw::Entity *entity = Load(parent, layer_tree); 
+  cpw::Entity *entity = Load(parent, layer_tree); 
 
 
-	if(entity != NULL)
+  if(entity != NULL)
+    {
+      if(!layer_tree.AddToActiveLayer(entity))
 	{
-		if(!layer_tree.AddToActiveLayer(entity))
-		{
 			
-		  wxMessageDialog message(parent,wxT("Unable to add the entity to the layer tree. Recursive inclusion."), wxT("Capaware"),
-					  wxICON_WARNING |wxOK);
-			message.ShowModal();
+	  wxMessageDialog message(parent,wxT("Unable to add the entity to the layer tree. Recursive inclusion."), wxT("Capaware"),
+				  wxICON_WARNING |wxOK);
+	  message.ShowModal();
 
-			return false;
-		}
-		else
-		{
-			if(!cpw::ApplicationScene::GetInstance()->GetScene()->ObjectExistsInScene(entity->GetId()))
-				entity->GraphicInsert();
-
-			return true;
-		}
+	  return false;
 	}
-	return false;
+      else
+	{
+	  if(!cpw::ApplicationScene::GetInstance()->GetScene()->ObjectExistsInScene(entity->GetId()))
+	    entity->GraphicInsert();
+
+	  return true;
+	}
+    }
+  return false;
 }
 
 
@@ -268,47 +270,47 @@ bool EntityController::AddEntity(wxWindow* parent, cpw::LayerTree &layer_tree)
 
 void EntityController::InitLayerTree(const std::string &scene_file, cpw::LayerTree &layer_tree)
 {
-	cpw::Entity *entity = Load(scene_file);
+  cpw::Entity *entity = Load(scene_file);
 
 			
 
-	if(entity == NULL) {
+  if(entity == NULL) {
 		
-		cpw::ContainerLayer layer;
-		entity = (cpw::Layer*) cpw::EntityFactory::GetInstance()->CreateEntity(layer.GetClassName());
+    cpw::ContainerLayer layer;
+    entity = (cpw::Layer*) cpw::EntityFactory::GetInstance()->CreateEntity(layer.GetClassName());
 
-		entity->SetName("TopLayer");
-		entity->SetUrl(scene_file);
+    entity->SetName("TopLayer");
+    entity->SetUrl(scene_file);
 		
-		boost::filesystem::path directory(cpw::ApplicationConfiguration::GetInstance()->GetDefaultDirectory());
-		boost::filesystem::path previous_path = boost::filesystem::initial_path();
-		boost::filesystem::path default_path   = (directory.has_root_name())? directory : previous_path / directory;
+    boost::filesystem::path directory(cpw::ApplicationConfiguration::GetInstance()->GetDefaultDirectory());
+    boost::filesystem::path previous_path = boost::filesystem::initial_path();
+    boost::filesystem::path default_path   = (directory.has_root_name())? directory : previous_path / directory;
 
-		default_path /= "folder.png";
+    default_path /= "folder.png";
 
-		entity->SetIcon(default_path.string());
+    entity->SetIcon(default_path.string());
 
-		Register(entity);
+    Register(entity);
 		
-		entity->GraphicInsert();
-	}
+    entity->GraphicInsert();
+  }
 
-	layer_tree.AddToActiveLayer(entity);
+  layer_tree.AddToActiveLayer(entity);
 }
 
 
 void EntityController::Register(cpw::Entity *entity)
 {
 
-	if(entity != NULL)
-	{
+  if(entity != NULL)
+    {
 
-		cpw::EntityRegistry::GetInstance()->Add(entity);
+      cpw::EntityRegistry::GetInstance()->Add(entity);
 
-		RegisterPrimitive(entity->GetPrimitiveUrl());
+      RegisterPrimitive(entity->GetPrimitiveUrl());
 
 
-	}
+    }
 
 }
 
@@ -316,24 +318,30 @@ void EntityController::Register(cpw::Entity *entity)
 void EntityController::RegisterPrimitive(const std::string &primitive_url)
 {
 
-	if(!primitive_url.empty())
+  if(!primitive_url.empty())
+    {
+
+      cpw::Entity* primitive = cpw::EntityFactory::GetInstance()->GetPrototypeFromUrl(primitive_url);
+
+      if(primitive == NULL)
 	{
 
-		cpw::Entity* primitive = cpw::EntityFactory::GetInstance()->GetPrototypeFromUrl(primitive_url);
-
-		if(primitive == NULL)
-		{
-
-			PersistentController persistent;
+	  PersistentController persistent;
 			
-			cpw::PersistentError error = persistent.Load((cpw::Persistent**)&primitive, primitive_url);
+	  cpw::PersistentError error = persistent.Load((cpw::Persistent**)&primitive, primitive_url);
 
-			if(error == cpw::PERSISTENTOK)
-			{
-				if(!cpw::EntityFactory::GetInstance()->Register(primitive))
-					delete primitive;
+	  if(error == cpw::PERSISTENTOK)
+	    {
+	      if(!cpw::EntityFactory::GetInstance()->Register(primitive))
+		{
+		  if (primitive)
+		    {
+		      delete primitive;
+		      primitive = NULL;
+		    }
 
-			}
 		}
+	    }
 	}
+    }
 }

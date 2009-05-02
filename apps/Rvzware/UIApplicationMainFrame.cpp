@@ -1174,7 +1174,10 @@ UIApplicationMainFrame::~UIApplicationMainFrame(void)
 {
   m_mgr.UnInit();
   if (viewport_manager)
-    delete viewport_manager;
+    {
+      delete viewport_manager;
+      viewport_manager = NULL;
+    }
 }
 
 void UIApplicationMainFrame::OnNoteBookPageChanged(wxNotebookEvent& WXUNUSED(event))

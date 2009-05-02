@@ -25,237 +25,237 @@ using namespace cpw::controllers;
 
 
 StatusController::StatusController() 
-: cpw::Subject()
+  : cpw::Subject()
 {
-	determined = true;
-	range = 0;
-	value = 0;
-	step  = 0;
-	label = "";
-	modalTraceableItem = 0;
-	TraceableList.clear();
+  determined = true;
+  range = 0;
+  value = 0;
+  step  = 0;
+  label = "";
+  modalTraceableItem = 0;
+  TraceableList.clear();
 }
 
 StatusController::~StatusController()
 {
-	Clear();
+  Clear();
 }
 
 
 int StatusController::Attach()
 {
 
-	mutex.lock();
+  mutex.lock();
 
-	TraceableData newTraceableData;
-	int newId = TraceableList.size() + 1;
-	TraceableList[newId] = newTraceableData;
+  TraceableData newTraceableData;
+  int newId = TraceableList.size() + 1;
+  TraceableList[newId] = newTraceableData;
 	
-	mutex.unlock();
+  mutex.unlock();
 
-	Init(newId);
+  Init(newId);
 
-	Update();
+  Update();
 
 
-	return newId;
+  return newId;
 }
 
 void StatusController::Detach(int traceableItem)
 {
-	mutex.lock();
+  mutex.lock();
 
-	if (!TraceableList.empty()) 
-	{
-		std::map<int, TraceableData>::iterator iter = TraceableList.find(traceableItem);
+  if (!TraceableList.empty()) 
+    {
+      std::map<int, TraceableData>::iterator iter = TraceableList.find(traceableItem);
 		
-		if(iter != TraceableList.end())
+      if(iter != TraceableList.end())
 			
-			TraceableList.erase(iter);
+	TraceableList.erase(iter);
 
-		mutex.unlock();
+      mutex.unlock();
 
-		Update();
+      Update();
 
-	}
-	else mutex.unlock();
+    }
+  else mutex.unlock();
 }
 
 void StatusController::Clear()
 {
-	mutex.lock();
-
-	if (!TraceableList.empty()) 
-	{
-		TraceableList.clear();
-		Update();
-	}
-	mutex.unlock();
+  mutex.lock();
+  
+  if (!TraceableList.empty()) 
+    {
+      TraceableList.clear();
+      Update();
+    }
+  mutex.unlock();
 }
 
 void StatusController::Update()
 {
-	mutex.lock();
-	value = 0;
-	range = 0;
-	step  = 0;
-	label = "";
-	determined = true;
-	modalTraceableItem = 0;
-	if (!TraceableList.empty()) 
+  mutex.lock();
+  value = 0;
+  range = 0;
+  step  = 0;
+  label = "";
+  determined = true;
+  modalTraceableItem = 0;
+  if (!TraceableList.empty()) 
+    {
+      std::map<int, TraceableData>::const_iterator iter = TraceableList.begin();
+      int i = 0;
+      float percent = 0;
+      for(;iter != TraceableList.end(); iter++)
 	{
-		std::map<int, TraceableData>::const_iterator iter = TraceableList.begin();
-		int i = 0;
-		float percent = 0;
-		for(;iter != TraceableList.end(); iter++)
-		{
-			TraceableData traceable = TraceableList[iter->first];
-			determined &= traceable.determined;
-			label = traceable.label;
-			if (traceable.range > range) 
-				range = traceable.range;
-			if (step == 0)
-				step  = traceable.step;
-			else 
-				if (((traceable.step  > 0)) && ((traceable.step  < step) )) 
-					step  = traceable.step;
-			if (traceable.range != 0)
-				percent += traceable.value / (float)traceable.range;
-			if (traceable.modal)
-				modalTraceableItem = iter->first;
-			i++;
-		}
-		if (i > 0) value = (int)( (percent/(float)i)*range);
+	  TraceableData traceable = TraceableList[iter->first];
+	  determined &= traceable.determined;
+	  label = traceable.label;
+	  if (traceable.range > range) 
+	    range = traceable.range;
+	  if (step == 0)
+	    step  = traceable.step;
+	  else 
+	    if (((traceable.step  > 0)) && ((traceable.step  < step) )) 
+	      step  = traceable.step;
+	  if (traceable.range != 0)
+	    percent += traceable.value / (float)traceable.range;
+	  if (traceable.modal)
+	    modalTraceableItem = iter->first;
+	  i++;
 	}
-	mutex.unlock();
+      if (i > 0) value = (int)( (percent/(float)i)*range);
+    }
+  mutex.unlock();
 
-	Notify();
+  Notify();
 }
 
 TraceableData StatusController::GetModalTraceableItem()
 {
-	mutex.lock();
+  mutex.lock();
 
-	if (modalTraceableItem > 0)
-	{
-		mutex.unlock();
-		return TraceableList[modalTraceableItem];
-	}
-	TraceableData notvalid;
-	notvalid.valid = false;
+  if (modalTraceableItem > 0)
+    {
+      mutex.unlock();
+      return TraceableList[modalTraceableItem];
+    }
+  TraceableData notvalid;
+  notvalid.valid = false;
 
-	mutex.unlock();
+  mutex.unlock();
 
-	return notvalid;
+  return notvalid;
 }
 
 void StatusController::Init (const int &id)
 {
-	mutex.lock();
-	TraceableList[id].valid = true;
-	TraceableList[id].determined = true;
-	TraceableList[id].label = "";
-	TraceableList[id].modal = false;
-	TraceableList[id].range = 100;
-	TraceableList[id].step = 1;
-	TraceableList[id].value = 0;
-	mutex.unlock();
+  mutex.lock();
+  TraceableList[id].valid = true;
+  TraceableList[id].determined = true;
+  TraceableList[id].label = "";
+  TraceableList[id].modal = false;
+  TraceableList[id].range = 100;
+  TraceableList[id].step = 1;
+  TraceableList[id].value = 0;
+  mutex.unlock();
 
 }
 
 void StatusController::SetDetermined (const int &id, const bool &value)
 {
-	mutex.lock();
-	TraceableList[id].determined = value;
-	mutex.unlock();
+  mutex.lock();
+  TraceableList[id].determined = value;
+  mutex.unlock();
 
-	Update();
+  Update();
 }
 
 void StatusController::SetRange (const int &id, const int &value)
 {
-	mutex.lock();
-	TraceableList[id].range = value;
-	mutex.unlock();
+  mutex.lock();
+  TraceableList[id].range = value;
+  mutex.unlock();
 
-	Update();
+  Update();
 }
 
 void StatusController::SetValue	(const int &id, const int &value)
 {
-	mutex.lock();
+  mutex.lock();
 
-	TraceableList[id].value = value;
-	if (TraceableList[id].value < 0) TraceableList[id].value = 0;
-	if (TraceableList[id].determined)
-	{
-		if (value > TraceableList[id].range) TraceableList[id].value  = TraceableList[id].range;
-	}
-	else 
-		TraceableList[id].value = TraceableList[id].value % TraceableList[id].range;
+  TraceableList[id].value = value;
+  if (TraceableList[id].value < 0) TraceableList[id].value = 0;
+  if (TraceableList[id].determined)
+    {
+      if (value > TraceableList[id].range) TraceableList[id].value  = TraceableList[id].range;
+    }
+  else 
+    TraceableList[id].value = TraceableList[id].value % TraceableList[id].range;
 	
-	mutex.unlock();
+  mutex.unlock();
 
-	Update();
+  Update();
 }
 
 void StatusController::SetStep (const int &id, const int &value)
 {
-	mutex.lock();
-	TraceableList[id].step = value;
-	mutex.unlock();
+  mutex.lock();
+  TraceableList[id].step = value;
+  mutex.unlock();
 
-	Update();
+  Update();
 }
 
 void StatusController::SetLabel (const int &id, const std::string &value)
 {
-	mutex.lock();
-	TraceableList[id].label = value;
-	mutex.unlock();
+  mutex.lock();
+  TraceableList[id].label = value;
+  mutex.unlock();
 
-	Update();
+  Update();
 }
 
 void StatusController::SetModal (const int &id, const bool &value)
 {
-	mutex.lock();
-	TraceableList[id].modal = value;
-	mutex.unlock();
+  mutex.lock();
+  TraceableList[id].modal = value;
+  mutex.unlock();
 
-	Update();
+  Update();
 }
 
 void StatusController::Pulse (const int &id, const int &value)
 {
-	mutex.lock();
-	TraceableList[id].value += value;
-	if (TraceableList[id].value < 0) TraceableList[id].value = 0;
-	if (TraceableList[id].determined)
-	{
-		if (value > TraceableList[id].range) TraceableList[id].value  = TraceableList[id].range;
-	}
-	else 
-		TraceableList[id].value = TraceableList[id].value % TraceableList[id].range;
-	mutex.unlock();
+  mutex.lock();
+  TraceableList[id].value += value;
+  if (TraceableList[id].value < 0) TraceableList[id].value = 0;
+  if (TraceableList[id].determined)
+    {
+      if (value > TraceableList[id].range) TraceableList[id].value  = TraceableList[id].range;
+    }
+  else 
+    TraceableList[id].value = TraceableList[id].value % TraceableList[id].range;
+  mutex.unlock();
 
-	Update();
+  Update();
 }
 
 void StatusController::Pulse (const int &id)
 {
-	mutex.lock();
+  mutex.lock();
 	
-	TraceableList[id].value += TraceableList[id].step;
-	if (TraceableList[id].value < 0) TraceableList[id].value = 0;
-	if (TraceableList[id].determined)
-	{
-		if (value > TraceableList[id].range) TraceableList[id].value  = TraceableList[id].range;
-	}
-	else 
-		TraceableList[id].value = TraceableList[id].value % TraceableList[id].range;
+  TraceableList[id].value += TraceableList[id].step;
+  if (TraceableList[id].value < 0) TraceableList[id].value = 0;
+  if (TraceableList[id].determined)
+    {
+      if (value > TraceableList[id].range) TraceableList[id].value  = TraceableList[id].range;
+    }
+  else 
+    TraceableList[id].value = TraceableList[id].value % TraceableList[id].range;
 	
-	mutex.unlock();
+  mutex.unlock();
 
-	Update();
+  Update();
 }

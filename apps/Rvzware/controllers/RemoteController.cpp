@@ -148,13 +148,42 @@ RemoteController::RemoteController(wxWindow *parent_window, cpw::LayerTree *laye
 
 RemoteController::~RemoteController()
 {
-  if (factory) delete factory;
-  if (resolver) delete resolver;
-  if (protocol) delete protocol;
-  if (recv_newconnection_cb) delete recv_newconnection_cb;
-  if (recv_disconnection_cb) delete recv_disconnection_cb;
-  if (recv_getpublishedresponse_cb) delete recv_getpublishedresponse_cb;
-  if (recv_disconnectentity_cb) delete recv_disconnectentity_cb;
+
+  if (factory)
+    {
+      delete factory;
+      factory = NULL;
+    }
+  if (resolver)
+    {
+      delete resolver;
+      resolver = NULL;
+    }
+  if (protocol)
+    {
+      delete protocol;
+      protocol = NULL;
+    }
+  if (recv_newconnection_cb)
+    {
+      delete recv_newconnection_cb;
+      recv_newconnection_cb = NULL;
+    }
+  if (recv_disconnection_cb)
+    {
+      delete recv_disconnection_cb;
+      recv_disconnection_cb = NULL;
+    }
+  if (recv_getpublishedresponse_cb)
+    {
+      delete recv_getpublishedresponse_cb;
+      recv_getpublishedresponse_cb = NULL;
+    }
+  if (recv_disconnectentity_cb)
+    {
+      delete recv_disconnectentity_cb;
+      recv_disconnectentity_cb = NULL;
+    }
 }
 
 

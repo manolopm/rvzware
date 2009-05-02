@@ -122,15 +122,47 @@ Application::~Application(void)
 
   std::map<int, DynamicLibrary*>::iterator mi = plugin_map.begin();
   for( ; mi!=plugin_map.end() ; mi++)
-    if ((*mi).second)           delete (*mi).second;
-  if (status_controller)        delete status_controller;
-  if (sun_controller)           delete sun_controller;
-  if (project_controller)       delete project_controller;
-  if (graphic_factory)          delete graphic_factory;
-  if (remote_controller)        delete remote_controller;
-  if (remote_entity_controller) delete remote_entity_controller;
+    if ((*mi).second)
+      {
+	delete (*mi).second;
+	(*mi).second = NULL;
+      }
 
+  if (status_controller)
+    {
+      delete status_controller;
+      status_controller = NULL;
+    }
+  
+  if (sun_controller)
+    {
+      delete sun_controller;
+      sun_controller = NULL;
+    }
 
+  if (project_controller)
+    {
+      delete project_controller;
+      project_controller = NULL;
+    }
+
+  if (graphic_factory)
+    {
+      delete graphic_factory;
+      graphic_factory = NULL;
+    }
+  
+  if (remote_entity_controller)
+    {
+      delete remote_entity_controller;
+      remote_entity_controller = NULL;
+    }
+  
+  if (remote_controller)
+    {
+      delete remote_controller;
+      remote_controller = NULL;
+    }
 }
 
 void Application::EnableSunConfiguration(const bool &value)
@@ -419,29 +451,44 @@ bool Application::Close()
   if (!cancel)
     {
       if (remote_controller)
-	delete remote_controller;
+	{
+	  delete remote_controller;
+	  remote_controller = NULL;
+	}
       
       DeleteControllers();
       
       if (graphic_factory)
-	delete graphic_factory;
-      graphic_factory = NULL;
+	{
+	  delete graphic_factory;
+	  graphic_factory = NULL;
+	}
       if (wms_request_manager)
-	delete wms_request_manager;
-      wms_request_manager = NULL;
+	{
+	  delete wms_request_manager;
+	  wms_request_manager = NULL;
+	}
       if (three_dimension_camera_controller)
-	delete three_dimension_camera_controller;
-      three_dimension_camera_controller = NULL;
+	{
+	  delete three_dimension_camera_controller;
+	  three_dimension_camera_controller = NULL;
+	}
       if (two_dimension_camera_controller)
-	delete two_dimension_camera_controller;
-      two_dimension_camera_controller = NULL;
+	{
+	  delete two_dimension_camera_controller;
+	  two_dimension_camera_controller = NULL;
+	}
       video_controller.SetAllowUpdate(false);
       if (navigator_manager)
-	delete navigator_manager;
-      navigator_manager = NULL;
-
+	{
+	  delete navigator_manager;
+	  navigator_manager = NULL;
+	}
       if (main_frame)
-	delete main_frame;
+	{
+	  delete main_frame;
+	  main_frame = NULL;
+	}
       
       application_time->Off();
       
@@ -639,7 +686,10 @@ void Application::NewElement()
   if(IsControllerOpen()) return;
   //if it did exist, delete first
   if (ec != NULL)
-    delete ec;
+    {
+      delete ec;
+      ec = NULL;
+    }
 	
   ec = new cpw::controllers::ElementController(main_frame, layer_tree, graphic_factory, navigator_manager, &handler_controller);
 
@@ -674,6 +724,7 @@ void Application::NewFire()
     {
       fc->Cancel();
       delete fc;
+      fc = NULL;
     }
 
   cpw::IGraphicObjectLoader *loader = graphic_factory->CreateObjectLoader();	
@@ -690,6 +741,7 @@ void Application::NewFirewall(wxWindow *parent)
     {
       evc->Cancel();
       delete evc;
+      evc = NULL;
     }
 
   cpw::IGraphicObjectLoader *loader = graphic_factory->CreateObjectLoader();	
@@ -919,7 +971,10 @@ void Application::RegisterAllPlugins()
 	    }
 	  else
 	    if (library)
-	      delete library;
+	      {
+		delete library;
+		library = NULL;
+	      }
 			
 	}
       plugins_file.close();
@@ -1008,7 +1063,10 @@ void Application::ModifyProperties(const cpw::TypeId &id, wxWindow* parent)
       if(ent->GetClassName() == vectorial.GetClassName())
 	{
 	  if (evcm != NULL)
-	    delete evcm;
+	    {
+	      delete evcm;
+	      evcm = NULL;
+	    }
 	  cpw::IGraphicObjectLoader *loader = graphic_factory->CreateObjectLoader();
 	  evcm = new cpw::controllers::ElementVectorialController(parent, layer_tree, graphic_factory, navigator_manager, loader);
 	  evcm->ModifyProperties(ent);
@@ -1046,7 +1104,10 @@ void Application::ModifyProperties(const cpw::TypeId &id, wxWindow* parent)
       if(ent->GetClassName() == fire.GetClassName())
 	{
 	  if(fcm != NULL)
-	    delete fcm;
+	    {
+	      delete fcm;
+	      fcm = NULL;
+	    }
 	  cpw::IGraphicObjectLoader *loader = graphic_factory->CreateObjectLoader();
 	  fcm = new cpw::controllers::FireController(parent, layer_tree, graphic_factory, navigator_manager, loader);
 	  StopTimeAndControls();

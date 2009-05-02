@@ -32,51 +32,51 @@ IMPLEMENT_DYNAMIC_CLASS(MyTimeChangeEvent, wxNotifyEvent)
 DEFINE_EVENT_TYPE(cpw::gui::MyEVT_TIMECHANGE)
 
 MyTimeChangeEvent::MyTimeChangeEvent()
-	: wxNotifyEvent()
+: wxNotifyEvent()
 {
 }
 
 MyTimeChangeEvent::MyTimeChangeEvent(wxEventType type, wxWindowID id, const wxString& value)
-	: wxNotifyEvent(type, id)
+  : wxNotifyEvent(type, id)
 {
-	SetValue(value);
+  SetValue(value);
 }
 
 
 MyTimeChangeEvent::MyTimeChangeEvent(const MyTimeChangeEvent& event) 
-	: wxNotifyEvent(event)
+  : wxNotifyEvent(event)
 {
-	val = event.val;
+  val = event.val;
 }
 
 wxEvent *MyTimeChangeEvent::Clone()
 {
-	return new MyTimeChangeEvent(*this);
+  return new MyTimeChangeEvent(*this);
 }
 
 void MyTimeChangeEvent::SetValue(const wxString& value) 
 {
-	val = value;
+  val = value;
 }
 
 wxString MyTimeChangeEvent::GetValue() const
 {
-	return val;
+  return val;
 }
 
 // MyTextCtrl
 IMPLEMENT_DYNAMIC_CLASS(MyTextCtrl, wxTextCtrl)
 
 MyTextCtrl::MyTextCtrl()
-	: wxTextCtrl()
+: wxTextCtrl()
 {
 }
 
 MyTextCtrl::MyTextCtrl(MyTimeCtrl *timectrl, const wxString& value)
-	: wxTextCtrl(timectrl->GetParent(), -1, value, wxDefaultPosition, wxDefaultSize)
+  : wxTextCtrl(timectrl->GetParent(), -1, value, wxDefaultPosition, wxDefaultSize)
 {
-	tc = timectrl;
-	buffer = wxT("");
+  tc = timectrl;
+  buffer = wxT("");
 }
 
 MyTextCtrl::~MyTextCtrl()
@@ -86,245 +86,245 @@ MyTextCtrl::~MyTextCtrl()
 
 void MyTextCtrl::Increment(IncrementType direction)
 {
-	/**
-	 * Format 00:00:00 xM -> 00:00:00
-	 *
-	 *        01234567891
-	 *                  0
-	 */
+  /**
+   * Format 00:00:00 xM -> 00:00:00
+   *
+   *        01234567891
+   *                  0
+   */
 	 
-	if (pos > 8)
+  if (pos > 8)
+    {
+      //if (buffer.IsSameAs(wxT("AM"), FALSE) )
+      //{
+      //	buffer = wxT("PM");
+      //}
+      //else
+      //{
+      //	buffer = wxT("AM");
+      //}
+    }
+  else
+    {
+      long value;
+      buffer.ToLong(&value);
+
+      switch	(direction)
 	{
-		//if (buffer.IsSameAs(wxT("AM"), FALSE) )
-		//{
-		//	buffer = wxT("PM");
-		//}
-		//else
-		//{
-		//	buffer = wxT("AM");
-		//}
+	case POSITIVE:
+	  value++;
+	  break;
+
+	case NEGATIVE:
+	  value--;
+	  break;
 	}
-	else
-	{
-		long value;
-		buffer.ToLong(&value);
-
-		switch	(direction)
-		{
-			case POSITIVE:
-				value++;
-				break;
-
-			case NEGATIVE:
-				value--;
-				break;
-		}
 		
-		FixValue(&value);
+      FixValue(&value);
 	
-		buffer = wxString::Format(wxT("%.2d"), (int) value);
-	}
+      buffer = wxString::Format(wxT("%.2d"), (int) value);
+    }
 }
 
 void MyTextCtrl::ApplyIncrement(IncrementType type)
 {
-	UpdatePosition();
-	SelectPart();	
-	UpdateBuffer();
-	Increment(type);
-	FlushBuffer();
-	SelectPart();
+  UpdatePosition();
+  SelectPart();	
+  UpdateBuffer();
+  Increment(type);
+  FlushBuffer();
+  SelectPart();
 }
 
 void MyTextCtrl::OnClick(wxMouseEvent &event)
 {
-		UpdatePosition();
-		SelectPart();
+  UpdatePosition();
+  SelectPart();
 
-		event.Skip(true);
+  event.Skip(true);
 }
 
 void MyTextCtrl::OnChar(wxKeyEvent& event)
 {
-	UpdatePosition();
-	SelectPart();
-	UpdateBuffer();
+  UpdatePosition();
+  SelectPart();
+  UpdateBuffer();
 		
-	int keycode = event.GetKeyCode();
+  int keycode = event.GetKeyCode();
 	
-	if (keycode >= 48 && keycode <= 57 && pos < 8)
-	{
-		char ch = keycode;
-		wxString temp = buffer + ch;
+  if (keycode >= 48 && keycode <= 57 && pos < 8)
+    {
+      char ch = keycode;
+      wxString temp = buffer + ch;
 
-		long value;
-		temp.Right(2).ToLong(&value);
+      long value;
+      temp.Right(2).ToLong(&value);
 		
-		if (value < min || value > max)
-		{
-//			buffer = wxString(wxT("0") ) + (wchar_t) ch;
-			buffer = wxString(wxT("0") ) + ch;
-		}
-		else 
-		{
-			buffer = wxString::Format(wxT("%.2d"), (int) value);
-		}
-		FlushBuffer();		
+      if (value < min || value > max)
+	{
+	  //			buffer = wxString(wxT("0") ) + (wchar_t) ch;
+	  buffer = wxString(wxT("0") ) + ch;
 	}
-	
-	switch (keycode)
+      else 
 	{
-		case WXK_TAB:
-			FlushBuffer();
+	  buffer = wxString::Format(wxT("%.2d"), (int) value);
+	}
+      FlushBuffer();		
+    }
+	
+  switch (keycode)
+    {
+    case WXK_TAB:
+      FlushBuffer();
 			
-			if (!event.ShiftDown() )
-			{
-				pos += 3;
-			}
-			else
-			{
-				pos -= 3;
-			}
+      if (!event.ShiftDown() )
+	{
+	  pos += 3;
+	}
+      else
+	{
+	  pos -= 3;
+	}
 			
-			#ifndef __WXMAC__
-			if (pos < 0 || pos > 11)
-			{
-				event.Skip();
-			}
-			#endif // __WXMAC__
-			break;
+#ifndef __WXMAC__
+      if (pos < 0 || pos > 11)
+	{
+	  event.Skip();
+	}
+#endif // __WXMAC__
+      break;
 
-		case WXK_LEFT:
-			FlushBuffer();
+    case WXK_LEFT:
+      FlushBuffer();
 
-			pos -= 3;
-			if (pos < 0) 
-			{
-				pos = 0;
-			}
-			break;
+      pos -= 3;
+      if (pos < 0) 
+	{
+	  pos = 0;
+	}
+      break;
 			
-		case WXK_RIGHT:
-			FlushBuffer();
+    case WXK_RIGHT:
+      FlushBuffer();
 
-			pos += 3;
-			//if (pos > 11) //AJ
-			//{
-			//	pos = 11;
-			//}
-			if (pos > 8) 
-			{
-				pos = 8;
-			}
-			break;
+      pos += 3;
+      //if (pos > 11) //AJ
+      //{
+      //	pos = 11;
+      //}
+      if (pos > 8) 
+	{
+	  pos = 8;
+	}
+      break;
 						
-		case WXK_UP:
-			Increment(POSITIVE);
-			FlushBuffer();
-			break;
+    case WXK_UP:
+      Increment(POSITIVE);
+      FlushBuffer();
+      break;
 			
-		case WXK_DOWN:
-			Increment(NEGATIVE);
-			FlushBuffer();
-			break;
+    case WXK_DOWN:
+      Increment(NEGATIVE);
+      FlushBuffer();
+      break;
 		
-		//case 65:
-		//case 97:
-		//	//if (pos > 8)
-		//	//{
-		//	//	buffer = wxT("AM");
-		//	//}
-		//	//FlushBuffer();
-		//	//break;
-		//	
-		//case 80:
-		//case 112:
-		//	//if (pos > 8)
-		//	//{
-		//	//	buffer = wxT("PM");
-		//	//}
-		//	//FlushBuffer();
-		// //	break;
-	}
-	SelectPart();
+      //case 65:
+      //case 97:
+      //	//if (pos > 8)
+      //	//{
+      //	//	buffer = wxT("AM");
+      //	//}
+      //	//FlushBuffer();
+      //	//break;
+      //	
+      //case 80:
+      //case 112:
+      //	//if (pos > 8)
+      //	//{
+      //	//	buffer = wxT("PM");
+      //	//}
+      //	//FlushBuffer();
+      // //	break;
+    }
+  SelectPart();
 }
 
 void MyTextCtrl::UpdatePosition()
 {
-	pos = GetInsertionPoint();
+  pos = GetInsertionPoint();
 }
 
 void MyTextCtrl::SelectPart() 
 {
-	if (pos <= 2) 
-	{
-		min = 0;
-		//max = 12; //AJ
-		max = 23;
-	}
+  if (pos <= 2) 
+    {
+      min = 0;
+      //max = 12; //AJ
+      max = 23;
+    }
 	
-	if (pos > 2 && pos <= 8)
-	{
-		min = 0;
-		max = 59;
-	}
+  if (pos > 2 && pos <= 8)
+    {
+      min = 0;
+      max = 59;
+    }
 
-	if (pos <= 2)
-	{
-		SetSelection(0, 2);
-	}
+  if (pos <= 2)
+    {
+      SetSelection(0, 2);
+    }
 	
-	if (pos > 2 && pos <= 5)
-	{
-		SetSelection(3, 5);
-	}
+  if (pos > 2 && pos <= 5)
+    {
+      SetSelection(3, 5);
+    }
 	
-	if (pos > 5 && pos <= 8)
-	{
-		SetSelection(6, 8);
-	}
+  if (pos > 5 && pos <= 8)
+    {
+      SetSelection(6, 8);
+    }
 	
-	//if (pos > 8) 
-	//{
-	//	SetSelection(9, 11);
-	//}
+  //if (pos > 8) 
+  //{
+  //	SetSelection(9, 11);
+  //}
 }
 
 void MyTextCtrl::UpdateBuffer()
 {
-	buffer = GetStringSelection();
+  buffer = GetStringSelection();
 }
 
 
 void MyTextCtrl::FlushBuffer(bool clear)
 {
-	long start, end;
-	GetSelection(&start, &end);
-	Replace(start, end, buffer);
+  long start, end;
+  GetSelection(&start, &end);
+  Replace(start, end, buffer);
 	
-	// trigger a MyTimeChangeEvent
-	MyTimeChangeEvent timechanged(MyEVT_TIMECHANGE, tc->GetId() );
-	timechanged.SetEventObject(tc);
-	timechanged.SetValue(GetValue() );
-	GetEventHandler()->ProcessEvent(timechanged);
+  // trigger a MyTimeChangeEvent
+  MyTimeChangeEvent timechanged(MyEVT_TIMECHANGE, tc->GetId() );
+  timechanged.SetEventObject(tc);
+  timechanged.SetValue(GetValue() );
+  GetEventHandler()->ProcessEvent(timechanged);
 }
 
 void MyTextCtrl::FixValue(long *value)
 {
-	if (*value < min) 
-	{
-		*value = max;
-	}
+  if (*value < min) 
+    {
+      *value = max;
+    }
 	
-	if (*value > max)
-	{
-		*value = min;
-	}
+  if (*value > max)
+    {
+      *value = min;
+    }
 }
 
 BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
-	EVT_CHAR(MyTextCtrl::OnChar)
-	EVT_LEFT_UP     (MyTextCtrl::OnClick)
+EVT_CHAR(MyTextCtrl::OnChar)
+EVT_LEFT_UP     (MyTextCtrl::OnClick)
 
 END_EVENT_TABLE()	
 
@@ -366,59 +366,64 @@ END_EVENT_TABLE()
 IMPLEMENT_DYNAMIC_CLASS(MyTimeCtrl, wxControl)
 
 MyTimeCtrl::MyTimeCtrl(wxWindow *parent, wxWindowID id, 
-	const wxString& value, const wxPoint& pos, const wxSize& size)
-	: wxControl(parent, id, pos, size)
+		       const wxString& value, const wxPoint& pos, const wxSize& size)
+: wxControl(parent, id, pos, size)
 {
-	tc = new MyTextCtrl(this, value);
-	//AJ
-	//sb = new MySpinButton(this);
+  tc = new MyTextCtrl(this, value);
+  //AJ
+  //sb = new MySpinButton(this);
 
-	tc->SetWindowStyle(wxTE_PROCESS_TAB);
-	tc->SetMaxLength(8);
+  tc->SetWindowStyle(wxTE_PROCESS_TAB);
+  tc->SetMaxLength(8);
 
-	//wxSize bestsize = DoGetBestSize();
-	//DoMoveWindow(pos.x, pos.y, bestsize.x, bestsize.y);
-	//MPM : REMOVED DOMOVEWINDOW BELOW
-	//DoMoveWindow(pos.x, pos.y, size.x, size.y);
+  //wxSize bestsize = DoGetBestSize();
+  //DoMoveWindow(pos.x, pos.y, bestsize.x, bestsize.y);
+  //MPM : REMOVED DOMOVEWINDOW BELOW
+  //DoMoveWindow(pos.x, pos.y, size.x, size.y);
 
-	// prevent the time picker from intercepting events
-	wxControl::Enable(FALSE);
+  // prevent the time picker from intercepting events
+  wxControl::Enable(FALSE);
 
-	Show(TRUE);
+  Show(TRUE);
 }
 
 MyTimeCtrl::~MyTimeCtrl()
 {
-	delete tc;
-	//AJ
-	//delete sb;
+  if (tc)
+    {
+      delete tc;
+      tc = NULL;
+    }
+  
+  //AJ
+  //delete sb;
 }
 
 void MyTimeCtrl::SetFontType(const wxFont& font)
 {
-	tc->SetFont(font);
+  tc->SetFont(font);
 }
 
 bool MyTimeCtrl::Show(bool show)
 {
-	wxControl::Show(show);
+  wxControl::Show(show);
 	
-	tc->Show(show);
-	//AJ
-	//sb->Show(show);
+  tc->Show(show);
+  //AJ
+  //sb->Show(show);
 	
-	return TRUE;
+  return TRUE;
 }
 
 bool MyTimeCtrl::Enable(bool enable)
 {
-	//wxControl::Enable(enable);
+  //wxControl::Enable(enable);
 	
-	tc->Enable(enable);
-	//AJ
-	//sb->Enable(enable);
+  tc->Enable(enable);
+  //AJ
+  //sb->Enable(enable);
 	
-	return TRUE;
+  return TRUE;
 }
 
 //wxSize MyTimeCtrl::DoGetBestSize() const
@@ -433,65 +438,65 @@ void MyTimeCtrl::DoMoveWindow(int x, int y, int width, int height)
   //TODO: WHY DOES A CRITICAL?
   wxControl::DoMoveWindow(x, y, width, height);
 
-	//wxSize buttonsize = sb->GetBestSize();
-	//int textwidth = width - (buttonsize.x + SPACING);
+  //wxSize buttonsize = sb->GetBestSize();
+  //int textwidth = width - (buttonsize.x + SPACING);
   
-	//tc->SetSize(x, y, textwidth, height);
+  //tc->SetSize(x, y, textwidth, height);
   tc->SetSize(x, y, width, height);
-	//AJ
-	//sb->SetSize(x + textwidth + SPACING, y, -1, height);
+  //AJ
+  //sb->SetSize(x + textwidth + SPACING, y, -1, height);
 }
 
 void MyTimeCtrl::UpdateTextCtrl(IncrementType direction)
 {
-	tc->SetFocus();
-	tc->ApplyIncrement(direction);
+  tc->SetFocus();
+  tc->ApplyIncrement(direction);
 }
 
 wxString MyTimeCtrl::GetValue() const
 {
-	return tc->GetValue();
+  return tc->GetValue();
 }
 
 void MyTimeCtrl::SetValue(const wxString& value) const
 {
-	long start, end;
-	tc->GetSelection(&start, &end);
-	tc->SetValue(value);
-	tc->SetSelection(start,end);
+  long start, end;
+  tc->GetSelection(&start, &end);
+  tc->SetValue(value);
+  tc->SetSelection(start,end);
 }
 wxString MyTimeCtrl::GetCurrentTime()
 {
-	// get the current time
-	wxDateTime ct = wxDateTime::Now();
+  // get the current time
+  wxDateTime ct = wxDateTime::Now();
 	
-	// format current time appropriately for the time control
-	int hour = ct.GetHour();
-	int minute = ct.GetMinute();
-	int second = ct.GetSecond();
+  // format current time appropriately for the time control
+  int hour = ct.GetHour();
+  int minute = ct.GetMinute();
+  int second = ct.GetSecond();
 	
-	//AJ
-	//wxString ampm(wxT("AM") );
-	//
-	//if (hour == 24)
-	//{
-	//	hour = 0;
-	//}
+  //AJ
+  //wxString ampm(wxT("AM") );
+  //
+  //if (hour == 24)
+  //{
+  //	hour = 0;
+  //}
 
-	//if (hour >= 12)
-	//{
-	//	ampm = wxT("PM");
-	//}
-	//
-	//if (hour > 12) 
-	//{
-	//	hour %= 12;
-	//}
+  //if (hour >= 12)
+  //{
+  //	ampm = wxT("PM");
+  //}
+  //
+  //if (hour > 12) 
+  //{
+  //	hour %= 12;
+  //}
 	
-        wxString result = wxString::Format(wxT("%.2d"), hour) + wxT(":") +
-	  wxString::Format(wxT("%.2d"), minute) + wxT(":") +
-	  wxString::Format(wxT("%.2d"), second); //AJ + wxT(" ") + ampm;
+  wxString result = wxString::Format(wxT("%.2d"), hour) + wxT(":") +
+    wxString::Format(wxT("%.2d"), minute) + wxT(":") +
+    wxString::Format(wxT("%.2d"), second); //AJ + wxT(" ") + ampm;
 
-	return result;
+  return result;
 		
 }

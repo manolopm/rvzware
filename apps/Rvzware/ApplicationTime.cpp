@@ -26,12 +26,12 @@ ApplicationTime * ApplicationTime::instance = NULL;
 
 
 ApplicationTime::ApplicationTime(void) : time0(wxDateTime::UNow()),
-									     time1(wxDateTime::UNow()),
-										 ttime(wxDateTime::UNow()),
-										 running(true),
-										 multiplier(1.0f),
-										 established_period(false),
-										 minute_notify(0)
+					 time1(wxDateTime::UNow()),
+					 ttime(wxDateTime::UNow()),
+					 running(true),
+					 multiplier(1.0f),
+					 established_period(false),
+					 minute_notify(0)
 {
 	
 }
@@ -42,92 +42,95 @@ ApplicationTime::~ApplicationTime(void)
 
 ApplicationTime * ApplicationTime::GetInstance()
 {
-	if (instance == NULL)
-		instance = new ApplicationTime;
+  if (instance == NULL)
+    instance = new ApplicationTime;
 
-	return instance;
+  return instance;
 }
 void ApplicationTime::ReleaseInstance()
 {
-	if (instance != NULL)
-		delete instance;
+  if (instance != NULL)
+    {
+      delete instance;
+      instance = NULL;
+    }
 }
 
 void ApplicationTime::Update()
 {
-	if (!running)
-	{
-		Notify();
-		return;
-	}
+  if (!running)
+    {
+      Notify();
+      return;
+    }
 	
-	wxDateTime aux(wxDateTime::UNow());
-	wxTimeSpan time_span1(aux.GetHour(), aux.GetMinute(), aux.GetSecond(), aux.GetMillisecond());
-	wxTimeSpan time_span2(time1.GetHour(), time1.GetMinute(), time1.GetSecond(), time1.GetMillisecond());
-	wxTimeSpan difference = time_span1.Subtract(time_span2);
-	difference *= (int)multiplier;
+  wxDateTime aux(wxDateTime::UNow());
+  wxTimeSpan time_span1(aux.GetHour(), aux.GetMinute(), aux.GetSecond(), aux.GetMillisecond());
+  wxTimeSpan time_span2(time1.GetHour(), time1.GetMinute(), time1.GetSecond(), time1.GetMillisecond());
+  wxTimeSpan difference = time_span1.Subtract(time_span2);
+  difference *= (int)multiplier;
 
-	ttime.Add(difference);
+  ttime.Add(difference);
 
-	if (established_period)
-	{
-		if (ttime.IsLaterThan(end_date))
-			ttime = end_date;
-		else
-			if (ttime.IsEarlierThan(init_date))
-				ttime = init_date;
-	}
+  if (established_period)
+    {
+      if (ttime.IsLaterThan(end_date))
+	ttime = end_date;
+      else
+	if (ttime.IsEarlierThan(init_date))
+	  ttime = init_date;
+    }
 
-	time0 = time1;
-	time1 = aux;
+  time0 = time1;
+  time1 = aux;
 	
-	Notify(); //update the observers
+  Notify(); //update the observers
 	
 }
 
 
 void ApplicationTime::On()
 {
-	running = true;
-	time0 = wxDateTime::UNow();
-	time1 = wxDateTime::UNow();
+  running = true;
+  time0 = wxDateTime::UNow();
+  time1 = wxDateTime::UNow();
 }
 void ApplicationTime::Off()
 {
-	running = false;
+  running = false;
 }
 void ApplicationTime::Pause()
 {
-	running = false;
+  running = false;
 }
 void ApplicationTime::Resume()
 {
-	running = true;
-	time0 = time1;
-	time1 = wxDateTime::UNow();
+  running = true;
+  time0 = time1;
+  time1 = wxDateTime::UNow();
 }
 
 void ApplicationTime::SetPeriod(const wxDateTime &_init_date, const wxDateTime &_end_date)
 {
-	init_date = _init_date;
+  init_date = _init_date;
 
-	end_date = _end_date;
+  end_date = _end_date;
 
-	established_period = true;	
+  established_period = true;	
 }
 
 
 void ApplicationTime::SetTransformedTime(const wxDateTime &new_ttime)
 { 
-	ttime = new_ttime;
-	Notify(); //update the observers
+  ttime = new_ttime;
+  Notify(); //update the observers
 }
 
 cpw::cpwTime ApplicationTime::GetTransformedCPWTime() {
-	long seg = ttime.GetTicks();
-	cpw::cpwTime time;
-	time.seconds = seg;
-	time.miliseconds = 0;
-	return time;
+  long seg = ttime.GetTicks();
+  cpw::cpwTime time;
+  time.seconds = seg;
+  time.miliseconds = 0;
+  return time;
 }
 

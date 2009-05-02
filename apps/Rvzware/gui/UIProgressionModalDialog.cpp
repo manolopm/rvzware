@@ -26,75 +26,75 @@ using namespace cpw::gui;
 
 
 BEGIN_EVENT_TABLE(UIProgressionModalDialog,wxDialog)	
-	EVT_PAINT		(UIProgressionModalDialog::OnPaint)
+EVT_PAINT		(UIProgressionModalDialog::OnPaint)
 END_EVENT_TABLE()
 
 
 UIProgressionModalDialog::UIProgressionModalDialog(cpw::controllers::StatusController *status_controller, wxWindow *parent, wxWindowID id, const wxString &title, const wxPoint &position, const wxSize& size, long style)
 : wxDialog(parent, id, title, position, size, style), cpw::Observer(), paren(parent), sc(status_controller)
 {
-	InitGUI();
+  InitGUI();
 }
 
 UIProgressionModalDialog::~UIProgressionModalDialog()
 {
-	((cpw::Subject *)sc)->Detach(this);
+  ((cpw::Subject *)sc)->Detach(this);
 } 
 
 void UIProgressionModalDialog::InitGUI()
 {
-	SetTitle(wxT("Progression"));
-	SetIcon(wxNullIcon);
-	SetSize(8,8,300,100);
-	Center();
+  SetTitle(wxT("Progression"));
+  SetIcon(wxNullIcon);
+  SetSize(8,8,300,100);
+  Center();
 
-	statusLabel = new wxStaticText(this, wxID_ANY, wxT("Loading..."), wxPoint(44,10), wxSize(228,16),wxST_NO_AUTORESIZE);
-	statusGauge = new wxGauge(this, wxID_ANY, 50, wxPoint(22,30), wxSize(250,20), wxGA_HORIZONTAL);
+  statusLabel = new wxStaticText(this, wxID_ANY, wxT("Loading..."), wxPoint(44,10), wxSize(228,16),wxST_NO_AUTORESIZE);
+  statusGauge = new wxGauge(this, wxID_ANY, 50, wxPoint(22,30), wxSize(250,20), wxGA_HORIZONTAL);
 
-	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
-	animationGauge.LoadFile(wxString((icon_path + "loader.gif").c_str(),wxConvUTF8));
+  std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
+  animationGauge.LoadFile(wxString((icon_path + "loader.gif").c_str(),wxConvUTF8));
 }
 
 void UIProgressionModalDialog::Update(bool subject_deleted)
 {
-	if (subject_deleted)
-	{
-		Show(false);
-		wxDialog::Refresh();
-		wxDialog::Update();	
-		return;
-	}
-	if (sc->GetModalTraceableItem().valid)
-	{
-	  statusLabel->SetLabel(wxString(sc->GetModalTraceableItem().label.c_str(),wxConvUTF8));
-		statusGauge->SetRange(sc->GetModalTraceableItem().range);
-		statusGauge->SetValue(sc->GetModalTraceableItem().value);
+  if (subject_deleted)
+    {
+      Show(false);
+      wxDialog::Refresh();
+      wxDialog::Update();	
+      return;
+    }
+  if (sc->GetModalTraceableItem().valid)
+    {
+      statusLabel->SetLabel(wxString(sc->GetModalTraceableItem().label.c_str(),wxConvUTF8));
+      statusGauge->SetRange(sc->GetModalTraceableItem().range);
+      statusGauge->SetValue(sc->GetModalTraceableItem().value);
 
-		float gifpercent = sc->GetModalTraceableItem().value / (float)(sc->GetModalTraceableItem().range);
-		if (gifpercent > 1) gifpercent = 1.0f;
-		int frame = (int)(gifpercent*(animationGauge.GetFrameCount()-1));
-		frameImage = animationGauge.GetFrame(frame);
+      float gifpercent = sc->GetModalTraceableItem().value / (float)(sc->GetModalTraceableItem().range);
+      if (gifpercent > 1) gifpercent = 1.0f;
+      int frame = (int)(gifpercent*(animationGauge.GetFrameCount()-1));
+      frameImage = animationGauge.GetFrame(frame);
 
-		if (!IsShown()) 
-		{
-			Center();
-			Show(true);
-		}
-	}
-	else
+      if (!IsShown()) 
 	{
-		if (IsShown()) Show(false);
+	  Center();
+	  Show(true);
 	}
-	wxDialog::Refresh();
-	wxDialog::Update();
+    }
+  else
+    {
+      if (IsShown()) Show(false);
+    }
+  wxDialog::Refresh();
+  wxDialog::Update();
 }
 
 void UIProgressionModalDialog::OnPaint(wxPaintEvent& event)
 {
-	wxPaintDC dc(this);
-	dc.SetFont(*wxNORMAL_FONT); 
-	dc.SetBrush( *wxTRANSPARENT_BRUSH );
-	dc.SetBackgroundMode( wxTRANSPARENT );
-	dc.Clear();
-	dc.DrawBitmap(frameImage, 22, 8, true);
+  wxPaintDC dc(this);
+  dc.SetFont(*wxNORMAL_FONT); 
+  dc.SetBrush( *wxTRANSPARENT_BRUSH );
+  dc.SetBackgroundMode( wxTRANSPARENT );
+  dc.Clear();
+  dc.DrawBitmap(frameImage, 22, 8, true);
 }

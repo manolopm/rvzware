@@ -1,4 +1,4 @@
-/*
+/*				
  * Rvzware based in CAPAWARE 3D
  *
  * Rvzware is free software; you can redistribute it and/or modify it under
@@ -32,40 +32,40 @@
 namespace cpw
 {
 
-	namespace controllers
-	{
+  namespace controllers
+  {
 
-		/** 
-			\brief This controllers is responsible for the management of the animations
-			\ingroup cpw
-		*/
-		class VideoController : public cpw::Observer
-		{
-			public:
+    /** 
+	\brief This controllers is responsible for the management of the animations
+	\ingroup cpw
+    */
+    class VideoController : public cpw::Observer
+      {
+      public:
 				
-				VideoController(void);
-				~VideoController(void);
+	VideoController(void);
+	~VideoController(void);
 				
-				virtual void Update(bool subject_deleted = false);
-				void SetAnimatedEntityList(std::vector<cpw::Entity *> &entities);
-				void GetAnimatedEntityListFromLayerTree(cpw::LayerTree *layer_tree);
+	virtual void Update(bool subject_deleted = false);
+	void SetAnimatedEntityList(std::vector<cpw::Entity *> &entities);
+	void GetAnimatedEntityListFromLayerTree(cpw::LayerTree *layer_tree);
 
-				void SetAppTime(ApplicationTime *_app_time) { app_time = _app_time; }
-				void SetLayerTree(cpw::LayerTree *lt) { _layer_tree = lt; }
-				void SetAllowUpdate(const bool &_allow_update) { allow_update = _allow_update; }
+	void SetAppTime(ApplicationTime *_app_time) { app_time = _app_time; }
+	void SetLayerTree(cpw::LayerTree *lt) { _layer_tree = lt; }
+	void SetAllowUpdate(const bool &_allow_update) { allow_update = _allow_update; }
 
-				void UpdateList(); 
+	void UpdateList(); 
 
 						
-			private:
+      private:
 
-				cpw::LayerTree *_layer_tree;
-				std::vector<cpw::Entity *> animated_entities;
-				ApplicationTime *app_time;
-				bool init, allow_update;
+	cpw::LayerTree *_layer_tree;
+	std::vector<cpw::Entity *> animated_entities;
+	ApplicationTime *app_time;
+	bool init, allow_update;
 
-		};
-	}
+      };
+  }
 }
 
 #endif

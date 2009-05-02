@@ -32,60 +32,60 @@ cpw::controllers::KeyboardControl* KeyboardControl::instance = NULL;
 
 KeyboardControl *KeyboardControl::GetInstance()
 {
-	if(instance == NULL)
-		instance = new KeyboardControl;
+  if(instance == NULL)
+    instance = new KeyboardControl;
 
-	return instance;
+  return instance;
 }
 
 void KeyboardControl::ReleaseInstance()
 {
-	if (instance != NULL)
-	{
-		delete instance;
-		instance = NULL;
-	}
+  if (instance != NULL)
+    {
+      delete instance;
+      instance = NULL;
+    }
 }
 			
 
 KeyboardControl::KeyboardControl(void)
 {
-	//keys = new bool[KEYBOARD_SIZE];
-	//keys = (bool *) malloc(sizeof(bool) * KEYBOARD_SIZE);
-	//memset(keys, 0, KEYBOARD_SIZE);
+  //keys = new bool[KEYBOARD_SIZE];
+  //keys = (bool *) malloc(sizeof(bool) * KEYBOARD_SIZE);
+  //memset(keys, 0, KEYBOARD_SIZE);
 
-	for (int i=0; i<KEYBOARD_SIZE; i++)
-		keys[i] = false;
+  for (int i=0; i<KEYBOARD_SIZE; i++)
+    keys[i] = false;
 }
 
 KeyboardControl::~KeyboardControl(void)
 {
-	int debug;
-	debug = 1;
+  int debug;
+  debug = 1;
 }
 
 
 void KeyboardControl::KeyDown(int k)
 {
-	if ((k < 0) || (k >= KEYBOARD_SIZE))
-		return;
+  if ((k < 0) || (k >= KEYBOARD_SIZE))
+    return;
 
-	keys[k] = true; 
+  keys[k] = true; 
 }
 
 void KeyboardControl::KeyUp(int k)
 {
-	if ((k < 0) || (k >= KEYBOARD_SIZE))
-		return;
+  if ((k < 0) || (k >= KEYBOARD_SIZE))
+    return;
 
-	keys[k] = false; 
+  keys[k] = false; 
 
 }
 		
 bool KeyboardControl::KeyPressed(int k)
 {
-	if ((k < 0) || (k >= KEYBOARD_SIZE))
-		return false;
+  if ((k < 0) || (k >= KEYBOARD_SIZE))
+    return false;
 
-	return keys[k];
+  return keys[k];
 }
