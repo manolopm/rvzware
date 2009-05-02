@@ -74,7 +74,11 @@ Persistent &Persistent::operator = (const Persistent &persistent)
 
 Persistent::~Persistent() 
 {
-	if (persistent_callback != NULL) delete persistent_callback;
+  if (persistent_callback != NULL)
+    {
+      delete persistent_callback;
+      persistent_callback = NULL;
+    }
 
 }
 
@@ -340,9 +344,13 @@ PersistentError Persistent::Delete()
 
 void Persistent::SetPersistentCallBack(IPersistentCallBack *persist)
 {
-	if(persistent_callback != NULL) delete persistent_callback;
+  if(persistent_callback != NULL)
+    {
+      delete persistent_callback;
+      persistent_callback = NULL;
+    }
 
-	persistent_callback = persist; 
+  persistent_callback = persist; 
 
 }
 

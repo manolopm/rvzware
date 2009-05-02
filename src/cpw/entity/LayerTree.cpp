@@ -32,12 +32,16 @@ using namespace cpw;
 LayerTree::LayerTree(Entity* toplayer)
 {
 
-	if(top_layer != NULL) delete top_layer;
+  if(top_layer != NULL)
+    {
+      delete top_layer;
+      top_layer = NULL;
+    }
 
-	top_layer = toplayer;
-	active    = top_layer;
-	last_added_entity = top_layer;
-	active_parent = top_layer;
+  top_layer = toplayer;
+  active    = top_layer;
+  last_added_entity = top_layer;
+  active_parent = top_layer;
 }
 
 
@@ -48,155 +52,158 @@ LayerTree::~LayerTree()
 
 bool LayerTree::TestModified(Entity *entity)
 {
-	if(entity->isModified()) return true;
-	else {
-		bool modified = false;
-		if(entity->isContainer())
-		{
-			int i = 0;
-			while(i < entity->GetNumChildren() && !(modified = TestModified(entity->GetChild(i)))) 
-				i++;
-		}
-		return modified;
-	}
+  if(entity->isModified()) return true;
+  else {
+    bool modified = false;
+    if(entity->isContainer())
+      {
+	int i = 0;
+	while(i < entity->GetNumChildren() && !(modified = TestModified(entity->GetChild(i)))) 
+	  i++;
+      }
+    return modified;
+  }
 }
 
 bool LayerTree::isModified()
 {
-	if(top_layer != NULL)
+  if(top_layer != NULL)
 	
-		return TestModified(top_layer);	
+    return TestModified(top_layer);	
 	
-	return false;
+  return false;
 }
 
 
 void LayerTree::CopyLayerToTop(Entity *layer)
 {	
-	if(top_layer != NULL)
-		delete top_layer;
+  if(top_layer != NULL)
+    {
+      delete top_layer;
+      top_layer = NULL;
+    }
 
-	top_layer = layer;
-	active    = top_layer;
-	active_parent = top_layer;
-	last_added_entity = top_layer;
-	Subject::Notify();
+  top_layer = layer;
+  active    = top_layer;
+  active_parent = top_layer;
+  last_added_entity = top_layer;
+  Subject::Notify();
 }
 
 
 bool LayerTree::AddToActiveLayer(Entity *ent, const bool &add_parent)
 {
-	if(top_layer == NULL) 
-	{
-		CopyLayerToTop(ent);
-	}
-	else
-	{
-		//test for recursive inclusions
-		cpw::TypeId id = ent->GetId();
-		cpw::Entity *layer = active_parent; 
+  if(top_layer == NULL) 
+    {
+      CopyLayerToTop(ent);
+    }
+  else
+    {
+      //test for recursive inclusions
+      cpw::TypeId id = ent->GetId();
+      cpw::Entity *layer = active_parent; 
 		
-		while(layer != NULL && layer->GetId() != id) 
-			layer = layer->GetParent();
+      while(layer != NULL && layer->GetId() != id) 
+	layer = layer->GetParent();
 
-		if(layer != NULL)
-			return false;
-		else
-		{
-			if (active_parent == NULL)
-				active_parent = top_layer;
+      if(layer != NULL)
+	return false;
+      else
+	{
+	  if (active_parent == NULL)
+	    active_parent = top_layer;
 
-			active_parent->Add(ent);
-			last_added_entity = ent;
-			active = last_added_entity;
-			Subject::Notify();
-		}
+	  active_parent->Add(ent);
+	  last_added_entity = ent;
+	  active = last_added_entity;
+	  Subject::Notify();
 	}
-	return true;
+    }
+  return true;
 
 }
 
 
 cpw::Entity *LayerTree::MakeActive(const cpw::TypeId &id)
 {
-	//search for the node with the url
-	bool ok = false;
-	Entity *selected = NULL;
-	SearchAndMakeActive(top_layer, id, ok, &selected, false);
+  //search for the node with the url
+  bool ok = false;
+  Entity *selected = NULL;
+  SearchAndMakeActive(top_layer, id, ok, &selected, false);
 
-	return selected;
+  return selected;
 }
 
 void LayerTree::MakeParentActive(const cpw::TypeId &id)
 {
-	//search for the node with the url
-	bool ok = false;
-	Entity *selected = NULL;
-	SearchAndMakeActive(top_layer, id, ok, &selected, true);
+  //search for the node with the url
+  bool ok = false;
+  Entity *selected = NULL;
+  SearchAndMakeActive(top_layer, id, ok, &selected, true);
 }
 
 
 void LayerTree::SearchAndMakeActive(Entity *entity, const cpw::TypeId &id, bool &entity_found, Entity **selected, bool parent)
 {
-	//if already found don´t continue searching
-	if (entity_found)
-		return;
+  //if already found don´t continue searching
+  if (entity_found)
+    return;
 
-	//if this is the entity make it active and return
-	if (entity->GetId() == id)
-	{
-		entity_found = true;
+  //if this is the entity make it active and return
+  if (entity->GetId() == id)
+    {
+      entity_found = true;
 
-		*selected = entity;
+      *selected = entity;
 
-		if (parent)
-			active_parent = entity;
-		else
-			active = entity;
+      if (parent)
+	active_parent = entity;
+      else
+	active = entity;
 		
-		return;
-	}
+      return;
+    }
 	
-	//keep searching
-	if (entity->isContainer())
-	{
-		for (int i = 0; i < ((cpw::ContainerLayer *)entity)->GetNumChildren(); i++)
-			SearchAndMakeActive(((cpw::ContainerLayer *)entity)->GetChild(i), id, entity_found, selected, parent);
-	}
+  //keep searching
+  if (entity->isContainer())
+    {
+      for (int i = 0; i < ((cpw::ContainerLayer *)entity)->GetNumChildren(); i++)
+	SearchAndMakeActive(((cpw::ContainerLayer *)entity)->GetChild(i), id, entity_found, selected, parent);
+    }
 }
 
 
 void LayerTree::GetAnimatedEntitiesFromTopLayer(std::vector<cpw::Entity *> &entities)
 {
-	GetAnimatedEntities(entities, top_layer);
+  GetAnimatedEntities(entities, top_layer);
 }
 
 void LayerTree::GetAnimatedEntities(std::vector<cpw::Entity *> &entities, cpw::Entity *entity)
 {
-	if (entity == NULL)
-		return;
+  if (entity == NULL)
+    return;
 
-	for (unsigned int i=0; i<(unsigned int)entity->GetNumChildren(); i++)
-		GetAnimatedEntities(entities, entity->GetChild(i));
+  for (unsigned int i=0; i<(unsigned int)entity->GetNumChildren(); i++)
+    GetAnimatedEntities(entities, entity->GetChild(i));
 
-	if (entity->IsAnimated())
-		entities.push_back(entity);
+  if (entity->IsAnimated())
+    entities.push_back(entity);
 	
 }
 
 
 cpw::Entity * LayerTree::GetEntity(const cpw::TypeId &id)
 {
-	return cpw::EntityRegistry::GetInstance()->GetEntity(id);	
+  return cpw::EntityRegistry::GetInstance()->GetEntity(id);	
 }
 
 
 void LayerTree::Clear()
 {
-	top_layer = NULL;  
-	active    = top_layer;
-	last_added_entity = top_layer;
-	active_parent = top_layer;
-	Subject::Notify();
+  top_layer = NULL;  
+  active    = top_layer;
+  last_added_entity = top_layer;
+  active_parent = top_layer;
+  Subject::Notify();
 
 }

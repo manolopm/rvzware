@@ -43,13 +43,16 @@ using namespace cpw::wxremote;
  *  This constructor requires an object to be used as a link to the main thread.
  */
 WxSocketFactory::WxSocketFactory(wxEvtHandler *handler)
-	: socket_handler(NULL), parent_handler(handler) { }
+  : socket_handler(NULL), parent_handler(handler) { }
 
 
 WxSocketFactory::~WxSocketFactory()
 {
-	if (socket_handler != NULL)
-		delete socket_handler;
+  if (socket_handler != NULL)
+    {
+      delete socket_handler;
+      socket_handler = NULL;
+    }
 }
 
 
@@ -61,7 +64,7 @@ WxSocketFactory::~WxSocketFactory()
  */
 void WxSocketFactory::CreateHelperClasses(cpw::remote::RemoteProtocol *protocol)
 {
-	socket_handler = new WxSocketHandler(protocol);
+  socket_handler = new WxSocketHandler(protocol);
 }
 
 
@@ -72,9 +75,9 @@ void WxSocketFactory::CreateHelperClasses(cpw::remote::RemoteProtocol *protocol)
  */
 cpw::remote::ISocket *WxSocketFactory::CreateSocket()
 {
-	WxSocket *wx_socket = new WxSocket(new wxSocketClient(), socket_handler);
+  WxSocket *wx_socket = new WxSocket(new wxSocketClient(), socket_handler);
 
-	return wx_socket;
+  return wx_socket;
 }
 
 
@@ -84,9 +87,9 @@ cpw::remote::ISocket *WxSocketFactory::CreateSocket()
  */
 cpw::remote::ISocket *WxSocketFactory::CreateSocket(wxSocketClient *socket)
 {
-	WxSocket *wx_socket = new WxSocket(socket, socket_handler);
+  WxSocket *wx_socket = new WxSocket(socket, socket_handler);
 
-	return wx_socket;
+  return wx_socket;
 }
 
 
@@ -97,6 +100,6 @@ cpw::remote::ISocket *WxSocketFactory::CreateSocket(wxSocketClient *socket)
  */
 bool WxSocketFactory::ListenOn(int port)
 {
-	return socket_handler->ListenOn(port);
+  return socket_handler->ListenOn(port);
 }
 

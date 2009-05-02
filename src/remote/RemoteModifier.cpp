@@ -43,16 +43,16 @@ using namespace cpw::remote;
  *  \param protocol The RemoteProtocol object that is active on the system
  */
 RemoteModifier::RemoteModifier(cpw::Persistent *persistent, RemoteProtocol *protocol)
-	: subject(persistent), protocol(protocol), execute_next_update(true)
+  : subject(persistent), protocol(protocol), execute_next_update(true)
 {
-	subject->Attach(this);
+  subject->Attach(this);
 }
 
 
 RemoteModifier::~RemoteModifier()
 {
-	if (subject != NULL)
-		subject->Detach(this);
+  if (subject != NULL)
+    subject->Detach(this);
 }
 
 
@@ -70,7 +70,7 @@ RemoteModifier::~RemoteModifier()
  */
 void RemoteModifier::SetExecuteNext(bool enable)
 {
-	execute_next_update = enable;
+  execute_next_update = enable;
 }
 
 
@@ -85,20 +85,20 @@ void RemoteModifier::SetExecuteNext(bool enable)
  */
 void RemoteModifier::Update(bool subject_deleted)
 {
-	if (subject_deleted)
+  if (subject_deleted)
+    {
+      protocol->EntityRemoved(((cpw::Entity *) subject)->GetId());
+      subject = NULL;
+    }
+  else
+    {
+      if (execute_next_update)
 	{
-		protocol->EntityRemoved(((cpw::Entity *) subject)->GetId());
-		subject = NULL;
+	  cpw::Change change = ((cpw::Loggable*)subject)->GetLastChange();
+	  if (change.field != "")
+	    protocol->SendChange(subject->GetId(), change);
 	}
-	else
-	{
-		if (execute_next_update)
-		{
-			cpw::Change change = ((cpw::Loggable*)subject)->GetLastChange();
-			if (change.field != "")
-				protocol->SendChange(subject->GetId(), change);
-		}
-	}
+    }
 }
 
 
@@ -114,19 +114,19 @@ void RemoteModifier::Update(bool subject_deleted)
  */
 void RemoteModifier::SetValue(const std::string &field, const std::string &value, const uint64_t ts)
 {
-	if (subject != NULL)
-	{
-		execute_next_update = false;
-		((cpw::Loggable*)subject)->SetRegisterChanges(false);
+  if (subject != NULL)
+    {
+      execute_next_update = false;
+      ((cpw::Loggable*)subject)->SetRegisterChanges(false);
 
-		if (((cpw::Loggable*)subject)->AddChange(cpw::Change(field, value, ts), false))
-			subject->SetValue(field, value);
+      if (((cpw::Loggable*)subject)->AddChange(cpw::Change(field, value, ts), false))
+	subject->SetValue(field, value);
 		
-		//((cpw::Entity *)subject)->GraphicDelete();
-		//((cpw::Entity *)subject)->GraphicInsert();
-		((cpw::Entity *)subject)->GraphicUpdate();
+      //((cpw::Entity *)subject)->GraphicDelete();
+      //((cpw::Entity *)subject)->GraphicInsert();
+      ((cpw::Entity *)subject)->GraphicUpdate();
 
-		((cpw::Loggable*)subject)->SetRegisterChanges(true);
-		execute_next_update = true;
-	}
+      ((cpw::Loggable*)subject)->SetRegisterChanges(true);
+      execute_next_update = true;
+    }
 }

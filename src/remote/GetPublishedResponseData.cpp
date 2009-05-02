@@ -38,14 +38,17 @@ void TreeDeflatten(PublishedFolder *root_node, std::list<uint8_t> &stream);
  */
 GetPublishedResponseData::GetPublishedResponseData() : entities(NULL)
 {
-	SetMessageType(msgTypeGetPublishedResponse);
+  SetMessageType(msgTypeGetPublishedResponse);
 }
 
 
 GetPublishedResponseData::~GetPublishedResponseData()
 {
-	if (entities != NULL)
-		delete entities;
+  if (entities != NULL)
+    {
+      delete entities;
+      entities = NULL;
+    }
 }
 
 
@@ -58,31 +61,31 @@ GetPublishedResponseData::~GetPublishedResponseData()
  */
 DataStream GetPublishedResponseData::Code()
 {
-	try
-	{
-		std::list<uint8_t> stream;
+  try
+    {
+      std::list<uint8_t> stream;
 
-		TreeFlatten(entities, stream);
-		stream.push_back(1);
+      TreeFlatten(entities, stream);
+      stream.push_back(1);
 
-		uint32_t msg_size = stream.size() + 6;
+      uint32_t msg_size = stream.size() + 6;
 
-		DataStream data(msg_size);
+      DataStream data(msg_size);
 
-		data << (uint8_t) message_type;
-		data << msg_size;
-		data << request_id;
+      data << (uint8_t) message_type;
+      data << msg_size;
+      data << request_id;
 
-		std::list<uint8_t>::iterator i;
-		for (i = stream.begin(); i != stream.end(); ++i)
-			data << *i;
+      std::list<uint8_t>::iterator i;
+      for (i = stream.begin(); i != stream.end(); ++i)
+	data << *i;
 
-		return data;
-	}
-	catch (DataStreamException)
-	{
-		return DataStream();
-	}
+      return data;
+    }
+  catch (DataStreamException)
+    {
+      return DataStream();
+    }
 }
 
 
@@ -96,72 +99,76 @@ DataStream GetPublishedResponseData::Code()
  */
 bool GetPublishedResponseData::Decode(const DataStream &data_stream)
 {
-	try
+  try
+    {
+      DataStream data(data_stream);
+      //Get the control data
+      uint8_t tmp8;
+      data >> tmp8;
+      message_type = (MessageType) tmp8;
+
+      uint32_t msg_size;
+      data >> msg_size;
+
+      if (data.GetSize() != msg_size)
+	return false;
+
+      data >> tmp8;
+      request_id = tmp8;
+
+      PublishedFolder *tmp_root = new PublishedFolder("Published Entities", cpw::TypeId());
+
+      std::list<uint8_t> stream;
+
+      int i = 6;
+      while (i<data.GetSize())
+	stream.push_back(data[i++]);
+
+      bool first=true;
+
+      if (stream.size() > 0)
 	{
-		DataStream data(data_stream);
-		//Get the control data
-		uint8_t tmp8;
-		data >> tmp8;
-		message_type = (MessageType) tmp8;
-
-		uint32_t msg_size;
-		data >> msg_size;
-
-		if (data.GetSize() != msg_size)
-			return false;
-
-		data >> tmp8;
-		request_id = tmp8;
-
-		PublishedFolder *tmp_root = new PublishedFolder("Published Entities", cpw::TypeId());
-
-		std::list<uint8_t> stream;
-
-		int i = 6;
-		while (i<data.GetSize())
-			stream.push_back(data[i++]);
-
-		bool first=true;
-
-		if (stream.size() > 0)
+	  unsigned char front;
+	  do
+	    {
+	      TreeDeflatten(tmp_root, stream);
+	      front = stream.front();
+	      stream.pop_front();
+	      if (front==2)
 		{
-			unsigned char front;
-			do
-			{
-				TreeDeflatten(tmp_root, stream);
-				front = stream.front();
-				stream.pop_front();
-				if (front==2)
-				{
-					front = stream.front();//should be  = 1
-					stream.pop_front();
-				}
-
-				if (first)
-				{
-					if (tmp_root->GetNodes().size()==1)
-					{
-						entities = *(tmp_root->GetNodes().begin());
-						tmp_root->DetachChildren();
-						delete tmp_root;
-						tmp_root = (PublishedFolder*)entities;
-					}
-					else
-						entities = tmp_root;
-						//otherwise the message is incorrect, but for now it doesn't handle this error
-					first = false;
-				}
-
-
-			} while (front!=1);
+		  front = stream.front();//should be  = 1
+		  stream.pop_front();
 		}
 
-		return true;
+	      if (first)
+		{
+		  if (tmp_root->GetNodes().size()==1)
+		    {
+		      entities = *(tmp_root->GetNodes().begin());
+		      tmp_root->DetachChildren();
+		      if (tmp_root)
+			{
+			  delete tmp_root;
+			  tmp_root = NULL;
+			}
+		      tmp_root = (PublishedFolder*)entities;
+		    }
+		  else
+		    entities = tmp_root;
+		  //otherwise the message is incorrect, but for now it doesn't handle this error
+		  first = false;
+		}
+
+
+	    } while (front!=1);
 	}
-	catch (DataStreamException)
-	{
-		return false;
-	}
+
+      return true;
+    }
+  catch (DataStreamException)
+    {
+      return false;
+    }
 }
 
 
@@ -172,7 +179,7 @@ bool GetPublishedResponseData::Decode(const DataStream &data_stream)
  */
 bool GetPublishedResponseData::IsRequest()
 {
-	return false;
+  return false;
 }
 
 
@@ -183,7 +190,7 @@ bool GetPublishedResponseData::IsRequest()
  */
 bool GetPublishedResponseData::IsResponse()
 {
-	return true;
+  return true;
 }
 
 
@@ -194,7 +201,7 @@ bool GetPublishedResponseData::IsResponse()
  */
 PublishedNode *GetPublishedResponseData::GetEntities()
 {
-	return entities;
+  return entities;
 }
 
 
@@ -205,7 +212,7 @@ PublishedNode *GetPublishedResponseData::GetEntities()
  */
 PublishedNode *GetPublishedResponseData::GetEntities() const
 {
-	return entities;
+  return entities;
 }
 
 
@@ -217,7 +224,7 @@ PublishedNode *GetPublishedResponseData::GetEntities() const
  */
 void GetPublishedResponseData::SetEntities(PublishedNode *root_node)
 {
-	entities = root_node;
+  entities = root_node;
 }
 
 
@@ -230,37 +237,37 @@ void GetPublishedResponseData::SetEntities(PublishedNode *root_node)
  */
 void TreeFlatten(PublishedNode *root_node, std::list<uint8_t> &stream)
 {
-	cpw::TypeId id;
-	id = root_node->GetId();
+  cpw::TypeId id;
+  id = root_node->GetId();
 
-	for (int i=0; i < cpw::TypeId::size(); i++)
-		stream.push_back(id[i]);
+  for (int i=0; i < cpw::TypeId::size(); i++)
+    stream.push_back(id[i]);
 
-	std::string name = root_node->GetName();
+  std::string name = root_node->GetName();
 
-	stream.push_back((uint8_t)name.size());
-	for (uint32_t i=0;i<name.size();i++)
-		stream.push_back(name[i]);
+  stream.push_back((uint8_t)name.size());
+  for (uint32_t i=0;i<name.size();i++)
+    stream.push_back(name[i]);
 
-	if (!root_node->IsLeaf())
-	{
-		std::vector<PublishedNode *> children = ((PublishedFolder*)root_node)->GetNodes();
+  if (!root_node->IsLeaf())
+    {
+      std::vector<PublishedNode *> children = ((PublishedFolder*)root_node)->GetNodes();
 		
-		if (children.size()>0)
-			stream.push_back(3);
-		else
-			stream.push_back(4);
+      if (children.size()>0)
+	stream.push_back(3);
+      else
+	stream.push_back(4);
 
-		std::vector<PublishedNode *>::iterator i;
-		for (i = children.begin(); i < children.end(); ++i)
-		{
-			TreeFlatten(*i,stream);
-			if ((i+1)==children.end())
-				stream.push_back(2);
-			else
-				stream.push_back(0);
-		}
+      std::vector<PublishedNode *>::iterator i;
+      for (i = children.begin(); i < children.end(); ++i)
+	{
+	  TreeFlatten(*i,stream);
+	  if ((i+1)==children.end())
+	    stream.push_back(2);
+	  else
+	    stream.push_back(0);
 	}
+    }
 }
 
 
@@ -273,66 +280,66 @@ void TreeFlatten(PublishedNode *root_node, std::list<uint8_t> &stream)
  */
 void TreeDeflatten(PublishedFolder *root_node, std::list<uint8_t> &stream)
 {
-	cpw::TypeId id;
+  cpw::TypeId id;
 
-	for (int i=0; i < cpw::TypeId::size(); i++)
-	{
-		id[i] = stream.front();
-		stream.pop_front();
-	}
+  for (int i=0; i < cpw::TypeId::size(); i++)
+    {
+      id[i] = stream.front();
+      stream.pop_front();
+    }
 	
-	uint32_t name_size = stream.front();
+  uint32_t name_size = stream.front();
+  stream.pop_front();
+
+  std::string name;
+  for (;name_size>0;name_size--)
+    {
+      name += stream.front();
+      stream.pop_front();
+    }
+
+  switch (stream.front())
+    {
+    case 0:
+      {
+	PublishedLeaf *node = new PublishedLeaf(name, id);
+	root_node->Add(node);
+	break;
+      }
+    case 1:
+      break; //error - It shouldn't get this point. Otherwise it is a wrong stream
+    case 2:
+      {
+	PublishedLeaf *node = new PublishedLeaf(name, id);
+	root_node->Add(node);
+	break;
+      }
+    case 3:
+      {
+	stream.pop_front(); //consume byte
+	PublishedFolder *node = new PublishedFolder(name, id);
+	unsigned char front;
+	do
+	  {
+	    TreeDeflatten(node, stream);
+	    front = stream.front();
+	    stream.pop_front();
+	    if (front != 0 && front != 2)
+	      return;
+	  } while (front != 2);
+	root_node->Add(node);
+	break;
+      }
+    case 4:
+      {
+	//empty tree
 	stream.pop_front();
-
-	std::string name;
-	for (;name_size>0;name_size--)
-	{
-		name += stream.front();
-		stream.pop_front();
-	}
-
-	switch (stream.front())
-	{
-	case 0:
-		{
-			PublishedLeaf *node = new PublishedLeaf(name, id);
-			root_node->Add(node);
-			break;
-		}
-	case 1:
-		break; //error - It shouldn't get this point. Otherwise it is a wrong stream
-	case 2:
-		{
-			PublishedLeaf *node = new PublishedLeaf(name, id);
-			root_node->Add(node);
-			break;
-		}
-	case 3:
-		{
-			stream.pop_front(); //consume byte
-			PublishedFolder *node = new PublishedFolder(name, id);
-			unsigned char front;
-			do
-			{
-				TreeDeflatten(node, stream);
-				front = stream.front();
-				stream.pop_front();
-				if (front != 0 && front != 2)
-					return;
-			} while (front != 2);
-			root_node->Add(node);
-			break;
-		}
-	case 4:
-		{
-			//empty tree
-			stream.pop_front();
-			PublishedFolder *node = new PublishedFolder(name, id);
-			root_node->Add(node);
-			break;
-		}
-	default:
-		break; //error - It shouldn't get this point. Otherwise it is a wrong stream
-	}
+	PublishedFolder *node = new PublishedFolder(name, id);
+	root_node->Add(node);
+	break;
+      }
+    default:
+      break; //error - It shouldn't get this point. Otherwise it is a wrong stream
+    }
 }
 

@@ -33,20 +33,20 @@ EntityRegistry* EntityRegistry::instance = NULL;
 
 EntityRegistry * EntityRegistry::GetInstance()
 {
-	if(instance == NULL)
-		instance = new EntityRegistry;
+  if(instance == NULL)
+    instance = new EntityRegistry;
 
-	return instance;
+  return instance;
 }
 
 
 void EntityRegistry::ReleaseInstance()
 {
-	if(instance != NULL)
-	{
-		delete instance;
-		instance = NULL;
-	}
+  if(instance != NULL)
+    {
+      delete instance;
+      instance = NULL;
+    }
 }
 
 
@@ -57,148 +57,162 @@ EntityRegistry::EntityRegistry(){
 EntityRegistry::~EntityRegistry()
 {
 	
-	//container::iterator i = entities.begin();
+  //container::iterator i = entities.begin();
 
-	while (!entities.empty())
+  while (!entities.empty())
+    {
+      container::iterator i = entities.begin();
+      cpw::Entity *entity = i->second;
+      entities.erase(i);
+      if (entity)
 	{
-		container::iterator i = entities.begin();
-		cpw::Entity *entity = i->second;
-		entities.erase(i);
-		delete entity;
+	  delete entity;
+	  entity = NULL;
 	}
+    }
 
-	//for(;i !=  entities.end(); i++) 
-	//{
-	//	delete i->second;	
-	//	i->second = NULL;
-	//}
+  //for(;i !=  entities.end(); i++) 
+  //{
+  //	delete i->second;	
+  //	i->second = NULL;
+  //}
 
-	entities.clear();
+  entities.clear();
 	
 }
 
 
 void EntityRegistry::Add(cpw::Entity *entity) {
 
-	if(entity != NULL)
-	{
-		container::iterator i = entities.find(entity->GetId());
+  if(entity != NULL)
+    {
+      container::iterator i = entities.find(entity->GetId());
 
-		if(i == entities.end())
-		{
-			entities[entity->GetId()] = entity;
-			//entity->SetLast();
-		}
+      if(i == entities.end())
+	{
+	  entities[entity->GetId()] = entity;
+	  //entity->SetLast();
 	}
+    }
 }
 
 void EntityRegistry::Remove(const cpw::TypeId id) 
 {
-	container::iterator i = entities.find(id);
+  container::iterator i = entities.find(id);
 	
-	if (i!=entities.end())
-	{	
-		entities.erase(i);
-	}	
+  if (i!=entities.end())
+    {	
+      entities.erase(i);
+    }	
 }
 
 
 void EntityRegistry::DeleteEntity(const cpw::TypeId id) 
 {
-	container::iterator i = entities.find(id);
+  container::iterator i = entities.find(id);
 	
-	if (i!=entities.end())
-	{	
-		delete i->second;
-		entities.erase(i);
-	}	
+  if (i!=entities.end())
+    {
+      if (i->second)
+	{
+	  delete i->second;
+	  i->second = NULL;
+	}
+      entities.erase(i);
+    }	
 }
 
 void EntityRegistry::Clear()
 {
-	container::iterator i = entities.begin();
+  container::iterator i = entities.begin();
 
-	for(;i !=  entities.end(); i++) 
-		delete i->second;
+  for(;i !=  entities.end(); i++)
+    {
+      if ( i->second)
+	{
+	  delete i->second;
+	  i->second = NULL;
+	}
+    }
 
-	entities.clear();
+  entities.clear();
 
 }
 
 cpw::Entity* EntityRegistry::GetEntity(const cpw::TypeId id)
 {
-	container::iterator i = entities.find(id);
+  container::iterator i = entities.find(id);
 	
-	if (i!=entities.end())
+  if (i!=entities.end())
 	
-		return i->second;
+    return i->second;
 
-	return NULL;
+  return NULL;
 
 }
 
 std::vector<cpw::Entity*>  EntityRegistry::GetEntities(const std::string &class_name)
 {
 	
-	std::vector<cpw::Entity*> out;
+  std::vector<cpw::Entity*> out;
 
-	container::iterator i = entities.begin();
+  container::iterator i = entities.begin();
 
-	for(;i !=  entities.end(); i++) 
+  for(;i !=  entities.end(); i++) 
 
-		if(i->second->GetClassName() == class_name)
+    if(i->second->GetClassName() == class_name)
 
-			out.push_back(i->second);
+      out.push_back(i->second);
 
-	return out;
+  return out;
 
 }
 
 
 
- cpw::Entity* EntityRegistry::GetEntityFromUrl(const std::string &entity_url)
+cpw::Entity* EntityRegistry::GetEntityFromUrl(const std::string &entity_url)
 {
-	std::map<cpw::TypeId, Entity *>::iterator i;
-	for(i = entities.begin(); i != entities.end() ; i++ )
-	{
-		if(i->second->GetUrl() == entity_url)	
-			return i->second;
-	}
-	return NULL;
+  std::map<cpw::TypeId, Entity *>::iterator i;
+  for(i = entities.begin(); i != entities.end() ; i++ )
+    {
+      if(i->second->GetUrl() == entity_url)	
+	return i->second;
+    }
+  return NULL;
 }
 
 
 std::vector<cpw::Entity*> EntityRegistry::GetAnimatedEntities()
 {
 	
-	std::vector<cpw::Entity*> out;
+  std::vector<cpw::Entity*> out;
 
-	container::iterator i = entities.begin();
+  container::iterator i = entities.begin();
 
-	for(;i !=  entities.end(); i++) 
+  for(;i !=  entities.end(); i++) 
 
-		if(i->second->IsAnimated())
+    if(i->second->IsAnimated())
 
-			out.push_back(i->second);
+      out.push_back(i->second);
 
-	return out;
+  return out;
 
 
 }
 
 std::vector<cpw::Entity*> EntityRegistry::GetPublishedEntities()
 {
-	std::vector<cpw::Entity*> out;
+  std::vector<cpw::Entity*> out;
 
-	container::iterator i = entities.begin();
+  container::iterator i = entities.begin();
 
-	for(;i !=  entities.end(); i++) 
+  for(;i !=  entities.end(); i++) 
 
-		if(i->second->isPublished())
+    if(i->second->isPublished())
 
-			out.push_back(i->second);
+      out.push_back(i->second);
 
-	return out;
+  return out;
 
 
 
@@ -207,15 +221,15 @@ std::vector<cpw::Entity*> EntityRegistry::GetPublishedEntities()
 
 std::vector<cpw::Entity*> EntityRegistry::GetAllEntities()
 {
-	std::vector<cpw::Entity*> out;
+  std::vector<cpw::Entity*> out;
 
-	for(std::map<cpw::TypeId, Entity* >::iterator i = entities.begin();
-		i !=  entities.end();
-		i++) 
-	{
-		out.push_back(i->second);
-	}
+  for(std::map<cpw::TypeId, Entity* >::iterator i = entities.begin();
+      i !=  entities.end();
+      i++) 
+    {
+      out.push_back(i->second);
+    }
 
-	return out;
+  return out;
 
 }

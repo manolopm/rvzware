@@ -45,38 +45,38 @@ FileManager::~FileManager(void)
 
 bool FileManager::IsLocal(const std::string &url)
 {
-	std::string url1 = url.substr(0, 4);
-	return (url1 != "http");
-	//return true;
+  std::string url1 = url.substr(0, 4);
+  return (url1 != "http");
+  //return true;
 }
 
 
 FileError FileManager::Save(const std::string &data, const std::string &file, bool overwrite){
 
-	if(!overwrite) {
+  if(!overwrite) {
 
-		//test if file already exists
-		std::ifstream fin(file.c_str());
+    //test if file already exists
+    std::ifstream fin(file.c_str());
 		
-		if(fin.is_open()) 
-		{	
-			fin.close();
-			return FILEALREADYEXISTS;
-		}
-		fin.close();
+    if(fin.is_open()) 
+      {	
+	fin.close();
+	return FILEALREADYEXISTS;
+      }
+    fin.close();
 		
-	}
+  }
 
-	std::ofstream fout(file.c_str());
+  std::ofstream fout(file.c_str());
 
-	if(fout.is_open()) {
+  if(fout.is_open()) {
 	
-		fout << data;
-		fout.close();
+    fout << data;
+    fout.close();
 
-		return FILEOK;
-	}
-	else return FILEPERMISSIONDENIED;
+    return FILEOK;
+  }
+  else return FILEPERMISSIONDENIED;
 
 }
 
@@ -84,60 +84,63 @@ FileError FileManager::Save(const std::string &data, const std::string &file, bo
 FileError FileManager::Load(const std::string &url, std::string &data) {
 
 	
-	if(IsLocal(url))
-	{
-		std::ifstream fin(url.c_str());
+  if(IsLocal(url))
+    {
+      std::ifstream fin(url.c_str());
 
 
-		if(fin.is_open()) {
+      if(fin.is_open()) {
 
-			  int length;
-			  char * buffer;
+	int length;
+	char * buffer;
 
-			  // get length of file:
-			  fin.seekg (0, ios::end);
-			  length = fin.tellg();
-			  fin.seekg (0, ios::beg);
+	// get length of file:
+	fin.seekg (0, ios::end);
+	length = fin.tellg();
+	fin.seekg (0, ios::beg);
 
-			  // allocate memory:
-			  buffer = new char [length];
-			  memset(buffer,0,length);
+	// allocate memory:
+	buffer = new char [length];
+	memset(buffer,0,length);
 
-			  // read data as a block:
-			  fin.read (buffer,length);
-			  fin.close();
+	// read data as a block:
+	fin.read (buffer,length);
+	fin.close();
 
-			  std::string temp(buffer,&buffer[length]);
+	std::string temp(buffer,&buffer[length]);
+	if (buffer)
+	  {
+	    delete[] buffer;
+	    buffer = NULL;
+	  }
 
-			  delete[] buffer;
+	data.swap(temp);
 
-			  data.swap(temp);
+	return FILEOK;
+      }
+      else return FILENOTFOUND;
+    }
+  else
+    {
 
-   			  return FILEOK;
-		}
-		else return FILENOTFOUND;
-	}
-	else
-	{
-
-		//this is for remote access
-		std::string proxy = "";
-		bool isSSLAddress = false;
-		bool result = GetMap(url, isSSLAddress, data, proxy);
+      //this is for remote access
+      std::string proxy = "";
+      bool isSSLAddress = false;
+      bool result = GetMap(url, isSSLAddress, data, proxy);
 		
-		if(result) return FILEOK;
-		else return FILENOTFOUND; //return (int)data.size();
-	}
+      if(result) return FILEOK;
+      else return FILENOTFOUND; //return (int)data.size();
+    }
 }
 
 
 FileError FileManager::Delete(const std::string &file)
 {
-	if(std::remove(file.c_str()) != 0)
+  if(std::remove(file.c_str()) != 0)
 
-		return FILECANNOTDELETE;
+    return FILECANNOTDELETE;
 
-	return FILEOK;
+  return FILEOK;
 }
 
 
@@ -156,7 +159,7 @@ size_t FileManager::writeCallback(void *buffer, size_t size, size_t nmemb, void 
 /**
  *  The function retrieves a map image, storing it in memory 
  *  TRUE if success. FALSE if any error.
-**/
+ **/
 bool FileManager::GetMap(const std::string &url, bool ssl, std::string &memBuf, const std::string &proxy)
 {
   CURL *curl;
@@ -171,16 +174,16 @@ bool FileManager::GetMap(const std::string &url, bool ssl, std::string &memBuf, 
   curl = curl_easy_init();
   if(curl) {
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-	if (proxy!="")
-		curl_easy_setopt(curl, CURLOPT_PROXY, proxy.c_str());
+    if (proxy!="")
+      curl_easy_setopt(curl, CURLOPT_PROXY, proxy.c_str());
 
-	if (ssl)
-	{
-		// Disable checking server certificate
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
-		// Disable checking server name
-		curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
-	}
+    if (ssl)
+      {
+	// Disable checking server certificate
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+	// Disable checking server name
+	curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0);
+      }
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &wd);
 
@@ -188,7 +191,7 @@ bool FileManager::GetMap(const std::string &url, bool ssl, std::string &memBuf, 
 
     /* always cleanup */
     curl_easy_cleanup(curl);
-	result = true;
+    result = true;
   }
 
   return result;

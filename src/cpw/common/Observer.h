@@ -25,23 +25,23 @@
 
 namespace cpw
 {
-	/** 
-		\brief This class implements the Observer Pattern
-		\ingroup cpw
-	*/
-	class CPWEXPORT Observer
-	{
-		public:
+  /** 
+      \brief This class implements the Observer Pattern
+      \ingroup cpw
+  */
+  class CPWEXPORT Observer
+  {
+  public:
 			
-			/** Destructor */
-			virtual ~Observer(void) {}
+    /** Destructor */
+    virtual ~Observer(void) {}
 			
-			/** Update method to be called when the Subject is modified 
-				\param subject_deleted determines if the Subject has been deleted
-			*/
-			virtual void Update(bool subject_deleted = false) = 0;
+    /** Update method to be called when the Subject is modified 
+	\param subject_deleted determines if the Subject has been deleted
+    */
+    virtual void Update(bool subject_deleted = false) = 0;
 			
-	};
+  };
 }
 #endif
 

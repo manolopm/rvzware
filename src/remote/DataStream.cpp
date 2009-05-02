@@ -30,12 +30,12 @@ using namespace cpw::remote;
 
 bool isBigEndian()
 {
-	uint32_t tmp = 1;
+  uint32_t tmp = 1;
 
-	if (((uint8_t *) &tmp)[0] == 1)
-		return false;
-	else
-		return true;
+  if (((uint8_t *) &tmp)[0] == 1)
+    return false;
+  else
+    return true;
 }
 
 bool DataStream::big_endian = isBigEndian();
@@ -47,9 +47,9 @@ bool DataStream::big_endian = isBigEndian();
  */
 DataStream::DataStream()
 {
-	data = NULL;
-	size = 0;
-	current_pos = 0;
+  data = NULL;
+  size = 0;
+  current_pos = 0;
 }
 
 
@@ -65,11 +65,11 @@ DataStream::DataStream()
  */
 DataStream::DataStream(int size, uint8_t *stream)
 {
-	current_pos = 0;
-	this->size = size;
-	data = new uint8_t[size];
+  current_pos = 0;
+  this->size = size;
+  data = new uint8_t[size];
 
-	memcpy(data, stream, size);
+  memcpy(data, stream, size);
 }
 
 
@@ -80,9 +80,9 @@ DataStream::DataStream(int size, uint8_t *stream)
  */
 DataStream::DataStream(int size)
 {
-	current_pos = 0;
-	this->size = size;
-	data = new uint8_t[size];
+  current_pos = 0;
+  this->size = size;
+  data = new uint8_t[size];
 }
 
 
@@ -94,18 +94,21 @@ DataStream::DataStream(int size)
  */
 DataStream::DataStream(const DataStream &stream)
 {
-	current_pos = 0;
-	size = stream.size;
-	data = new uint8_t[size];
+  current_pos = 0;
+  size = stream.size;
+  data = new uint8_t[size];
 
-	memcpy(data, stream.data, size);
+  memcpy(data, stream.data, size);
 }
 
 
 DataStream::~DataStream()
 {
-	if (data != NULL)
-		delete [] data;
+  if (data != NULL)
+    {
+      delete [] data;
+      data = NULL;
+    }
 }
 
 
@@ -117,18 +120,21 @@ DataStream::~DataStream()
  */
 DataStream &DataStream::operator=(const DataStream &stream)
 {
-	if (data != NULL)
-		delete [] data;
+  if (data != NULL)
+    {
+      delete [] data;
+      data = NULL;
+    }
 
-	size = stream.size;
-	data = new uint8_t[size];
+  size = stream.size;
+  data = new uint8_t[size];
 
-	current_pos = stream.current_pos;
+  current_pos = stream.current_pos;
 
-	for (int i=0; i<size; i++)
-		data[i] = stream.data[i];
+  for (int i=0; i<size; i++)
+    data[i] = stream.data[i];
 
-	return *this;
+  return *this;
 }
 
 
@@ -139,7 +145,7 @@ DataStream &DataStream::operator=(const DataStream &stream)
  */
 int DataStream::GetSize() const
 {
-	return size;
+  return size;
 }
 
 
@@ -153,7 +159,7 @@ int DataStream::GetSize() const
  */
 uint8_t *DataStream::GetDataPointer() const
 {
-	return data;
+  return data;
 }
 
 
@@ -170,10 +176,10 @@ uint8_t *DataStream::GetDataPointer() const
  */
 uint8_t &DataStream::operator[](const int index) const
 {
-	if (index < size)
-		return data[index];
-	else
-		throw dsExceptOverflow;
+  if (index < size)
+    return data[index];
+  else
+    throw dsExceptOverflow;
 }
 
 
@@ -194,15 +200,15 @@ uint8_t &DataStream::operator[](const int index) const
  */
 DataStream &DataStream::operator<<(const DataStream &stream)
 {
-	(*this) << (uint32_t)stream.size;
+  (*this) << (uint32_t)stream.size;
 
-	if (current_pos+stream.size-1 >= size)
-		throw dsExceptOverflow;
+  if (current_pos+stream.size-1 >= size)
+    throw dsExceptOverflow;
 
-	memcpy(&(data[current_pos]), stream.data, stream.size);
-	current_pos += stream.size;
+  memcpy(&(data[current_pos]), stream.data, stream.size);
+  current_pos += stream.size;
 
-	return *this;
+  return *this;
 }
 
 
@@ -220,11 +226,11 @@ DataStream &DataStream::operator<<(const DataStream &stream)
  */
 DataStream &DataStream::operator<<(bool b)
 {
-	if (current_pos >= size)
-		throw dsExceptOverflow;
-	data[current_pos++] = (b?1:0);
+  if (current_pos >= size)
+    throw dsExceptOverflow;
+  data[current_pos++] = (b?1:0);
 
-	return *this;
+  return *this;
 }
 
 
@@ -242,11 +248,11 @@ DataStream &DataStream::operator<<(bool b)
  */
 DataStream &DataStream::operator<<(uint8_t n)
 {
-	if (current_pos >= size)
-		throw dsExceptOverflow;
-	data[current_pos++] = n;
+  if (current_pos >= size)
+    throw dsExceptOverflow;
+  data[current_pos++] = n;
 
-	return *this;
+  return *this;
 }
 
 
@@ -266,16 +272,16 @@ DataStream &DataStream::operator<<(uint8_t n)
  */
 DataStream &DataStream::operator<<(uint32_t n)
 {
-	if (current_pos+3 >= size)
-		throw dsExceptOverflow;
+  if (current_pos+3 >= size)
+    throw dsExceptOverflow;
 
-	n = DataStream::ToNetworku32(n);
-	data[current_pos++] = ((uint8_t*) &n)[0];
-	data[current_pos++] = ((uint8_t*) &n)[1];
-	data[current_pos++] = ((uint8_t*) &n)[2];
-	data[current_pos++] = ((uint8_t*) &n)[3];
+  n = DataStream::ToNetworku32(n);
+  data[current_pos++] = ((uint8_t*) &n)[0];
+  data[current_pos++] = ((uint8_t*) &n)[1];
+  data[current_pos++] = ((uint8_t*) &n)[2];
+  data[current_pos++] = ((uint8_t*) &n)[3];
 
-	return *this;
+  return *this;
 }
 
 
@@ -295,19 +301,19 @@ DataStream &DataStream::operator<<(uint32_t n)
  */
 DataStream &DataStream::operator<<(uint64_t n)
 {
-	if (current_pos+7 >= size)
-		throw dsExceptOverflow;
-	n = DataStream::ToNetworku64(n);
-	data[current_pos++] = ((uint8_t*) &n)[0];
-	data[current_pos++] = ((uint8_t*) &n)[1];
-	data[current_pos++] = ((uint8_t*) &n)[2];
-	data[current_pos++] = ((uint8_t*) &n)[3];
-	data[current_pos++] = ((uint8_t*) &n)[4];
-	data[current_pos++] = ((uint8_t*) &n)[5];
-	data[current_pos++] = ((uint8_t*) &n)[6];
-	data[current_pos++] = ((uint8_t*) &n)[7];
+  if (current_pos+7 >= size)
+    throw dsExceptOverflow;
+  n = DataStream::ToNetworku64(n);
+  data[current_pos++] = ((uint8_t*) &n)[0];
+  data[current_pos++] = ((uint8_t*) &n)[1];
+  data[current_pos++] = ((uint8_t*) &n)[2];
+  data[current_pos++] = ((uint8_t*) &n)[3];
+  data[current_pos++] = ((uint8_t*) &n)[4];
+  data[current_pos++] = ((uint8_t*) &n)[5];
+  data[current_pos++] = ((uint8_t*) &n)[6];
+  data[current_pos++] = ((uint8_t*) &n)[7];
 
-	return *this;
+  return *this;
 }
 
 
@@ -328,16 +334,16 @@ DataStream &DataStream::operator<<(uint64_t n)
  */
 DataStream &DataStream::operator<<(const std::string &s)
 {
-	if (current_pos+s.size()+4-1 >= (unsigned)size)
-		throw dsExceptOverflow;
+  if (current_pos+s.size()+4-1 >= (unsigned)size)
+    throw dsExceptOverflow;
 
-	(*this) << (uint32_t)s.size();
+  (*this) << (uint32_t)s.size();
 
-	std::string::const_iterator it_str;
-	for (it_str = s.begin(); it_str != s.end(); it_str++)
-		data[current_pos++] = *it_str;
+  std::string::const_iterator it_str;
+  for (it_str = s.begin(); it_str != s.end(); it_str++)
+    data[current_pos++] = *it_str;
 
-	return *this;
+  return *this;
 }
 
 
@@ -355,14 +361,14 @@ DataStream &DataStream::operator<<(const std::string &s)
  */
 DataStream &DataStream::operator<<(const cpw::TypeId &id)
 {
-	if (current_pos+cpw::TypeId::size() -1 >= size)
-		throw dsExceptOverflow;
+  if (current_pos+cpw::TypeId::size() -1 >= size)
+    throw dsExceptOverflow;
 
-	cpw::TypeId idtemp = id;
-	for (int i=0; i<cpw::TypeId::size(); i++)
-		data[current_pos++] = idtemp[i];
+  cpw::TypeId idtemp = id;
+  for (int i=0; i<cpw::TypeId::size(); i++)
+    data[current_pos++] = idtemp[i];
 
-	return *this;
+  return *this;
 }
 
 
@@ -383,16 +389,16 @@ DataStream &DataStream::operator<<(const cpw::TypeId &id)
  */
 DataStream &DataStream::operator>>(DataStream &stream)
 {
-	uint32_t opsize;
-	(*this) >> opsize;
+  uint32_t opsize;
+  (*this) >> opsize;
 
-	if (current_pos+opsize-1 >= size)
-		throw dsExceptOverflow;
+  if (current_pos+opsize-1 >= size)
+    throw dsExceptOverflow;
 
-	stream = DataStream(opsize, &(data[current_pos]));
-	current_pos += opsize;
+  stream = DataStream(opsize, &(data[current_pos]));
+  current_pos += opsize;
 
-	return *this;
+  return *this;
 }
 
 
@@ -410,10 +416,10 @@ DataStream &DataStream::operator>>(DataStream &stream)
  */
 DataStream &DataStream::operator>>(bool &b)
 {
-	if (current_pos >= size)
-		throw dsExceptOverflow;
-	data[current_pos++] ? b=true : b=false;
-	return *this;
+  if (current_pos >= size)
+    throw dsExceptOverflow;
+  data[current_pos++] ? b=true : b=false;
+  return *this;
 }
 
 
@@ -431,10 +437,10 @@ DataStream &DataStream::operator>>(bool &b)
  */
 DataStream &DataStream::operator>>(uint8_t &n)
 {
-	if (current_pos >= size)
-		throw dsExceptOverflow;
-	n = data[current_pos++];
-	return *this;
+  if (current_pos >= size)
+    throw dsExceptOverflow;
+  n = data[current_pos++];
+  return *this;
 }
 
 
@@ -452,16 +458,16 @@ DataStream &DataStream::operator>>(uint8_t &n)
  */
 DataStream &DataStream::operator>>(uint32_t &n)
 {
-	if (current_pos+3 >= size)
-		throw dsExceptOverflow;
-	uint32_t tmp;
-	((uint8_t*)&tmp)[0] = data[current_pos++];
-	((uint8_t*)&tmp)[1] = data[current_pos++];
-	((uint8_t*)&tmp)[2] = data[current_pos++];
-	((uint8_t*)&tmp)[3] = data[current_pos++];
-	n = DataStream::FromNetworku32(tmp);
+  if (current_pos+3 >= size)
+    throw dsExceptOverflow;
+  uint32_t tmp;
+  ((uint8_t*)&tmp)[0] = data[current_pos++];
+  ((uint8_t*)&tmp)[1] = data[current_pos++];
+  ((uint8_t*)&tmp)[2] = data[current_pos++];
+  ((uint8_t*)&tmp)[3] = data[current_pos++];
+  n = DataStream::FromNetworku32(tmp);
 
-	return *this;
+  return *this;
 }
 
 
@@ -479,20 +485,20 @@ DataStream &DataStream::operator>>(uint32_t &n)
  */
 DataStream &DataStream::operator>>(uint64_t &n)
 {
-	if (current_pos+7 >= size)
-		throw dsExceptOverflow;
-	uint64_t tmp;
-	((uint8_t*)&tmp)[0] = data[current_pos++];
-	((uint8_t*)&tmp)[1] = data[current_pos++];
-	((uint8_t*)&tmp)[2] = data[current_pos++];
-	((uint8_t*)&tmp)[3] = data[current_pos++];
-	((uint8_t*)&tmp)[4] = data[current_pos++];
-	((uint8_t*)&tmp)[5] = data[current_pos++];
-	((uint8_t*)&tmp)[6] = data[current_pos++];
-	((uint8_t*)&tmp)[7] = data[current_pos++];
-	n = DataStream::FromNetworku64(tmp);
+  if (current_pos+7 >= size)
+    throw dsExceptOverflow;
+  uint64_t tmp;
+  ((uint8_t*)&tmp)[0] = data[current_pos++];
+  ((uint8_t*)&tmp)[1] = data[current_pos++];
+  ((uint8_t*)&tmp)[2] = data[current_pos++];
+  ((uint8_t*)&tmp)[3] = data[current_pos++];
+  ((uint8_t*)&tmp)[4] = data[current_pos++];
+  ((uint8_t*)&tmp)[5] = data[current_pos++];
+  ((uint8_t*)&tmp)[6] = data[current_pos++];
+  ((uint8_t*)&tmp)[7] = data[current_pos++];
+  n = DataStream::FromNetworku64(tmp);
 
-	return *this;
+  return *this;
 }
 
 
@@ -513,18 +519,18 @@ DataStream &DataStream::operator>>(uint64_t &n)
  */
 DataStream &DataStream::operator>>(std::string &s)
 {
-	s = std::string();
-	uint32_t s_size;
-	(*this)>>s_size;
-	if (current_pos+s_size-1 >= (unsigned)size)
-		throw dsExceptOverflow;
-	while ((unsigned)s_size > 0)
-	{
-		s += (unsigned char) data[current_pos++];
-		s_size--;
-	}
+  s = std::string();
+  uint32_t s_size;
+  (*this)>>s_size;
+  if (current_pos+s_size-1 >= (unsigned)size)
+    throw dsExceptOverflow;
+  while ((unsigned)s_size > 0)
+    {
+      s += (unsigned char) data[current_pos++];
+      s_size--;
+    }
 
-	return *this;
+  return *this;
 }
 
 
@@ -542,12 +548,12 @@ DataStream &DataStream::operator>>(std::string &s)
  */
 DataStream &DataStream::operator>>(cpw::TypeId &id)
 {
-	if (current_pos+cpw::TypeId::size() -1 >= size)
-		throw dsExceptOverflow;
-	for (int i=0; i<cpw::TypeId::size(); i++)
-		id[i] = data[current_pos++];
+  if (current_pos+cpw::TypeId::size() -1 >= size)
+    throw dsExceptOverflow;
+  for (int i=0; i<cpw::TypeId::size(); i++)
+    id[i] = data[current_pos++];
 
-	return *this;
+  return *this;
 }
 
 
@@ -559,16 +565,16 @@ DataStream &DataStream::operator>>(cpw::TypeId &id)
  */
 uint32_t DataStream::ToNetworku32(uint32_t number)
 {
-	if (!big_endian)
-	{
-		uint32_t new_number;
-		((uint8_t*) &new_number)[3] = ((uint8_t*) &number)[0];
-		((uint8_t*) &new_number)[2] = ((uint8_t*) &number)[1];
-		((uint8_t*) &new_number)[1] = ((uint8_t*) &number)[2];
-		((uint8_t*) &new_number)[0] = ((uint8_t*) &number)[3];
-		return new_number;
-	}
-	return number;
+  if (!big_endian)
+    {
+      uint32_t new_number;
+      ((uint8_t*) &new_number)[3] = ((uint8_t*) &number)[0];
+      ((uint8_t*) &new_number)[2] = ((uint8_t*) &number)[1];
+      ((uint8_t*) &new_number)[1] = ((uint8_t*) &number)[2];
+      ((uint8_t*) &new_number)[0] = ((uint8_t*) &number)[3];
+      return new_number;
+    }
+  return number;
 }
 
 
@@ -580,20 +586,20 @@ uint32_t DataStream::ToNetworku32(uint32_t number)
  */
 uint64_t DataStream::ToNetworku64(uint64_t number)
 {
-	if (!big_endian)
-	{
-		uint64_t new_number;
-		((uint8_t*) &new_number)[7] = ((uint8_t*) &number)[0];
-		((uint8_t*) &new_number)[6] = ((uint8_t*) &number)[1];
-		((uint8_t*) &new_number)[5] = ((uint8_t*) &number)[2];
-		((uint8_t*) &new_number)[4] = ((uint8_t*) &number)[3];
-		((uint8_t*) &new_number)[3] = ((uint8_t*) &number)[4];
-		((uint8_t*) &new_number)[2] = ((uint8_t*) &number)[5];
-		((uint8_t*) &new_number)[1] = ((uint8_t*) &number)[6];
-		((uint8_t*) &new_number)[0] = ((uint8_t*) &number)[7];
-		return new_number;
-	}
-	return number;
+  if (!big_endian)
+    {
+      uint64_t new_number;
+      ((uint8_t*) &new_number)[7] = ((uint8_t*) &number)[0];
+      ((uint8_t*) &new_number)[6] = ((uint8_t*) &number)[1];
+      ((uint8_t*) &new_number)[5] = ((uint8_t*) &number)[2];
+      ((uint8_t*) &new_number)[4] = ((uint8_t*) &number)[3];
+      ((uint8_t*) &new_number)[3] = ((uint8_t*) &number)[4];
+      ((uint8_t*) &new_number)[2] = ((uint8_t*) &number)[5];
+      ((uint8_t*) &new_number)[1] = ((uint8_t*) &number)[6];
+      ((uint8_t*) &new_number)[0] = ((uint8_t*) &number)[7];
+      return new_number;
+    }
+  return number;
 }
 
 
@@ -605,16 +611,16 @@ uint64_t DataStream::ToNetworku64(uint64_t number)
  */
 uint32_t DataStream::FromNetworku32(uint32_t number)
 {
-	if (!big_endian)
-	{
-		uint32_t new_number;
-		((uint8_t*) &new_number)[3] = ((uint8_t*) &number)[0];
-		((uint8_t*) &new_number)[2] = ((uint8_t*) &number)[1];
-		((uint8_t*) &new_number)[1] = ((uint8_t*) &number)[2];
-		((uint8_t*) &new_number)[0] = ((uint8_t*) &number)[3];
-		return new_number;
-	}
-	return number;
+  if (!big_endian)
+    {
+      uint32_t new_number;
+      ((uint8_t*) &new_number)[3] = ((uint8_t*) &number)[0];
+      ((uint8_t*) &new_number)[2] = ((uint8_t*) &number)[1];
+      ((uint8_t*) &new_number)[1] = ((uint8_t*) &number)[2];
+      ((uint8_t*) &new_number)[0] = ((uint8_t*) &number)[3];
+      return new_number;
+    }
+  return number;
 }
 
 
@@ -626,18 +632,18 @@ uint32_t DataStream::FromNetworku32(uint32_t number)
  */
 uint64_t DataStream::FromNetworku64(uint64_t number)
 {
-	if (!big_endian)
-	{
-		uint64_t new_number;
-		((uint8_t*) &new_number)[7] = ((uint8_t*) &number)[0];
-		((uint8_t*) &new_number)[6] = ((uint8_t*) &number)[1];
-		((uint8_t*) &new_number)[5] = ((uint8_t*) &number)[2];
-		((uint8_t*) &new_number)[4] = ((uint8_t*) &number)[3];
-		((uint8_t*) &new_number)[3] = ((uint8_t*) &number)[4];
-		((uint8_t*) &new_number)[2] = ((uint8_t*) &number)[5];
-		((uint8_t*) &new_number)[1] = ((uint8_t*) &number)[6];
-		((uint8_t*) &new_number)[0] = ((uint8_t*) &number)[7];
-		return new_number;
-	}
-	return number;
+  if (!big_endian)
+    {
+      uint64_t new_number;
+      ((uint8_t*) &new_number)[7] = ((uint8_t*) &number)[0];
+      ((uint8_t*) &new_number)[6] = ((uint8_t*) &number)[1];
+      ((uint8_t*) &new_number)[5] = ((uint8_t*) &number)[2];
+      ((uint8_t*) &new_number)[4] = ((uint8_t*) &number)[3];
+      ((uint8_t*) &new_number)[3] = ((uint8_t*) &number)[4];
+      ((uint8_t*) &new_number)[2] = ((uint8_t*) &number)[5];
+      ((uint8_t*) &new_number)[1] = ((uint8_t*) &number)[6];
+      ((uint8_t*) &new_number)[0] = ((uint8_t*) &number)[7];
+      return new_number;
+    }
+  return number;
 }

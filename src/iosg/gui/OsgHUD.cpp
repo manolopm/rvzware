@@ -34,121 +34,126 @@ OsgIHUD::OsgIHUD(void) : id_generator(0), active_widget(NULL)
 
 OsgIHUD::~OsgIHUD(void)
 {
-	std::vector<OsgIWidget *>::iterator i = widgets.begin();
+  std::vector<OsgIWidget *>::iterator i = widgets.begin();
 
-	for ( ; i != widgets.end(); i++)
+  for ( ; i != widgets.end(); i++)
+    {
+      if (*i)
 	{
-		delete *i;
+	  delete *i;
+	  *i = NULL;
 	}
+		 
+    }
 }
 
 void OsgIHUD::Update()
 {
-	std::vector<OsgIWidget *>::iterator i = widgets.begin();
+  std::vector<OsgIWidget *>::iterator i = widgets.begin();
 
-	for ( ; i != widgets.end(); i++)
-	{
-		(*i)->Update();
-	}
+  for ( ; i != widgets.end(); i++)
+    {
+      (*i)->Update();
+    }
 }
 
 void OsgIHUD::UpdateSize(const int &_size_x, const int &_size_y)
 {
-	std::vector<OsgIWidget *>::iterator i = widgets.begin();
+  std::vector<OsgIWidget *>::iterator i = widgets.begin();
 
-	for ( ; i != widgets.end(); i++)
-	{
-		(*i)->ResizeScreen(_size_x, _size_y);
-	}
+  for ( ; i != widgets.end(); i++)
+    {
+      (*i)->ResizeScreen(_size_x, _size_y);
+    }
 
 
 }
 
 void OsgIHUD::AddWidget(OsgIWidget *widget/*, const cpw::Point3d<float> &pos,
-			                              const cpw::Point3d<float> &size,
-										  const cpw::Point3d<float> &rotation*/)
+					    const cpw::Point3d<float> &size,
+					    const cpw::Point3d<float> &rotation*/)
 {
-	std::ostringstream os;
+  std::ostringstream os;
 
-	os << id_generator;
-	id_generator++;
+  os << id_generator;
+  id_generator++;
 
-	widgets.push_back(widget);
-	widget->SetApplication(application);
-	widget->SetParentWindow(parent_window);
+  widgets.push_back(widget);
+  widget->SetApplication(application);
+  widget->SetParentWindow(parent_window);
 	
-	//widget->SetSize(size);
-	//widget->SetPosition(pos);
-	//widget->SetSize(size);
-	//widget->SetRotation(rotation);
+  //widget->SetSize(size);
+  //widget->SetPosition(pos);
+  //widget->SetSize(size);
+  //widget->SetRotation(rotation);
 
-	root->addChild(widget->GetMatrixTransform());
+  root->addChild(widget->GetMatrixTransform());
 
-	OsgIContainer *container = dynamic_cast<OsgIContainer *>(widget);
-	if (container != NULL)
+  OsgIContainer *container = dynamic_cast<OsgIContainer *>(widget);
+  if (container != NULL)
+    {
+      for (unsigned int i = 0; i<container->GetNumChildren(); i++)
 	{
-		for (unsigned int i = 0; i<container->GetNumChildren(); i++)
-		{
-			AddMore(container->GetChild(i));
-			//root->addChild(container->GetChild(i)->GetMatrixTransform());
-			//OsgIContainer *container2 = dynamic_cast<OsgIContainer *>(container->GetChild(i));
-		}
+	  AddMore(container->GetChild(i));
+	  //root->addChild(container->GetChild(i)->GetMatrixTransform());
+	  //OsgIContainer *container2 = dynamic_cast<OsgIContainer *>(container->GetChild(i));
 	}
+    }
 }
 
 void OsgIHUD::AddMore(OsgIWidget *widget/*, const cpw::Point3d<float> &pos,
-			                              const cpw::Point3d<float> &size,
-										  const cpw::Point3d<float> &rotation*/)
+					  const cpw::Point3d<float> &size,
+					  const cpw::Point3d<float> &rotation*/)
 {
-	//widgets.push_back(widget);
+  //widgets.push_back(widget);
 
-	widget->SetApplication(application);
-	widget->SetParentWindow(parent_window);
+  widget->SetApplication(application);
+  widget->SetParentWindow(parent_window);
 	
 
-	root->addChild(widget->GetMatrixTransform());
+  root->addChild(widget->GetMatrixTransform());
 	
-	OsgIContainer *container = dynamic_cast<OsgIContainer *>(widget);
+  OsgIContainer *container = dynamic_cast<OsgIContainer *>(widget);
 	
-	if (container != NULL)
-	{
-		for (unsigned int i = 0; i<container->GetNumChildren(); i++)
-			AddMore(container->GetChild(i));
-	}
+  if (container != NULL)
+    {
+      for (unsigned int i = 0; i<container->GetNumChildren(); i++)
+	AddMore(container->GetChild(i));
+    }
 
 }
 
 void OsgIHUD::SetActiveWidget(const std::string &widget_id)
 {
-	std::vector<OsgIWidget *>::iterator i = widgets.begin();
+  std::vector<OsgIWidget *>::iterator i = widgets.begin();
 
-	active_widget = NULL;
+  active_widget = NULL;
 
-	for ( ; i != widgets.end(); i++)
+  for ( ; i != widgets.end(); i++)
+    {
+      OsgIContainer *container = dynamic_cast<OsgIContainer *>(*i);
+
+      if ((*i)->GetId() == widget_id)
+	active_widget = *i;
+      else if (container != NULL)
 	{
-		OsgIContainer *container = dynamic_cast<OsgIContainer *>(*i);
-
-		if ((*i)->GetId() == widget_id)
-			active_widget = *i;
-		else if (container != NULL)
-		{
-			for (unsigned int i = 0; i<container->GetNumChildren(); i++)
-				SearchForActiveWidget(container->GetChild(i), widget_id);
-		}
+	  for (unsigned int i = 0; i<container->GetNumChildren(); i++)
+	    SearchForActiveWidget(container->GetChild(i), widget_id);
 	}
+    }
 
-	//active_widget->SetSize(cpw::Point3d<float>(2000, 2000, 200));
+  //active_widget->SetSize(cpw::Point3d<float>(2000, 2000, 200));
 }
 
 void OsgIHUD::SearchForActiveWidget(OsgIWidget *widget, const std::string &widget_id)
 {
-	OsgIContainer *container = dynamic_cast<OsgIContainer *>(widget);
+  OsgIContainer *container = dynamic_cast<OsgIContainer *>(widget);
 
-	if (widget->GetId() == widget_id)
-		active_widget = widget;
-	else if (container != NULL)
-	{
-		for (unsigned int i = 0; i<container->GetNumChildren(); i++)
-			SearchForActiveWidget(container->GetChild(i), widget_id);
-	}
+  if (widget->GetId() == widget_id)
+    active_widget = widget;
+  else if (container != NULL)
+    {
+      for (unsigned int i = 0; i<container->GetNumChildren(); i++)
+	SearchForActiveWidget(container->GetChild(i), widget_id);
+    }
 }

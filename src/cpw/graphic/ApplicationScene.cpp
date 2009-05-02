@@ -37,47 +37,51 @@ ApplicationScene::ApplicationScene(): scene()
 
 ApplicationScene::~ApplicationScene()
 {
-	delete scene;
+  if (scene)
+    {
+      delete scene;
+      scene = NULL;
+    }
 }
 
 
 cpw::ApplicationScene * ApplicationScene::GetInstance()
 {
 
-	if(instance == NULL)
-		instance = new ApplicationScene;
+  if(instance == NULL)
+    instance = new ApplicationScene;
 
-	return instance;
+  return instance;
 }
 
 
 void ApplicationScene::ReleaseInstance()
 {
 
-	if(instance != NULL)
-	{
-		delete instance;
-		instance = NULL;
+  if(instance != NULL)
+    {
+      delete instance;
+      instance = NULL;
 	
-	}
+    }
 }
 
 
 void ApplicationScene::SetScene(IScene *scen) 
 { 
-	scene = scen; 
+  scene = scen; 
 }
 
 IScene *ApplicationScene::GetScene() 
 {
-	return scene; 
+  return scene; 
 }
 
 void ApplicationScene::SetNavigatorManager(INavigatorManager *_navigator_manager)
 {
-	navigator_manager = _navigator_manager; 
+  navigator_manager = _navigator_manager; 
 }
 INavigatorManager * ApplicationScene::GetNavigatorManager()
 {
-	return navigator_manager;
+  return navigator_manager;
 }

@@ -60,84 +60,84 @@
 
 namespace cpw 
 { 
-	namespace remote
-	{
-		class Connection;
-		class ISocketFactory;
-		class ConnectionManager;
+  namespace remote
+  {
+    class Connection;
+    class ISocketFactory;
+    class ConnectionManager;
 
-		/*!
-		 *  \class RemoteProtocol RemoteProtocol.h <remote/RemoteProtocol.h>
-		 *  \ingroup remote
-		 *  \brief Implements the network protocol
-		 *
-		 *
-		 *  This is the main class in the remote package. It implements the protocol defined in remote
-		 *  by providing the mecanisms to create and delete all the needed objects, and methods to
-		 *  process all the messages received.
-		 *
-		 *  It also serves as an interface to applications using the remote component in Capaware.
-		 *
-		 *  Use the methods with the prefix Recv whenever a network event happens.
-		 *
-		 */
-		class REMOTE_EXPORT RemoteProtocol
-		{
-		public:
-			RemoteProtocol(int port, cpw::LayerTree *layer_tree, ISocketFactory *factory);
-			~RemoteProtocol();
+    /*!
+     *  \class RemoteProtocol RemoteProtocol.h <remote/RemoteProtocol.h>
+     *  \ingroup remote
+     *  \brief Implements the network protocol
+     *
+     *
+     *  This is the main class in the remote package. It implements the protocol defined in remote
+     *  by providing the mecanisms to create and delete all the needed objects, and methods to
+     *  process all the messages received.
+     *
+     *  It also serves as an interface to applications using the remote component in Capaware.
+     *
+     *  Use the methods with the prefix Recv whenever a network event happens.
+     *
+     */
+    class REMOTE_EXPORT RemoteProtocol
+    {
+    public:
+      RemoteProtocol(int port, cpw::LayerTree *layer_tree, ISocketFactory *factory);
+      ~RemoteProtocol();
 
-			remote::ConnectionManager *GetConnectionManager();
+      remote::ConnectionManager *GetConnectionManager();
 
-			void SetCallback(MessageType type, IRemoteCallback *callback);
+      void SetCallback(MessageType type, IRemoteCallback *callback);
 
-			Connection* Connect(std::string hostname, int port);
-			void GetPublished(Connection *connection);
-			void GetEntities(Connection *connection, std::vector<cpw::TypeId> &ids);
-			void SendChange(cpw::TypeId entity_id, struct cpw::Change change);
+      Connection* Connect(std::string hostname, int port);
+      void GetPublished(Connection *connection);
+      void GetEntities(Connection *connection, std::vector<cpw::TypeId> &ids);
+      void SendChange(cpw::TypeId entity_id, struct cpw::Change change);
 
-			void EntityRemoved(cpw::TypeId entity_id);
+      void EntityRemoved(cpw::TypeId entity_id);
 
-			void ConnectToAllEntities(cpw::Entity *entity = NULL);
-			void DisconnectAllEntities(cpw::Entity *entity = NULL);
+      void ConnectToAllEntities(cpw::Entity *entity = NULL);
+      void DisconnectAllEntities(cpw::Entity *entity = NULL);
 
-			void RecvNewConnection(const cpw::RemoteNode &node, ISocket *data = NULL);
-			void RecvDisconnection(const cpw::RemoteNode &node);
-			void RecvMessage(const cpw::RemoteNode &node, const DataStream &data);
+      void RecvNewConnection(const cpw::RemoteNode &node, ISocket *data = NULL);
+      void RecvDisconnection(const cpw::RemoteNode &node);
+      void RecvMessage(const cpw::RemoteNode &node, const DataStream &data);
 
-			void CleanUpModifiers();
-
-
-		private:
-
-			void RecvMessage(Connection *connection, GetPublishedRequestData *message_data);
-			void RecvMessage(Connection *connection, GetPublishedResponseData *message_data);
-			void RecvMessage(Connection *connection, GetEntityRequestData *message_data);
-			void RecvMessage(Connection *connection, GetEntityResponseData *message_data);
-			void RecvMessage(Connection *connection, RequestSynchroData *message_data);
-			void RecvMessage(Connection *connection, SendChangesData *message_data);
-			void RecvMessage(Connection *connection, SetValueData *message_data);
-			void RecvMessage(Connection *connection, DisconnectEntityData *message_data);
-
-			void AddEntity(remote::Connection * connection, const cpw::TypeId &entity_id,
-				const cpw::TypeId &child_id);
-			void DeleteEntity(remote::Connection * connection, const cpw::TypeId &entity_id,
-				const cpw::TypeId &child_id);
-			void DeleteEntity_helper(Connection *connection, cpw::Entity *entity);
+      void CleanUpModifiers();
 
 
-			cpw::LayerTree *layer_tree;
-			ConnectionManager *connection_manager;
+    private:
 
-			std::map<MessageType, IRemoteCallback *> callbacks;
+      void RecvMessage(Connection *connection, GetPublishedRequestData *message_data);
+      void RecvMessage(Connection *connection, GetPublishedResponseData *message_data);
+      void RecvMessage(Connection *connection, GetEntityRequestData *message_data);
+      void RecvMessage(Connection *connection, GetEntityResponseData *message_data);
+      void RecvMessage(Connection *connection, RequestSynchroData *message_data);
+      void RecvMessage(Connection *connection, SendChangesData *message_data);
+      void RecvMessage(Connection *connection, SetValueData *message_data);
+      void RecvMessage(Connection *connection, DisconnectEntityData *message_data);
 
-			std::map<cpw::TypeId, RemoteModifier*> modifiers;
-			std::map<std::pair<cpw::TypeId,cpw::RemoteNode>, bool> pending_synchs;
-			std::multimap<cpw::TypeId, cpw::TypeId> child_parent; //1:child 2:parent
-			std::list<cpw::TypeId> processed_msg;
-		};
+      void AddEntity(remote::Connection * connection, const cpw::TypeId &entity_id,
+		     const cpw::TypeId &child_id);
+      void DeleteEntity(remote::Connection * connection, const cpw::TypeId &entity_id,
+			const cpw::TypeId &child_id);
+      void DeleteEntity_helper(Connection *connection, cpw::Entity *entity);
 
-	}
+
+      cpw::LayerTree *layer_tree;
+      ConnectionManager *connection_manager;
+
+      std::map<MessageType, IRemoteCallback *> callbacks;
+
+      std::map<cpw::TypeId, RemoteModifier*> modifiers;
+      std::map<std::pair<cpw::TypeId,cpw::RemoteNode>, bool> pending_synchs;
+      std::multimap<cpw::TypeId, cpw::TypeId> child_parent; //1:child 2:parent
+      std::list<cpw::TypeId> processed_msg;
+    };
+
+  }
 
 }
 #endif

@@ -29,23 +29,23 @@ cpw::ApplicationLog * cpw::ApplicationLog::instance = NULL;
 
 ApplicationLog * ApplicationLog::GetInstance()
 {
-	if (instance == NULL)
-		instance = new ApplicationLog();
+  if (instance == NULL)
+    instance = new ApplicationLog();
 
-	return instance;
+  return instance;
 }
 
 void ApplicationLog::ReleaseInstance()
 {
-	if (instance != NULL) {
-		delete instance;
-		instance = NULL;
-	}
+  if (instance != NULL) {
+    delete instance;
+    instance = NULL;
+  }
 }
 
 ApplicationLog::ApplicationLog(void)
 {
-	logger = NULL;
+  logger = NULL;
 }
 
 ApplicationLog::~ApplicationLog(void)
@@ -54,10 +54,10 @@ ApplicationLog::~ApplicationLog(void)
 
 Logger * ApplicationLog::GetLogger()
 {
-	return logger;
+  return logger;
 }
 
 void ApplicationLog::SetLogger(Logger *_logger)
 { 
-	logger = _logger; 
+  logger = _logger; 
 }

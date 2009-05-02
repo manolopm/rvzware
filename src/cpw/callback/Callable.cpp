@@ -33,102 +33,113 @@ Callable::Callable(void): callback_vector(), animate_callback()
 
 Callable::Callable(const Callable &callable)
 {
-	std::vector<ICallBack*>::const_iterator i = callable.callback_vector.begin();
-	for(;i!=callable.callback_vector.end();i++)
-	{
-		callback_vector.push_back((*i)->Clone());  
-	}
+  std::vector<ICallBack*>::const_iterator i = callable.callback_vector.begin();
+  for(;i!=callable.callback_vector.end();i++)
+    {
+      callback_vector.push_back((*i)->Clone());  
+    }
 
-	if(callable.animate_callback != NULL)
-		animate_callback = (IGraphicCallBack *)callable.animate_callback->Clone();
-	else
-		animate_callback = NULL;
+  if(callable.animate_callback != NULL)
+    animate_callback = (IGraphicCallBack *)callable.animate_callback->Clone();
+  else
+    animate_callback = NULL;
 
 }
 
 Callable &Callable::operator = (const Callable &callable)
 {
-	std::vector<ICallBack*>::const_iterator i = callable.callback_vector.begin();
-	for(;i!=callable.callback_vector.end();i++)
-	{
-		callback_vector.push_back((*i)->Clone());  
-	}
-	if(callable.animate_callback != NULL)
-		animate_callback = (IGraphicCallBack *)callable.animate_callback->Clone();
-	else
-		animate_callback = NULL;
+  std::vector<ICallBack*>::const_iterator i = callable.callback_vector.begin();
+  for(;i!=callable.callback_vector.end();i++)
+    {
+      callback_vector.push_back((*i)->Clone());  
+    }
+  if(callable.animate_callback != NULL)
+    animate_callback = (IGraphicCallBack *)callable.animate_callback->Clone();
+  else
+    animate_callback = NULL;
 
 
-	return *this;
+  return *this;
 }
 
 
 Callable::~Callable(void)
 {
-	std::vector<ICallBack*>::iterator i = callback_vector.begin();
+  std::vector<ICallBack*>::iterator i = callback_vector.begin();
 
-	for( ; i!= callback_vector.end(); i++)
-		delete *i;
+  for( ; i!= callback_vector.end(); i++)
+    {
+      if (*i) 
+	delete *i;
+    }
 
-	if (animate_callback != NULL) delete animate_callback;
+  if (animate_callback != NULL)
+    {
+      delete animate_callback;
+      animate_callback = NULL;
+    }
 }
 
 
 
 void Callable::GraphicInsert()
 {
-	std::vector<ICallBack*>::iterator i = callback_vector.begin();
-	for( ; i!= callback_vector.end(); i++)
-	{
-		(*i)->Insert(this);
-	}
+  std::vector<ICallBack*>::iterator i = callback_vector.begin();
+  for( ; i!= callback_vector.end(); i++)
+    {
+      (*i)->Insert(this);
+    }
 
 }
 
 void Callable::GraphicUpdate()
 {
-	std::vector<ICallBack*>::iterator i = callback_vector.begin();
-	for( ; i!= callback_vector.end(); i++)
-		(*i)->Update(this); //debug assertiron aqui --'
+  std::vector<ICallBack*>::iterator i = callback_vector.begin();
+  for( ; i!= callback_vector.end(); i++)
+    (*i)->Update(this); //debug assertiron aqui --'
 }
 
 void Callable::GraphicDelete()
 {
-	std::vector<ICallBack*>::iterator i = callback_vector.begin();
-	for( ; i!= callback_vector.end(); i++)
-		(*i)->Delete(this);
+  std::vector<ICallBack*>::iterator i = callback_vector.begin();
+  for( ; i!= callback_vector.end(); i++)
+    (*i)->Delete(this);
 }
 
 void Callable::AddCallBack(cpw::ICallBack* callback)
 { 
-	callback_vector.push_back(callback); 
+  callback_vector.push_back(callback); 
 }
 
 void Callable::Animate(cpw::cpwTime &time)
 { 
-	if (animate_callback != NULL)
-		animate_callback->Animate(this, time); 
+  if (animate_callback != NULL)
+    animate_callback->Animate(this, time); 
 }
 
 
 void Callable::SetAnimateCallBack(IGraphicCallBack *callback)
 { 
-	if(animate_callback != NULL) delete animate_callback;
+  if(animate_callback != NULL)
+    {
+      delete animate_callback;
+      animate_callback = NULL;
+    }
 
-	animate_callback = callback; 
+  animate_callback = callback; 
 }
 
 void Callable::Visualize(const bool &value)
 {
-	if (animate_callback != NULL)
-	{
-		bool a = value;
-		animate_callback->Visualize(this, a);		
-	}
+  if (animate_callback != NULL)
+    {
+      bool a = value;
+      animate_callback->Visualize(this, a);		
+    }
 	
-	std::vector<ICallBack*>::iterator i = callback_vector.begin();
-	for( ; i!= callback_vector.end(); i++)
-		(*i)->Visualize(this, value);
+  std::vector<ICallBack*>::iterator i = callback_vector.begin();
+  for( ; i!= callback_vector.end(); i++)
+    (*i)->Visualize(this, value);
 	
 
 }

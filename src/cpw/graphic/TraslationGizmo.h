@@ -26,24 +26,24 @@
 
 namespace cpw
 {
-	/** 
-		\brief Por comentar ....
-		\ingroup cpw
-	*/
-	class CPWEXPORT TraslationGizmo : public Gizmo
-	{
-		public:
+  /** 
+      \brief Por comentar ....
+      \ingroup cpw
+  */
+  class CPWEXPORT TraslationGizmo : public Gizmo
+  {
+  public:
 
-			TraslationGizmo(void);
-			~TraslationGizmo(void);
+    TraslationGizmo(void);
+    ~TraslationGizmo(void);
 
-			virtual bool MouseDrag(const int &x0, const int &y0, const int &x1, const int &y1, const cpw::MouseButtonsState &mbs);
+    virtual bool MouseDrag(const int &x0, const int &y0, const int &x1, const int &y1, const cpw::MouseButtonsState &mbs);
 
-			virtual void Update(bool subject_deleted = false);
+    virtual void Update(bool subject_deleted = false);
 		
-		private:
+  private:
 
-	};
+  };
 }
 
 #endif

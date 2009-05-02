@@ -48,14 +48,20 @@ using namespace cpw::remote;
  *  \param factory The socket factory to be used
  */
 ConnectionManager::ConnectionManager(ISocketFactory *factory)
-	: factory(factory) {}
+  : factory(factory) {}
 
 
 ConnectionManager::~ConnectionManager()
 {
-	std::map<cpw::RemoteNode, Connection* >::iterator it1;
-	for(it1 = connections.begin();it1 !=  connections.end(); it1++)
-		delete it1->second;
+  std::map<cpw::RemoteNode, Connection* >::iterator it1;
+  for(it1 = connections.begin();it1 !=  connections.end(); it1++)
+    {
+      if (it1->second)
+	{
+	  delete it1->second;
+	  it1->second = NULL;
+	}
+    }
 }
 
 
@@ -66,13 +72,13 @@ ConnectionManager::~ConnectionManager()
  */
 std::vector<cpw::RemoteNode> ConnectionManager::GetNodes()
 {
-	std::vector<cpw::RemoteNode> nodes;
+  std::vector<cpw::RemoteNode> nodes;
 
-	std::map<cpw::RemoteNode, Connection*>::iterator it;
-	for (it = connections.begin(); it != connections.end(); it++)
-		nodes.push_back(it->first);
+  std::map<cpw::RemoteNode, Connection*>::iterator it;
+  for (it = connections.begin(); it != connections.end(); it++)
+    nodes.push_back(it->first);
 
-	return nodes;
+  return nodes;
 }
 
 
@@ -84,10 +90,10 @@ std::vector<cpw::RemoteNode> ConnectionManager::GetNodes()
  */
 Connection* ConnectionManager::GetConnection(const cpw::RemoteNode &node)
 {
-	if (connections.find(node) != connections.end())
-		return connections[node];
-	else
-		return NULL;
+  if (connections.find(node) != connections.end())
+    return connections[node];
+  else
+    return NULL;
 }
 
 
@@ -99,10 +105,10 @@ Connection* ConnectionManager::GetConnection(const cpw::RemoteNode &node)
  */
 ConnectionState ConnectionManager::GetConnectionState(const cpw::RemoteNode &node)
 {
-	if (connection_state.find(node) != connection_state.end())
-		return connection_state[node];
-	else
-		return cstDisconnected;
+  if (connection_state.find(node) != connection_state.end())
+    return connection_state[node];
+  else
+    return cstDisconnected;
 }
 
 
@@ -112,17 +118,17 @@ ConnectionState ConnectionManager::GetConnectionState(const cpw::RemoteNode &nod
  */
 std::vector<Connection *> ConnectionManager::GetSubscribers(const cpw::TypeId &id)
 {
-	std::vector<Connection *> subscribers;
-	std::pair<std::multimap<cpw::TypeId, const Connection*>::iterator,
-	std::multimap<cpw::TypeId, const Connection*>::iterator> range;
+  std::vector<Connection *> subscribers;
+  std::pair<std::multimap<cpw::TypeId, const Connection*>::iterator,
+    std::multimap<cpw::TypeId, const Connection*>::iterator> range;
 
-	range = shared_entities.equal_range(id);
+range = shared_entities.equal_range(id);
 	
-	std::multimap<cpw::TypeId, const Connection*>::iterator it;
-	for (it = range.first; it!=range.second; it++)
-		subscribers.push_back(((Connection*)it->second));
+std::multimap<cpw::TypeId, const Connection*>::iterator it;
+for (it = range.first; it!=range.second; it++)
+  subscribers.push_back(((Connection*)it->second));
 
-	return subscribers;
+return subscribers;
 }
 
 
@@ -132,17 +138,17 @@ std::vector<Connection *> ConnectionManager::GetSubscribers(const cpw::TypeId &i
  */
 std::vector<cpw::TypeId> ConnectionManager::GetSubscribed(const cpw::RemoteNode &node)
 {
-	std::vector<cpw::TypeId> entities;
+  std::vector<cpw::TypeId> entities;
 
-	std::multimap<cpw::TypeId, const Connection*>::iterator it;
+  std::multimap<cpw::TypeId, const Connection*>::iterator it;
 
-	for (it = shared_entities.begin(); it != shared_entities.end(); it++)
-	{
-		if (it->second->GetNode() == node)
-			entities.push_back(it->first);
-	}
+  for (it = shared_entities.begin(); it != shared_entities.end(); it++)
+    {
+      if (it->second->GetNode() == node)
+	entities.push_back(it->first);
+    }
 
-	return entities;
+  return entities;
 }
 
 
@@ -156,9 +162,9 @@ std::vector<cpw::TypeId> ConnectionManager::GetSubscribed(const cpw::RemoteNode 
  */
 bool ConnectionManager::SetListenPort(int port)
 {
-	bool isSet = factory->ListenOn(port);
-	listenning_on_port = isSet?port:-1;
-	return isSet;
+  bool isSet = factory->ListenOn(port);
+  listenning_on_port = isSet?port:-1;
+  return isSet;
 }
 
 
@@ -178,34 +184,34 @@ bool ConnectionManager::SetListenPort(int port)
  */
 Connection* ConnectionManager::Connect(const cpw::RemoteNode &node)
 {
-	//Checking 127.0.0.1 and localhost should be enough for now, but it would be 
-	//better to perform a better check
-	if ((node.GetHostname() == "127.0.0.1" || node.GetHostname() == "localhost") 
-		&& node.GetPort() == listenning_on_port)
-		return NULL;
+  //Checking 127.0.0.1 and localhost should be enough for now, but it would be 
+  //better to perform a better check
+  if ((node.GetHostname() == "127.0.0.1" || node.GetHostname() == "localhost") 
+      && node.GetPort() == listenning_on_port)
+    return NULL;
 
-	Connection *connection;
+  Connection *connection;
 
-	std::map<cpw::RemoteNode, Connection*>::iterator iter_connection;
-	iter_connection = connections.find(node);
-	if (iter_connection != connections.end())
-		connection = connections[node];
-	else
-	{
-		//Create the connection
-		ISocket *socket = factory->CreateSocket();
+  std::map<cpw::RemoteNode, Connection*>::iterator iter_connection;
+  iter_connection = connections.find(node);
+  if (iter_connection != connections.end())
+    connection = connections[node];
+  else
+    {
+      //Create the connection
+      ISocket *socket = factory->CreateSocket();
 
-		connection = new Connection(socket, node);
+      connection = new Connection(socket, node);
 
-		connection->Connect();
-		connections[node] = connection;
-		connection_state[node] = cstConnecting;
+      connection->Connect();
+      connections[node] = connection;
+      connection_state[node] = cstConnecting;
 
-		Notify();
-	}
+      Notify();
+    }
 
 
-	return connection;
+  return connection;
 }
 
 
@@ -219,8 +225,8 @@ Connection* ConnectionManager::Connect(const cpw::RemoteNode &node)
  */
 void ConnectionManager::Disconnect(const cpw::RemoteNode &node)
 {
-	connections[node]->Disconnect();
-	connection_state[node] = cstDisconnecting;
+  connections[node]->Disconnect();
+  connection_state[node] = cstDisconnecting;
 }
 
 
@@ -236,28 +242,28 @@ void ConnectionManager::Disconnect(const cpw::RemoteNode &node)
  */
 Connection * ConnectionManager::RecvNewConnection(const cpw::RemoteNode &node, ISocket *socket)
 {
-	if (connections.find(node) == connections.end())
-	{
-		//1 - Create Connection
-		Connection *connection = new Connection(socket, node);
+  if (connections.find(node) == connections.end())
+    {
+      //1 - Create Connection
+      Connection *connection = new Connection(socket, node);
 
-		//2 - Associate connection with address
-		//2.1 - Add parameter cpw::RemoteNode
-		connections[node] = connection;
-		connection_state[node] = cstConnected;
+      //2 - Associate connection with address
+      //2.1 - Add parameter cpw::RemoteNode
+      connections[node] = connection;
+      connection_state[node] = cstConnected;
 
-		Notify();
+      Notify();
 
-		return connection;
-	}
-	else
-	{
-		connection_state[node] = cstConnected;
+      return connection;
+    }
+  else
+    {
+      connection_state[node] = cstConnected;
 
-		Notify();
+      Notify();
 
-		return NULL;
-	}
+      return NULL;
+    }
 }
 
 
@@ -270,27 +276,30 @@ Connection * ConnectionManager::RecvNewConnection(const cpw::RemoteNode &node, I
  */
 void ConnectionManager::RecvDisconnection(const cpw::RemoteNode &node)
 {
-	if (connections.find(node) != connections.end())
+  if (connections.find(node) != connections.end())
+    {
+      Connection *connection = connections[node];
+
+      //Unsubscribe (kind of)
+      std::multimap<cpw::TypeId, const Connection*>::iterator it = shared_entities.begin();
+      while (it != shared_entities.end())
 	{
-		Connection *connection = connections[node];
-
-		//Unsubscribe (kind of)
-		std::multimap<cpw::TypeId, const Connection*>::iterator it = shared_entities.begin();
-		while (it != shared_entities.end())
-		{
-			std::multimap<cpw::TypeId, const Connection*>::iterator itaux = it;
-			itaux++;
-			if (it->second == connection)
-				shared_entities.erase(it);
-			it = itaux;
-		}
-
-		delete connection;
-		connections.erase(connections.find(node));
-		connection_state.erase(connection_state.find(node));
-
-		Notify();
+	  std::multimap<cpw::TypeId, const Connection*>::iterator itaux = it;
+	  itaux++;
+	  if (it->second == connection)
+	    shared_entities.erase(it);
+	  it = itaux;
 	}
+      if (connection)
+	{
+	  delete connection;
+	  connection = NULL;
+	}
+      connections.erase(connections.find(node));
+      connection_state.erase(connection_state.find(node));
+
+      Notify();
+    }
 }
 
 
@@ -304,17 +313,17 @@ void ConnectionManager::RecvDisconnection(const cpw::RemoteNode &node)
  */
 void ConnectionManager::Subscribe(const Connection *connection, cpw::TypeId &id)
 {
-	std::multimap<cpw::TypeId, const Connection*>::iterator it;
-	for (it = shared_entities.begin(); it != shared_entities.end(); it++)
-	{
-		if (it->first == id && it->second == connection)
-			break;
-	}
+  std::multimap<cpw::TypeId, const Connection*>::iterator it;
+  for (it = shared_entities.begin(); it != shared_entities.end(); it++)
+    {
+      if (it->first == id && it->second == connection)
+	break;
+    }
 
-	if (it == shared_entities.end())
-		shared_entities.insert(std::pair<cpw::TypeId, const Connection*>(id, connection));
+  if (it == shared_entities.end())
+    shared_entities.insert(std::pair<cpw::TypeId, const Connection*>(id, connection));
 
-	Notify();
+  Notify();
 }
 
 
@@ -330,15 +339,15 @@ void ConnectionManager::Subscribe(const Connection *connection, cpw::TypeId &id)
  */
 void ConnectionManager::Unsubscribe(const Connection *connection, cpw::TypeId &id)
 {
-	std::multimap<cpw::TypeId, const Connection*>::iterator it;
-	for (it = shared_entities.begin(); it != shared_entities.end(); it++)
-	{
-		if (it->first == id && it->second == connection)
-			break;
-	}
+  std::multimap<cpw::TypeId, const Connection*>::iterator it;
+  for (it = shared_entities.begin(); it != shared_entities.end(); it++)
+    {
+      if (it->first == id && it->second == connection)
+	break;
+    }
 
-	if (it != shared_entities.end())
-		shared_entities.erase(it);
+  if (it != shared_entities.end())
+    shared_entities.erase(it);
 
-	Notify();
+  Notify();
 }

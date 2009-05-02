@@ -69,8 +69,10 @@ OsgNavigatorManager::~OsgNavigatorManager(void)
 		
   //deleting the composite viewer all the associated viewers are deleted
   if (osg_composite_viewer)
-    delete osg_composite_viewer;
-  osg_composite_viewer = NULL;
+    {
+      delete osg_composite_viewer;
+      osg_composite_viewer = NULL;
+    }
   
 
   //free all the navigators
@@ -80,7 +82,10 @@ OsgNavigatorManager::~OsgNavigatorManager(void)
       
       OsgNavigator * tmp = navigator_vector.back();
       if (tmp)
-	delete tmp;
+	{
+	  delete tmp;
+	  tmp = NULL;
+	}
       
       navigator_vector.pop_back();
     }
@@ -203,10 +208,13 @@ void OsgNavigatorManager::DeleteNavigator(unsigned int navigator_id)
 	    {
 	      osg_composite_viewer->removeView
 		((osgViewer::Viewer *)n->GetViewer());
-	  //	osg_composite_viewer->en
-	  //osg_composite_viewer->removeView(n->GetHudView());
-
-	      delete n;
+	      //	osg_composite_viewer->en
+	      //osg_composite_viewer->removeView(n->GetHudView());
+	      if (n)
+		{
+		  delete n;
+		  n = NULL;
+		}
 	    }
 	  navigator_vector.erase(i);
 

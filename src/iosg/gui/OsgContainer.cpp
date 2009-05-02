@@ -30,54 +30,58 @@ OsgIContainer::OsgIContainer(const std::string &url, cpw::Point3d<float> _positi
 
 OsgIContainer::~OsgIContainer(void)
 {
-	std::map<std::string, iosg::OsgIWidget*>::iterator i = children.begin();
+  std::map<std::string, iosg::OsgIWidget*>::iterator i = children.begin();
 	
-	for ( ; i != children.end(); i++)
-		delete i->second;
+  for ( ; i != children.end(); i++)
+    if (i->second)
+      {
+	delete i->second;
+	i->second = NULL;
+      }
 
-	children.clear();
+  children.clear();
 }
 
 
 bool OsgIContainer::AttachChild(OsgIWidget *child)
 {
-	children[child->GetId()] = child;
-	return false;
+  children[child->GetId()] = child;
+  return false;
 }
 
 bool OsgIContainer::DetachChild(const std::string &name)
 {
 
-	std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.find(name);
-	children.erase(iter);
-	return false;
+  std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.find(name);
+  children.erase(iter);
+  return false;
 }
 
 OsgIWidget * OsgIContainer::GetChild(const std::string &name)
 {
-	std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.find(name);
+  std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.find(name);
 
-	if (iter == children.end())
-		return NULL;
-	else
-		return iter->second;
+  if (iter == children.end())
+    return NULL;
+  else
+    return iter->second;
 }
 
 OsgIWidget * OsgIContainer::GetChild(const unsigned int &index)
 {
-	unsigned int i=0;
+  unsigned int i=0;
 	
-	std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.begin();
+  std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.begin();
 
-	for ( ; iter != children.end(); iter++)
-	{
-		if (i == index)
-			return iter->second;
+  for ( ; iter != children.end(); iter++)
+    {
+      if (i == index)
+	return iter->second;
 
-		i++;
-	}
+      i++;
+    }
 
-	return NULL;
+  return NULL;
 }
 
 //void OsgIContainer::SetAnchor(const float &w, const float &h, const int &offset_x, const int &offset_y)
@@ -91,58 +95,58 @@ OsgIWidget * OsgIContainer::GetChild(const unsigned int &index)
 
 void OsgIContainer::ResizeScreen(const int &x, const int &y)
 {
-	OsgIWidget::ResizeScreen(x, y);
+  OsgIWidget::ResizeScreen(x, y);
 
-	std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.begin();
+  std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.begin();
 
-	for ( ; iter != children.end(); iter++)
-		iter->second->ResizeScreen(x, y);
+  for ( ; iter != children.end(); iter++)
+    iter->second->ResizeScreen(x, y);
 }
 
 void OsgIContainer::Update(osg::Matrix *mp)
 {
- //   osg::Matrix m_to_propagate;
+  //   osg::Matrix m_to_propagate;
 
-	//if (mp != NULL)
-	//	m_to_propagate = *mp;
-	//else
-	//	m_to_propagate.makeIdentity();
+  //if (mp != NULL)
+  //	m_to_propagate = *mp;
+  //else
+  //	m_to_propagate.makeIdentity();
 
-	//m_to_propagate = GetMatrixTransform()->getMatrix() * m_to_propagate;
+  //m_to_propagate = GetMatrixTransform()->getMatrix() * m_to_propagate;
 
 
-	//std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.begin();
+  //std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.begin();
 
-	//for ( ; iter != children.end(); iter++)
-	//{
-	//	//iter->second->GetMatrixTransform()->setMatrix(iter->second->GetMatrixTransform()->getMatrix() * m_to_propagate) ;
-	//	iter->second->Update(&m_to_propagate); 
-	//}
+  //for ( ; iter != children.end(); iter++)
+  //{
+  //	//iter->second->GetMatrixTransform()->setMatrix(iter->second->GetMatrixTransform()->getMatrix() * m_to_propagate) ;
+  //	iter->second->Update(&m_to_propagate); 
+  //}
 
-	UpdateTransformationMatrix();
-	osg::Matrix own_matrix = GetMatrixTransform()->getMatrix();
+  UpdateTransformationMatrix();
+  osg::Matrix own_matrix = GetMatrixTransform()->getMatrix();
 
-	std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.begin();
+  std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.begin();
 
-	if (mp != NULL)
-		own_matrix = own_matrix * (*mp);
+  if (mp != NULL)
+    own_matrix = own_matrix * (*mp);
 		
-	for ( ; iter != children.end(); iter++)
-		iter->second->Update(&own_matrix); 
+  for ( ; iter != children.end(); iter++)
+    iter->second->Update(&own_matrix); 
 
-	GetMatrixTransform()->setMatrix(own_matrix);
+  GetMatrixTransform()->setMatrix(own_matrix);
 	
-	/*else
-		for ( ; iter != children.end(); iter++)
-			iter->second->Update(NULL); */
+  /*else
+    for ( ; iter != children.end(); iter++)
+    iter->second->Update(NULL); */
 }
 
 void OsgIContainer::SetVisible(const bool &_visible)
 {
-	OsgIWidget::SetVisible(_visible);
+  OsgIWidget::SetVisible(_visible);
 
-	std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.begin();
+  std::map<std::string, iosg::OsgIWidget*>::iterator iter = children.begin();
 
-	for ( ; iter != children.end(); iter++)
-		iter->second->SetVisible(_visible);
+  for ( ; iter != children.end(); iter++)
+    iter->second->SetVisible(_visible);
 }

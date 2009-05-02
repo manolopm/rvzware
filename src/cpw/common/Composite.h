@@ -30,152 +30,156 @@
 namespace cpw {
 
 
-	/** 
-		\brief
-		\ingroup cpw
-	*/
-	class CPWEXPORT Node
-	{
+  /** 
+      \brief
+      \ingroup cpw
+  */
+  class CPWEXPORT Node
+  {
 
-	public:
+  public:
 
-		Node(): name(){}
+  Node(): name(){}
 		
-		Node(const std::string &nam):name(nam){}
+  Node(const std::string &nam):name(nam){}
 		
-		virtual ~Node(){}
+    virtual ~Node(){}
 
-		virtual void Add(Node *node) {}
+    virtual void Add(Node *node) {}
 		
-		virtual std::vector<Node *> GetChildren() {return std::vector<Node *>();}
-		virtual const std::vector<Node *> GetChildren() const {return std::vector<Node *>();}
+    virtual std::vector<Node *> GetChildren() {return std::vector<Node *>();}
+    virtual const std::vector<Node *> GetChildren() const {return std::vector<Node *>();}
 
-		virtual std::string GetChildValue(const std::string &name) {return std::string();}
-		virtual const std::string GetChildValue(const std::string &name) const {return std::string();}
+    virtual std::string GetChildValue(const std::string &name) {return std::string();}
+    virtual const std::string GetChildValue(const std::string &name) const {return std::string();}
 
-		virtual bool isContainer() = 0;
-		virtual const bool isContainer() const = 0;
+    virtual bool isContainer() = 0;
+    virtual const bool isContainer() const = 0;
 
-		std::string &GetName() { return name; }
-		const std::string &GetName() const { return name; }
+    std::string &GetName() { return name; }
+    const std::string &GetName() const { return name; }
 
-		virtual std::string GetValue() {return std::string();}
-		virtual const std::string GetValue() const {return std::string();}
+    virtual std::string GetValue() {return std::string();}
+    virtual const std::string GetValue() const {return std::string();}
 
-		virtual int GetNumAttributes () {return 0;}
-		virtual const int GetNumAttributes () const {return 0;}
-		virtual std::map<std::string, std::string> *GetAttributes() {return NULL;}
-		virtual const std::map<std::string, std::string> *GetAttributes() const {return NULL;}
+    virtual int GetNumAttributes () {return 0;}
+    virtual const int GetNumAttributes () const {return 0;}
+    virtual std::map<std::string, std::string> *GetAttributes() {return NULL;}
+    virtual const std::map<std::string, std::string> *GetAttributes() const {return NULL;}
 
-		virtual std::map<std::string, std::string> *GetChildAttributes(const std::string &name) {return NULL;}
-		virtual const std::map<std::string, std::string> *GetChildAttributes(const std::string &name) const {return NULL;}
-
-
-	private:
-
-		std::string name;
-	};
+    virtual std::map<std::string, std::string> *GetChildAttributes(const std::string &name) {return NULL;}
+    virtual const std::map<std::string, std::string> *GetChildAttributes(const std::string &name) const {return NULL;}
 
 
+  private:
 
-	/** 
-		\brief
-		\ingroup cpw
-	*/
-	class CPWEXPORT LeafNode: public Node {
+    std::string name;
+  };
+
+
+
+  /** 
+      \brief
+      \ingroup cpw
+  */
+  class CPWEXPORT LeafNode: public Node {
 	
-	public:
+  public:
 
-		LeafNode(): Node(), value(), attributes() {}
+  LeafNode(): Node(), value(), attributes() {}
 		
-		LeafNode(const std::string &nam, const std::string &val):Node(nam), value(val){}
+  LeafNode(const std::string &nam, const std::string &val):Node(nam), value(val){}
 
-		LeafNode(const std::string &nam, const std::map<std::string, std::string> &attr):Node(nam), attributes(attr){}
+  LeafNode(const std::string &nam, const std::map<std::string, std::string> &attr):Node(nam), attributes(attr){}
 
-		virtual ~LeafNode(){}
+    virtual ~LeafNode(){}
 
-		bool isContainer() {return false;}
-		const bool isContainer() const {return false;}
+    bool isContainer() {return false;}
+    const bool isContainer() const {return false;}
 
-		std::string GetValue() {return value;}
-		const std::string GetValue() const {return value;}
+    std::string GetValue() {return value;}
+    const std::string GetValue() const {return value;}
 
-		int GetNumAttributes () {return attributes.size();}
-		virtual const int GetNumAttributes () const {return attributes.size();}
-		std::map<std::string, std::string> *GetAttributes() {return &attributes;}
-		const std::map<std::string, std::string> *GetAttributes() const {return &attributes;}
+    int GetNumAttributes () {return attributes.size();}
+    virtual const int GetNumAttributes () const {return attributes.size();}
+    std::map<std::string, std::string> *GetAttributes() {return &attributes;}
+    const std::map<std::string, std::string> *GetAttributes() const {return &attributes;}
 
-	private:
-		std::string value;
-		std::map<std::string, std::string> attributes;
+  private:
+    std::string value;
+    std::map<std::string, std::string> attributes;
 
-	};
-
-
-
-	/** 
-		\brief
-		\ingroup cpw
-	*/
-	class CPWEXPORT Composite: public Node  {
-
-	public:
-		Composite(): Node(), components(){}
-
-		Composite(const std::string &nam):Node(nam), components(){}
-
-		Composite(const std::string &nam, const std::vector<Node *> &cmps):Node(nam), components(cmps){}
-
-		virtual ~Composite(){
-
-			for(std::vector<Node *>::iterator i = components.begin(); i != components.end(); i++)
-
-				delete *i;
-		}
+  };
 
 
-		virtual void Add(Node *node){ components.push_back(node); }
 
-		virtual std::vector<Node *> GetChildren() {return components;}
-		virtual const std::vector<Node *> GetChildren() const {return components;}
+  /** 
+      \brief
+      \ingroup cpw
+  */
+  class CPWEXPORT Composite: public Node  {
 
-		virtual std::string GetChildValue(const std::string &name) 
-		{
-			std::string value;
-			std::vector<Node *>::iterator i = components.begin();
-			while ((i!=components.end()) && ((*i)->GetName() != name)) i++;
+  public:
+  Composite(): Node(), components(){}
 
-			if(i != components.end()) return (*i)->GetValue();
-			else return std::string();
-		}
+  Composite(const std::string &nam):Node(nam), components(){}
 
+  Composite(const std::string &nam, const std::vector<Node *> &cmps):Node(nam), components(cmps){}
 
-		bool isContainer() {return true;}
-		const bool isContainer() const {return true;}
+    virtual ~Composite(){
 
-		virtual std::map<std::string, std::string> *GetChildAttributes(const std::string &name) 
-		{
-			std::vector<Node *>::iterator i = components.begin();
-			while ((i!=components.end()) && ((*i)->GetName() != name)) i++;
-
-			if(i != components.end()) return (*i)->GetAttributes();
-			else return NULL;
-		}
-		virtual const std::map<std::string, std::string> *GetChildAttributes(const std::string &name)const
-		{
-			std::vector<Node *>::const_iterator i = components.begin();
-			while ((i!=components.end()) && ((*i)->GetName() != name)) i++;
-
-			if(i != components.end()) return (*i)->GetAttributes();
-			else return NULL;
-		}
+      for(std::vector<Node *>::iterator i = components.begin(); i != components.end(); i++)
+			  
+	if (*i)
+	  {
+	    delete *i;
+	    *i = NULL;
+	  }
+    }
 
 
-	private:
+    virtual void Add(Node *node){ components.push_back(node); }
 
-		std::vector<Node *> components;
+    virtual std::vector<Node *> GetChildren() {return components;}
+    virtual const std::vector<Node *> GetChildren() const {return components;}
 
-	};
+    virtual std::string GetChildValue(const std::string &name) 
+      {
+	std::string value;
+	std::vector<Node *>::iterator i = components.begin();
+	while ((i!=components.end()) && ((*i)->GetName() != name)) i++;
+
+	if(i != components.end()) return (*i)->GetValue();
+	else return std::string();
+      }
+
+
+    bool isContainer() {return true;}
+    const bool isContainer() const {return true;}
+
+    virtual std::map<std::string, std::string> *GetChildAttributes(const std::string &name) 
+      {
+	std::vector<Node *>::iterator i = components.begin();
+	while ((i!=components.end()) && ((*i)->GetName() != name)) i++;
+
+	if(i != components.end()) return (*i)->GetAttributes();
+	else return NULL;
+      }
+    virtual const std::map<std::string, std::string> *GetChildAttributes(const std::string &name)const
+      {
+	std::vector<Node *>::const_iterator i = components.begin();
+	while ((i!=components.end()) && ((*i)->GetName() != name)) i++;
+
+	if(i != components.end()) return (*i)->GetAttributes();
+	else return NULL;
+      }
+
+
+  private:
+
+    std::vector<Node *> components;
+
+  };
 
 
 }

@@ -34,156 +34,160 @@
 
 namespace cpw 
 {
-	namespace ogcwcs
-	{
+  namespace ogcwcs
+  {
 
-		/** \brief Enumeration for the node types 
-			\ingroup ogcwcs
-		*/
-		enum NodeType {
+    /** \brief Enumeration for the node types 
+	\ingroup ogcwcs
+    */
+    enum NodeType {
 
-			LEAF = 0,
-			FOLDER = 1
-		};
+      LEAF = 0,
+      FOLDER = 1
+    };
 
-		/** \brief A basic node
-			\ingroup ogcwcs
-		*/
-		class Node {
+    /** \brief A basic node
+	\ingroup ogcwcs
+    */
+    class Node {
 
-		public:
+    public:
 
-			virtual ~Node() {};
+      virtual ~Node() {};
 
-			virtual int Add(Node *node) { return -1; }
+      virtual int Add(Node *node) { return -1; }
 
-			NodeType &Type()     {return type; }
-			std::string &Name()  {return name;}
-			std::string &Title() {return title;}
+      NodeType &Type()     {return type; }
+      std::string &Name()  {return name;}
+      std::string &Title() {return title;}
 
-			const NodeType &Type()     const {return type; }
-			const std::string &Name()  const {return name;}
-			const std::string &Title() const {return title;}
+      const NodeType &Type()     const {return type; }
+      const std::string &Name()  const {return name;}
+      const std::string &Title() const {return title;}
 
-			virtual std::vector<Node *> GetNodes(){ return std::vector<Node *>();}
-			virtual const std::vector<Node *> GetNodes() const { return std::vector<Node *>();}
+      virtual std::vector<Node *> GetNodes(){ return std::vector<Node *>();}
+      virtual const std::vector<Node *> GetNodes() const { return std::vector<Node *>();}
 
-		protected:
-			Node(NodeType typ, std::string nam = std::string(), std::string tit = std::string()): 
-					type(typ), name(nam), title(tit){}
+    protected:
+    Node(NodeType typ, std::string nam = std::string(), std::string tit = std::string()): 
+      type(typ), name(nam), title(tit){}
 
-		private:
+    private:
 
-			NodeType type;
-			std::string name;
-			std::string title;
-		};
-
-
-		/** \brief A compound node 
-			\ingroup ogcwcs
-		*/
-		class Folder: public Node {
-
-		public:
-			Folder(std::string nam = std::string(), std::string tit = std::string()): 
-				  Node(FOLDER, nam, tit){}
-
-			virtual ~Folder() { 
-
-				for(std::vector<Node *>::iterator i = nodes.begin(); i != nodes.end(); i++)
-					
-					delete *i;
-			}
-
-			int Add(Node *node) { nodes.push_back(node); return 0;}
-
-			virtual std::vector<Node *> GetNodes(){return nodes;}
-			virtual const std::vector<Node *> GetNodes() const {return nodes;}
+      NodeType type;
+      std::string name;
+      std::string title;
+    };
 
 
-		private:
+    /** \brief A compound node 
+	\ingroup ogcwcs
+    */
+    class Folder: public Node {
 
-			std::vector<Node *> nodes;
+    public:
+    Folder(std::string nam = std::string(), std::string tit = std::string()): 
+      Node(FOLDER, nam, tit){}
 
-		};
+      virtual ~Folder() { 
+
+	for(std::vector<Node *>::iterator i = nodes.begin(); i != nodes.end(); i++)
+				  
+	  if (*i)
+	    {
+	      delete *i;
+	      *i= NULL;
+	    }
+      }
+
+      int Add(Node *node) { nodes.push_back(node); return 0;}
+
+      virtual std::vector<Node *> GetNodes(){return nodes;}
+      virtual const std::vector<Node *> GetNodes() const {return nodes;}
 
 
-		/** \brief A leaf node 
-			\ingroup ogcwcs
-		*/
-		class Leaf: public Node {
+    private:
 
-		public:
-			Leaf(std::string nam = std::string(), std::string tit = std::string()): 
-				  Node(LEAF, nam, tit){}
+      std::vector<Node *> nodes;
 
-		};
+    };
 
 
+    /** \brief A leaf node 
+	\ingroup ogcwcs
+    */
+    class Leaf: public Node {
 
-		/** \brief This class controls the creation of a WCSLayer
-			\ingroup ogcwcs
-		*/
-		class OGCWCSEXPORT WcsLayerController
-		{
-		public:
-			WcsLayerController(void);
-			~WcsLayerController(void);
+    public:
+    Leaf(std::string nam = std::string(), std::string tit = std::string()): 
+      Node(LEAF, nam, tit){}
 
-			int ConnectToServer(const std::string &url);
+    };
 
-			void GetInformation(std::string &info);
 
-			void GetLayers(std::vector<std::string> &layers);
 
-			void GetLayers(Node *layerTree);
+    /** \brief This class controls the creation of a WCSLayer
+	\ingroup ogcwcs
+    */
+    class OGCWCSEXPORT WcsLayerController
+    {
+    public:
+      WcsLayerController(void);
+      ~WcsLayerController(void);
 
-			void GetImageFormats(std::vector<std::string> &formats);
+      int ConnectToServer(const std::string &url);
 
-			bool GetMap(const std::string &layer_name, int width, int height, float latmin, float lonmin,
-						float latmax, float lonmax, std::string &filename, const std::string &image_format = "image/png", 
-						const std::string &version = "1.0.0", 
-						const std::string &srs = "EPSG:32628");
-						//const std::string &srs = "EPSG:23030"); 
-						//
+      void GetInformation(std::string &info);
 
-			bool GetMap(const WcsLayer &layer, int width, int height, float latmin, float lonmin,
-						float latmax, float lonmax, std::string &filename, 
-						const std::string &srs = "EPSG:32628");
-						//const std::string &srs = "EPSG:23030");  
-						//
+      void GetLayers(std::vector<std::string> &layers);
 
-			bool DescribeCoverage(const std::string &folder);
+      void GetLayers(Node *layerTree);
 
-			wcsRefPtr<wcsCapabilitiesRoot> &GetRoot() {return wcs_root;}
+      void GetImageFormats(std::vector<std::string> &formats);
 
-			void GetSRS(std::vector<std::string> &formats);
+      bool GetMap(const std::string &layer_name, int width, int height, float latmin, float lonmin,
+		  float latmax, float lonmax, std::string &filename, const std::string &image_format = "image/png", 
+		  const std::string &version = "1.0.0", 
+		  const std::string &srs = "EPSG:32628");
+      //const std::string &srs = "EPSG:23030"); 
+      //
 
-			std::vector<std::string> WCS_CRS(const std::string &formats);
+      bool GetMap(const WcsLayer &layer, int width, int height, float latmin, float lonmin,
+		  float latmax, float lonmax, std::string &filename, 
+		  const std::string &srs = "EPSG:32628");
+      //const std::string &srs = "EPSG:23030");  
+      //
 
-			std::string GetComposedURL() {return cu;}
-			std::string GetMapURL(const WcsLayer &layer, int width, int height, float latmin, float lonmin,
-								float latmax, float lonmax, const std::string &srs = "EPSG:32628") ;
+      bool DescribeCoverage(const std::string &folder);
 
-			void CreateLayer(const std::string &layer_name, const std::string &format, WcsLayer &layer);
+      wcsRefPtr<wcsCapabilitiesRoot> &GetRoot() {return wcs_root;}
 
-		private:
+      void GetSRS(std::vector<std::string> &formats);
 
-			void AddChildrenNodes(Node *layerTree, std::vector<wcsRefPtr<wcsCapabilitiesState> > &children);
-			void ProcessDescribeCoverage(const std::string &folder, std::string &str1);
+      std::vector<std::string> WCS_CRS(const std::string &formats);
 
-			wcsRefPtr<wcsCapabilitiesRoot> wcs_root;
-			//wcsRefPtr<wcsDescribeRoot> wcs_desc_root;
-			wcsUrl wcs_url;
+      std::string GetComposedURL() {return cu;}
+      std::string GetMapURL(const WcsLayer &layer, int width, int height, float latmin, float lonmin,
+			    float latmax, float lonmax, const std::string &srs = "EPSG:32628") ;
 
-			std::string cu;
+      void CreateLayer(const std::string &layer_name, const std::string &format, WcsLayer &layer);
 
-			std::map<std::string, std::vector<std::string> > wcs_crs;
+    private:
 
-		};
+      void AddChildrenNodes(Node *layerTree, std::vector<wcsRefPtr<wcsCapabilitiesState> > &children);
+      void ProcessDescribeCoverage(const std::string &folder, std::string &str1);
 
-	}
+      wcsRefPtr<wcsCapabilitiesRoot> wcs_root;
+      //wcsRefPtr<wcsDescribeRoot> wcs_desc_root;
+      wcsUrl wcs_url;
+
+      std::string cu;
+
+      std::map<std::string, std::vector<std::string> > wcs_crs;
+
+    };
+
+  }
 
 }
 

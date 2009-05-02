@@ -52,8 +52,12 @@ PersistentError PersistentFileCallBack::Save(cpw::Persistent *persistent, bool o
 		std::string       xml;
 
 		parser.EntityToXml(root, xml);
-
-		delete root;
+		
+		if (root)
+		  {
+		    delete root;
+		    root = NULL;
+		  }
 
 		FileManager fout;
 		std::string url = persistent->GetUrl();
@@ -80,7 +84,11 @@ PersistentError PersistentFileCallBack::Load(cpw::Persistent *persistent)
 
 		Node *root = parser.XmlToEntity(xml);
 		persistent->SetPersistence(root);
-		delete root;
+		if (root)
+		  {
+		    delete root;
+		    root = NULL;
+		  }
 	
 	}
 	return ferror;

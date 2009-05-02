@@ -29,31 +29,31 @@
 
 namespace cpw
 {
-	/** 
-		\brief Por comentar ....
-		\ingroup cpw
-	*/
-	class CPWEXPORT Gizmo : public IHandler
-	{
-		public:
+  /** 
+      \brief Por comentar ....
+      \ingroup cpw
+  */
+  class CPWEXPORT Gizmo : public IHandler
+  {
+  public:
 			
-			enum TransformationAxis { AXIS_X, AXIS_Y, AXIS_Z};
+    enum TransformationAxis { AXIS_X, AXIS_Y, AXIS_Z};
 
-			Gizmo(void);
-			virtual ~Gizmo(void);
+    Gizmo(void);
+    virtual ~Gizmo(void);
 
-			const TransformationAxis & GetTransformationAxis() { return t_axis; }
-			void SetTransformationAxis(const TransformationAxis &_t_axis) { t_axis = _t_axis; }
-
-			
-
-			virtual void Update(bool subject_deleted = false){};
-
-		private:
+    const TransformationAxis & GetTransformationAxis() { return t_axis; }
+    void SetTransformationAxis(const TransformationAxis &_t_axis) { t_axis = _t_axis; }
 
 			
-			TransformationAxis t_axis;
-	};
+
+    virtual void Update(bool subject_deleted = false){};
+
+  private:
+
+			
+    TransformationAxis t_axis;
+  };
 }
 
 #endif

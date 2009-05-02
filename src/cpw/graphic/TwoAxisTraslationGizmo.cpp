@@ -42,101 +42,101 @@ TwoAxisTraslationGizmo::~TwoAxisTraslationGizmo(void)
 
 bool TwoAxisTraslationGizmo::MouseDrag(const int &x0, const int &y0, const int &x1, const int &y1, const cpw::MouseButtonsState &mbs)
 {
-	IScene *scene = cpw::ApplicationScene::GetInstance()->GetScene();
-	EntityRegistry *entity_reg =EntityRegistry::GetInstance();
-	const float dist_mult = 0.0025f;
-	float increment = 0.0f;
-	float increment_x, increment_y;
-	int traslation=0;
+  IScene *scene = cpw::ApplicationScene::GetInstance()->GetScene();
+  EntityRegistry *entity_reg =EntityRegistry::GetInstance();
+  const float dist_mult = 0.0025f;
+  float increment = 0.0f;
+  float increment_x, increment_y;
+  int traslation=0;
 	
 
-	increment_y = increment_x = 0.0f;
+  increment_y = increment_x = 0.0f;
 
-	if ((GetEntityTarget() == NULL) || (scene == NULL))
-		return false;
+  if ((GetEntityTarget() == NULL) || (scene == NULL))
+    return false;
 
-	Element *entity = (Element *) GetEntityTarget();
+  Element *entity = (Element *) GetEntityTarget();
 
-	float new_x = entity->GetUtm(0); 
-	float new_y = entity->GetUtm(1); 
-	float new_z = entity->GetUtm(2);
+  float new_x = entity->GetUtm(0); 
+  float new_y = entity->GetUtm(1); 
+  float new_z = entity->GetUtm(2);
 
-	cpw::Point3d<double> camera_view = GetCameraView();
+  cpw::Point3d<double> camera_view = GetCameraView();
 
-	int traslation_x = x1 - x0;
-	int traslation_y = y1 - y0;
+  int traslation_x = x1 - x0;
+  int traslation_y = y1 - y0;
 
-	if ((traslation_x == 0) && (traslation_y == 0))
-		return false;
+  if ((traslation_x == 0) && (traslation_y == 0))
+    return false;
 	
-	float distance = cpw::Math::DistanceBetweenTwoPoints(cpw::Point3d<double>(new_x, new_y, new_z), GetCameraPos());
+  float distance = cpw::Math::DistanceBetweenTwoPoints(cpw::Point3d<double>(new_x, new_y, new_z), GetCameraPos());
 
-	cpw::Point3d<float> ip;
+  cpw::Point3d<float> ip;
 
-	GetNavigatorManager()->GetFocusedOrFirstNavigator()->SetKeepMouseInsideCanvas(false);
+  GetNavigatorManager()->GetFocusedOrFirstNavigator()->SetKeepMouseInsideCanvas(false);
 
-	//if (!GetNavigatorManager()->GetFocusedOrFirstNavigator()->IntersectMouseWithScene(x1, y1, ix, iy, iz))
-	if (entity->GetAdjustToTerrainHeight())
+  //if (!GetNavigatorManager()->GetFocusedOrFirstNavigator()->IntersectMouseWithScene(x1, y1, ix, iy, iz))
+  if (entity->GetAdjustToTerrainHeight())
+    {
+      if (!GetNavigatorManager()->GetFocusedOrFirstNavigator()->IntersectMouseWithScene2(x1, y1, ip))
 	{
-		if (!GetNavigatorManager()->GetFocusedOrFirstNavigator()->IntersectMouseWithScene2(x1, y1, ip))
-		{
-			/*std::stringstream cc;
-			cc << "collision failed " << x1 << ", " << y1;
-			if (cpw::ApplicationLog::GetInstance()->GetLogger() != NULL)
-				cpw::ApplicationLog::GetInstance()->GetLogger()->NewLogMessage(cc.str());*/
+	  /*std::stringstream cc;
+	    cc << "collision failed " << x1 << ", " << y1;
+	    if (cpw::ApplicationLog::GetInstance()->GetLogger() != NULL)
+	    cpw::ApplicationLog::GetInstance()->GetLogger()->NewLogMessage(cc.str());*/
 	
-			return false;
-		}
+	  return false;
 	}
-	else
-	{
-		if (!GetNavigatorManager()->GetFocusedOrFirstNavigator()->IntersectMouseWithHorizontalPlane(x1, y1, ip, entity->GetUtm(2)))
-			return false;
-	}
+    }
+  else
+    {
+      if (!GetNavigatorManager()->GetFocusedOrFirstNavigator()->IntersectMouseWithHorizontalPlane(x1, y1, ip, entity->GetUtm(2)))
+	return false;
+    }
 
-	new_x = ip.x;
-	new_y = ip.y;
-	//new_x = ix;
-	//new_y = iy;
+  new_x = ip.x;
+  new_y = ip.y;
+  //new_x = ix;
+  //new_y = iy;
 	
-	//check if we should intersect against the terrain
-	if (entity->GetAdjustToTerrainHeight() || entity->GetAllowUnderTerrain())
+  //check if we should intersect against the terrain
+  if (entity->GetAdjustToTerrainHeight() || entity->GetAllowUnderTerrain())
+    {
+      cpw::Point3d<float> i_point;
+      if (scene->IntersectRayWithTerrain(cpw::Point3d<float>(new_x, new_y, 10000.0f),
+					 cpw::Point3d<float>(new_x, new_y, -10000.0f),
+					 i_point, true))
 	{
-		cpw::Point3d<float> i_point;
-		if (scene->IntersectRayWithTerrain(cpw::Point3d<float>(new_x, new_y, 10000.0f),
-			                             cpw::Point3d<float>(new_x, new_y, -10000.0f),
-										 i_point, true))
-		{
-			if (entity->GetAllowUnderTerrain())
-			{
-				if (new_z < i_point.z)
-					new_z = i_point.z;
-			}
+	  if (entity->GetAllowUnderTerrain())
+	    {
+	      if (new_z < i_point.z)
+		new_z = i_point.z;
+	    }
 
-			if (entity->GetAdjustToTerrainHeight())
-				new_z = i_point.z;
-		}
+	  if (entity->GetAdjustToTerrainHeight())
+	    new_z = i_point.z;
 	}
+    }
 	
-	entity->SetUtm(new_x, new_y, new_z);
+  entity->SetUtm(new_x, new_y, new_z);
 	
-	entity->GraphicUpdate();
+  entity->GraphicUpdate();
 	
-	IHandler::AdaptHandlerAndBrothersToModel();	
+  IHandler::AdaptHandlerAndBrothersToModel();	
 	
-	return true;
+  return true;
 }
 
 void TwoAxisTraslationGizmo::Update(bool subject_deleted)
 {
-	if (subject_deleted)
+  if (subject_deleted)
+    {
+      if (GetEntityTarget() != NULL)
 	{
-		if (GetEntityTarget() != NULL)
-		{
-			//GetEntityTarget()->Detach(this);
-			ClearEntityTarget();
-		}
+	  //GetEntityTarget()->Detach(this);
+	  ClearEntityTarget();
 	}
-	else
-		IHandler::AdaptHandlerAndBrothersToModel();
+    }
+  else
+    IHandler::AdaptHandlerAndBrothersToModel();
 }

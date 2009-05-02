@@ -45,25 +45,32 @@ using namespace cpw::wxremote;
  *  The second parameter should be of typ WxSocketHandler
  */
 WxSocket::WxSocket(wxSocketClient *socket, wxEvtHandler *socket_handler) :
-	socket(socket), socket_handler(socket_handler)
+  socket(socket), socket_handler(socket_handler)
 {
-	socket_thread = new WxClientSocketThread(socket, socket_handler);
-	if(wxTHREAD_NO_ERROR == socket_thread->Create()) // handle creation error here!
-		socket_thread->Run(); // run the thread
-	else
+  socket_thread = new WxClientSocketThread(socket, socket_handler);
+  if(wxTHREAD_NO_ERROR == socket_thread->Create()) // handle creation error here!
+    socket_thread->Run(); // run the thread
+  else
+    {
+      if (socket_thread)
 	{
-		delete socket_thread;
-		socket_thread = NULL;
+	  delete socket_thread;
+	  socket_thread = NULL;
 	}
+    }
 }
 
 
 WxSocket::~WxSocket()
 {
-	if (socket_thread != NULL)
-		socket_thread->Delete();
-	else
-		delete socket;
+  if (socket_thread != NULL)
+    socket_thread->Delete();
+  else
+    if (socket)
+      {
+	delete socket;
+	socket = NULL;
+      }
 }
 
 
@@ -75,13 +82,13 @@ WxSocket::~WxSocket()
  */
 void WxSocket::Send(const cpw::remote::DataStream &data)
 {
-	if (socket_thread != NULL)
-	{
-		WxSocketEvent evt;
-		evt.SetType(sockTypeWrite);
-		evt.SetData(data);
-		socket_thread->Post(evt);
-	}
+  if (socket_thread != NULL)
+    {
+      WxSocketEvent evt;
+      evt.SetType(sockTypeWrite);
+      evt.SetData(data);
+      socket_thread->Post(evt);
+    }
 }
 
 
@@ -93,13 +100,13 @@ void WxSocket::Send(const cpw::remote::DataStream &data)
  */
 void WxSocket::ConnectTo(const cpw::RemoteNode &node)
 {
-	if (socket_thread != NULL)
-	{
-		WxSocketEvent evt;
-		evt.SetType(sockTypeNewConnection);
-		evt.SetNode(node);
-		socket_thread->Post(evt);
-	}
+  if (socket_thread != NULL)
+    {
+      WxSocketEvent evt;
+      evt.SetType(sockTypeNewConnection);
+      evt.SetNode(node);
+      socket_thread->Post(evt);
+    }
 }
 
 
@@ -110,12 +117,12 @@ void WxSocket::ConnectTo(const cpw::RemoteNode &node)
  */
 void WxSocket::Disconnect()
 {
-	if (socket_thread != NULL)
-	{
-		WxSocketEvent evt;
-		evt.SetType(sockTypeDisconnection);
-		socket_thread->Post(evt);
-	}
+  if (socket_thread != NULL)
+    {
+      WxSocketEvent evt;
+      evt.SetType(sockTypeDisconnection);
+      socket_thread->Post(evt);
+    }
 }
 
 

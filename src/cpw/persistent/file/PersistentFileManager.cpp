@@ -48,45 +48,45 @@ PersistentFileManager::~PersistentFileManager(void)
 
 PersistentError PersistentFileManager::Save(const std::string &url, const Node *root, bool overwrite)
 {
-	cpw::PersistentError ferror = cpw::PERSISTENTNOTFOUND;
+  cpw::PersistentError ferror = cpw::PERSISTENTNOTFOUND;
 
-	if(root != NULL)
-	{
-		cpw::XmlCpwParser parser;
-		std::string       xml;
+  if(root != NULL)
+    {
+      cpw::XmlCpwParser parser;
+      std::string       xml;
 
-		parser.EntityToXml(root, xml);
+      parser.EntityToXml(root, xml);
 		
-		cpw::FileManager fout;
-		ferror = (PersistentError) fout.Save(xml, url, overwrite); 
+      cpw::FileManager fout;
+      ferror = (PersistentError) fout.Save(xml, url, overwrite); 
 
-	}
-	return ferror;
+    }
+  return ferror;
 }
 
 
 PersistentError PersistentFileManager::Load(const std::string &url, Node **root)
 {
-	//load the file with xml parser
-	FileManager file_manager;		
-	std::string xml;
-	xml.clear();
-	cpw::PersistentError ferror = (PersistentError) file_manager.Load(url, xml);
+  //load the file with xml parser
+  FileManager file_manager;		
+  std::string xml;
+  xml.clear();
+  cpw::PersistentError ferror = (PersistentError) file_manager.Load(url, xml);
 
-	if (ferror == cpw::PERSISTENTOK)
-	{
-	    cpw::XmlCpwParser parser;
-		*root = parser.XmlToEntity(xml);	
-	}
-	else *root = NULL;
-	return ferror;
+  if (ferror == cpw::PERSISTENTOK)
+    {
+      cpw::XmlCpwParser parser;
+      *root = parser.XmlToEntity(xml);	
+    }
+  else *root = NULL;
+  return ferror;
 }
 
 
 PersistentError PersistentFileManager::Delete(const std::string &url)
 {
-	//delete file from file system
-	FileManager file_manager;		
-	return (PersistentError) file_manager.Delete(url);
+  //delete file from file system
+  FileManager file_manager;		
+  return (PersistentError) file_manager.Delete(url);
 }
 

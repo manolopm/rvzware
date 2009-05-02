@@ -28,26 +28,30 @@ OsgObjectRegistrySingleton * OsgObjectRegistrySingleton::instance = NULL;
 
 OsgObjectRegistrySingleton * OsgObjectRegistrySingleton::GetInstance(void)
 {
-	if (instance == NULL)
-		instance = new OsgObjectRegistrySingleton;
+  if (instance == NULL)
+    instance = new OsgObjectRegistrySingleton;
 
-	return instance;
+  return instance;
 }
 
 void OsgObjectRegistrySingleton::ReleaseInstance(void)
 {
-	if (instance != NULL) {
-		delete instance;
-		instance = NULL;
-	}
+  if (instance != NULL) {
+    delete instance;
+    instance = NULL;
+  }
 }
 
 OsgObjectRegistrySingleton::OsgObjectRegistrySingleton(void)
 {
-	obj_reg = new OsgObjectRegistry;
+  obj_reg = new OsgObjectRegistry;
 }
 
 OsgObjectRegistrySingleton::~OsgObjectRegistrySingleton(void)
 {
-	delete obj_reg;
+  if (obj_reg)
+    {
+      delete obj_reg;
+      obj_reg = NULL;
+    }
 }

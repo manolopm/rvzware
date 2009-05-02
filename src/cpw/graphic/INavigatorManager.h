@@ -32,55 +32,55 @@
 
 namespace cpw
 {
-	class INavigator;
-	class ICameraController;
+  class INavigator;
+  class ICameraController;
 
 
-	/** 
-		\brief Por comentar ....
-		\ingroup cpw
-	*/
-	class INavigatorManager : public Observer
-	{
-		public:
+  /** 
+      \brief Por comentar ....
+      \ingroup cpw
+  */
+  class INavigatorManager : public Observer
+  {
+  public:
 
 
-			virtual	~INavigatorManager(){};
-			virtual IWindow *AddNavigator(IWindow *parent_frame, int id) = 0;
-			virtual void SetDefaultPath(const std::string &url) =0;
-			virtual void DeleteNavigator(unsigned int navigator_id) = 0;
-			virtual void Draw() = 0;
-			virtual void SetDrawingModeWireframe(int navigator_id) = 0;
-			virtual void SetDrawingModeSolid(int navigator_id) = 0;
-			virtual INavigator * GetFocusedOrFirstNavigator() = 0;
-			virtual void SetActive(int id) = 0;
-			//virtual void SetMouseEventCallBackOnActiveNavigator(void(*_callback_function)(int, int, int)) = 0;
-			virtual void ClearMouseEventCallBackOnNavigators() = 0;
-			virtual void SetMouseEventCallBackOnNavigators(cpw::IEventCallBack *event_callback) = 0;
-			virtual void Update(bool subject_deleted = false){};
-			virtual void CameraParametersToNextNewNavigator(const cpw::Point3d<double> &position,
-															const cpw::Point3d<double> &view,
-															const cpw::Point3d<double> &up) {}
+    virtual	~INavigatorManager(){};
+    virtual IWindow *AddNavigator(IWindow *parent_frame, int id) = 0;
+    virtual void SetDefaultPath(const std::string &url) =0;
+    virtual void DeleteNavigator(unsigned int navigator_id) = 0;
+    virtual void Draw() = 0;
+    virtual void SetDrawingModeWireframe(int navigator_id) = 0;
+    virtual void SetDrawingModeSolid(int navigator_id) = 0;
+    virtual INavigator * GetFocusedOrFirstNavigator() = 0;
+    virtual void SetActive(int id) = 0;
+    //virtual void SetMouseEventCallBackOnActiveNavigator(void(*_callback_function)(int, int, int)) = 0;
+    virtual void ClearMouseEventCallBackOnNavigators() = 0;
+    virtual void SetMouseEventCallBackOnNavigators(cpw::IEventCallBack *event_callback) = 0;
+    virtual void Update(bool subject_deleted = false){};
+    virtual void CameraParametersToNextNewNavigator(const cpw::Point3d<double> &position,
+						    const cpw::Point3d<double> &view,
+						    const cpw::Point3d<double> &up) {}
 
-			virtual void Pause(bool pause) = 0;
-			virtual void EveryNavigatorsToStartPosition(){}
-			virtual void SetCameraController(ICameraController *_camera_controller) {}
-			virtual ICameraController * GetCameraController() {return NULL;}
+    virtual void Pause(bool pause) = 0;
+    virtual void EveryNavigatorsToStartPosition(){}
+    virtual void SetCameraController(ICameraController *_camera_controller) {}
+    virtual ICameraController * GetCameraController() {return NULL;}
 
-			virtual void SetAllNavigatorsToInitialPosition()=0;
-			virtual void SetAllNavigatorsToLookDown()=0;
-			virtual void SetAllNavigatorsToLookPos(const Point3d<double> &position)=0;
+    virtual void SetAllNavigatorsToInitialPosition()=0;
+    virtual void SetAllNavigatorsToLookDown()=0;
+    virtual void SetAllNavigatorsToLookPos(const Point3d<double> &position)=0;
 
-			virtual void SetApplication(IApplication *_application)=0;
+    virtual void SetApplication(IApplication *_application)=0;
 
-			virtual void SetLightningToAllNavigators(const bool &lightning)=0;
-			virtual const bool & GetNavigatorsLightning()=0;
+    virtual void SetLightningToAllNavigators(const bool &lightning)=0;
+    virtual const bool & GetNavigatorsLightning()=0;
 
 		
 			
 
 			
-	};
+  };
 
 }
 

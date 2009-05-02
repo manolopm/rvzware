@@ -37,40 +37,40 @@
 
 namespace cpw 
 { 
-	namespace remote
-	{
-		class RemoteProtocol;
+  namespace remote
+  {
+    class RemoteProtocol;
 
-		/*!
-		 *  \class RemoteModifier RemoteModifier.h <remote/RemoteModifier.h>
-		 *  \brief Observer to an entity shared with a remote node
-		 *  \ingroup remote
-		 *
-		 *  Observer to an entity shared with a remote node.
-		 *
-		 *  This class is used to received modification events on an Entity, so the changes can be sent
-		 *  other nodes inmediatly.
-		 *
-		 *  There should be an object of this class for every Entity shared with at least one connection.
-		 */
-		class REMOTE_EXPORT RemoteModifier : public cpw::Observer
-		{
-		public:
-			RemoteModifier(cpw::Persistent *_persistent, RemoteProtocol *_protocol);
-			virtual ~RemoteModifier();
+    /*!
+     *  \class RemoteModifier RemoteModifier.h <remote/RemoteModifier.h>
+     *  \brief Observer to an entity shared with a remote node
+     *  \ingroup remote
+     *
+     *  Observer to an entity shared with a remote node.
+     *
+     *  This class is used to received modification events on an Entity, so the changes can be sent
+     *  other nodes inmediatly.
+     *
+     *  There should be an object of this class for every Entity shared with at least one connection.
+     */
+    class REMOTE_EXPORT RemoteModifier : public cpw::Observer
+      {
+      public:
+	RemoteModifier(cpw::Persistent *_persistent, RemoteProtocol *_protocol);
+	virtual ~RemoteModifier();
 
-			void SetExecuteNext(bool e);
+	void SetExecuteNext(bool e);
 
-			void Update(bool subject_deleted = false);
+	void Update(bool subject_deleted = false);
 
-			void SetValue(const std::string &field, const std::string &value, const uint64_t ts);
+	void SetValue(const std::string &field, const std::string &value, const uint64_t ts);
 
-		private:
-			cpw::Persistent *subject;
-			RemoteProtocol *protocol;
-			bool execute_next_update;
-		};
-	}
+      private:
+	cpw::Persistent *subject;
+	RemoteProtocol *protocol;
+	bool execute_next_update;
+      };
+  }
 }
 
 #endif

@@ -50,12 +50,16 @@ using namespace cpw::remote;
  *  \param node Identifier of the connection
  */
 Connection::Connection(ISocket *socket, cpw::RemoteNode node)
-	: socket(socket), last_request(0), node(node) {}
+  : socket(socket), last_request(0), node(node) {}
 
 
 Connection::~Connection()
 {
-	delete socket;
+  if (socket)
+    {
+      delete socket;
+      socket = NULL;
+    }
 }
 
 
@@ -66,7 +70,7 @@ Connection::~Connection()
  */
 cpw::RemoteNode Connection::GetNode()
 {
-	return node;
+  return node;
 }
 
 
@@ -79,7 +83,7 @@ cpw::RemoteNode Connection::GetNode()
  */
 cpw::RemoteNode Connection::GetNode() const
 {
-	return node;
+  return node;
 }
 
 
@@ -92,7 +96,7 @@ cpw::RemoteNode Connection::GetNode() const
  */
 void Connection::Connect()
 {
-	socket->ConnectTo(node);
+  socket->ConnectTo(node);
 }
 
 
@@ -103,7 +107,7 @@ void Connection::Connect()
  */
 void Connection::Disconnect()
 {
-	socket->Disconnect();
+  socket->Disconnect();
 }
 
 
@@ -117,22 +121,22 @@ void Connection::Disconnect()
  */
 MessageData *Connection::RecvMessage(const DataStream &data)
 {
-	int message_type = (int)data[0];
-	MessageData *message = GetMessageData((MessageType)message_type);
-	if (message != NULL)
+  int message_type = (int)data[0];
+  MessageData *message = GetMessageData((MessageType)message_type);
+  if (message != NULL)
+    {
+      if (message->Decode(data))
+	return message;
+      /*if (ProcessMessage(message))
+	return message;
+	else
 	{
-		if (message->Decode(data))
-			return message;
-			/*if (ProcessMessage(message))
-				return message;
-			else
-			{
-				delete message;
-				return NULL;
-			}*/
-	}
-
+	delete message;
 	return NULL;
+	}*/
+    }
+
+  return NULL;
 }
 
 
@@ -145,21 +149,21 @@ MessageData *Connection::RecvMessage(const DataStream &data)
  */
 void Connection::Send(MessageData *message)
 {
-	//Do not repeat GetPublishedRequest
-	/*if (message->GetMessageType() == msgTypeGetPublishedRequest)
-	{
-		if (requesting_published)
-			return;
-		else
-			requesting_published = true;
-	}*/
+  //Do not repeat GetPublishedRequest
+  /*if (message->GetMessageType() == msgTypeGetPublishedRequest)
+    {
+    if (requesting_published)
+    return;
+    else
+    requesting_published = true;
+    }*/
 
-	if (message->IsRequest())
-	{
-		message->SetRequestID(last_request);
-		last_request = (last_request + 1) % UINT8_MAX; //on the stream, we dedicate just 1 byte
-	}
-	socket->Send(message->Code());
+  if (message->IsRequest())
+    {
+      message->SetRequestID(last_request);
+      last_request = (last_request + 1) % UINT8_MAX; //on the stream, we dedicate just 1 byte
+    }
+  socket->Send(message->Code());
 }
 
 
@@ -171,104 +175,104 @@ void Connection::Send(MessageData *message)
  */
 MessageData* Connection::GetMessageData(MessageType message_type)
 {
-	switch(message_type)
-	{
-		case msgTypeConnection:
-			return new ConnectionData();
-			break;
-		case msgTypeDisconnection:
-			return new DisconnectionData();
-			break;
-		case msgTypeGetPublishedRequest:
-			return new GetPublishedRequestData();
-			break;
-		case msgTypeGetPublishedResponse:
-			return new GetPublishedResponseData();
-			break;
-		case msgTypeGetEntityRequest:
-			return new GetEntityRequestData();
-			break;
-		case msgTypeGetEntityResponse:
-			return new GetEntityResponseData();
-			break;
-		case msgTypeSendChanges:
-			return new SendChangesData();
-			break;
-		case msgTypeSetValue:
-			return new SetValueData();
-			break;
-		case msgTypeRequestSynchro:
-			return new RequestSynchroData();
-			break;
-		case msgTypeDisconnectEntity:
-			return new DisconnectEntityData();
-			break;
+  switch(message_type)
+    {
+    case msgTypeConnection:
+      return new ConnectionData();
+      break;
+    case msgTypeDisconnection:
+      return new DisconnectionData();
+      break;
+    case msgTypeGetPublishedRequest:
+      return new GetPublishedRequestData();
+      break;
+    case msgTypeGetPublishedResponse:
+      return new GetPublishedResponseData();
+      break;
+    case msgTypeGetEntityRequest:
+      return new GetEntityRequestData();
+      break;
+    case msgTypeGetEntityResponse:
+      return new GetEntityResponseData();
+      break;
+    case msgTypeSendChanges:
+      return new SendChangesData();
+      break;
+    case msgTypeSetValue:
+      return new SetValueData();
+      break;
+    case msgTypeRequestSynchro:
+      return new RequestSynchroData();
+      break;
+    case msgTypeDisconnectEntity:
+      return new DisconnectEntityData();
+      break;
 			
-		default:
-			return NULL;
-	}
+    default:
+      return NULL;
+    }
 }
 
 
 /*bool Connection::ProcessMessage(MessageData *msg_data)
-{
-	switch(msg_data->GetMessageType())
-	{
-		case msgTypeConnection:
-			return true;
-			break;
-		case msgTypeDisconnection:
-			return true;
-			break;
-		case msgTypeGetPublishedRequest:
-			return true;
-			break;
-		case msgTypeGetPublishedResponse:
-			if (requesting_published)
-			{
-				requesting_published = false;
-				return true;
-			}
-			else
-				return false;
-			break;
-		case msgTypeGetEntityRequest:
-		{
-			//cpw::TypeId entity_id = inc_msg->GetEntity();
-			//cpw::Entity *entity = cpw::EntityRegistry::GetInstance()->GetEntity(entity_id);
-			//if (modifiers.find(entity_id) == modifiers.end())
-			//	modifiers[entity_id] = new RemoteModifier(entity, this);
-			return true;
-			break;
-		}
-		case msgTypeGetEntityResponse:
-		{
-			return true;
-			break;
-		}
-		case msgTypeSendChanges:
+  {
+  switch(msg_data->GetMessageType())
+  {
+  case msgTypeConnection:
+  return true;
+  break;
+  case msgTypeDisconnection:
+  return true;
+  break;
+  case msgTypeGetPublishedRequest:
+  return true;
+  break;
+  case msgTypeGetPublishedResponse:
+  if (requesting_published)
+  {
+  requesting_published = false;
+  return true;
+  }
+  else
+  return false;
+  break;
+  case msgTypeGetEntityRequest:
+  {
+  //cpw::TypeId entity_id = inc_msg->GetEntity();
+  //cpw::Entity *entity = cpw::EntityRegistry::GetInstance()->GetEntity(entity_id);
+  //if (modifiers.find(entity_id) == modifiers.end())
+  //	modifiers[entity_id] = new RemoteModifier(entity, this);
+  return true;
+  break;
+  }
+  case msgTypeGetEntityResponse:
+  {
+  return true;
+  break;
+  }
+  case msgTypeSendChanges:
 
-			break;
-		case msgTypeSetValue:
-		{
-			return true;
-			//SetValueData *inc_msg = (SetValueData*) msg_data;
-			//if (modifiers.find(inc_msg->GetEntityId()) == modifiers.end())
-			//	return false;
-			//else
-			//{
-			//	return true;
-			//}
-		}
-			break;
-		case msgTypeRequestSynchro:
-			return true;
-			break;
-		case msgTypeDisconnectEntity:
-			return true;
-			break;
-		default:
-			return false;
-	}
-	return true;
-}*/
+  break;
+  case msgTypeSetValue:
+  {
+  return true;
+  //SetValueData *inc_msg = (SetValueData*) msg_data;
+  //if (modifiers.find(inc_msg->GetEntityId()) == modifiers.end())
+  //	return false;
+  //else
+  //{
+  //	return true;
+  //}
+  }
+  break;
+  case msgTypeRequestSynchro:
+  return true;
+  break;
+  case msgTypeDisconnectEntity:
+  return true;
+  break;
+  default:
+  return false;
+  }
+  return true;
+  }*/

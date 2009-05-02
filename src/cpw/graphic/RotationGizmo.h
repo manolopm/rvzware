@@ -26,28 +26,28 @@
 
 namespace cpw
 {
-	/** 
-		\brief Por comentar ....
-		\ingroup cpw
-	*/
-	class CPWEXPORT RotationGizmo : public Gizmo
-	{
-		public:
+  /** 
+      \brief Por comentar ....
+      \ingroup cpw
+  */
+  class CPWEXPORT RotationGizmo : public Gizmo
+  {
+  public:
 
-			RotationGizmo(void);
-			~RotationGizmo(void);
+    RotationGizmo(void);
+    ~RotationGizmo(void);
 
-			virtual bool MouseDrag(const int &x0, const int &y0, const int &x1, const int &y1, const cpw::MouseButtonsState &mbs);
-			virtual void Update(bool subject_deleted = false);
-			virtual void Reset();
+    virtual bool MouseDrag(const int &x0, const int &y0, const int &x1, const int &y1, const cpw::MouseButtonsState &mbs);
+    virtual void Update(bool subject_deleted = false);
+    virtual void Reset();
 
 			
-		private:
+  private:
 
-			cpw::Point3d<float> accumulative_rotation;
+    cpw::Point3d<float> accumulative_rotation;
 
 
-	};
+  };
 }
 
 #endif

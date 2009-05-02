@@ -32,43 +32,43 @@
 
 namespace cpw 
 { 
-	namespace utils
-	{
+  namespace utils
+  {
 
 
-		/** 
-			\brief Por comentar...
-			\ingroup utils 
-		*/
-		class CPWUTILS_EXPORT GraphicFireCallBack : public ParticleSystemCallBack, public Model3DCallBack
-		{
-			public:
-				GraphicFireCallBack(void);
-				GraphicFireCallBack(const GraphicFireCallBack &gfcb);
-				~GraphicFireCallBack(void);
+    /** 
+	\brief Por comentar...
+	\ingroup utils 
+    */
+    class CPWUTILS_EXPORT GraphicFireCallBack : public ParticleSystemCallBack, public Model3DCallBack
+    {
+    public:
+      GraphicFireCallBack(void);
+      GraphicFireCallBack(const GraphicFireCallBack &gfcb);
+      ~GraphicFireCallBack(void);
 				
-				virtual void Insert(const Callable* callable);
-				virtual void Update(Callable* callable);
-				virtual void Delete(Callable* callable);
-				virtual void Animate(Callable* callable, cpwTime &time_stamp);
-				virtual void Visualize(Callable* callable, const bool &value);
+      virtual void Insert(const Callable* callable);
+      virtual void Update(Callable* callable);
+      virtual void Delete(Callable* callable);
+      virtual void Animate(Callable* callable, cpwTime &time_stamp);
+      virtual void Visualize(Callable* callable, const bool &value);
 
-				//GraphicFireCallBack &operator = (const GraphicFireCallBack &gfcb){};
-				virtual ICallBack* Clone() {return (ParticleSystemCallBack *) new GraphicFireCallBack(*this);}
+      //GraphicFireCallBack &operator = (const GraphicFireCallBack &gfcb){};
+      virtual ICallBack* Clone() {return (ParticleSystemCallBack *) new GraphicFireCallBack(*this);}
 
-			private:
+    private:
 
-				void DeleteCurrentFlames(Callable* callable);
-				bool ignition_point_deleted;
-				FireAnimation fire_animation;
-				bool fire_inserted, animate_this_frame, reset_animation;
+      void DeleteCurrentFlames(Callable* callable);
+      bool ignition_point_deleted;
+      FireAnimation fire_animation;
+      bool fire_inserted, animate_this_frame, reset_animation;
 
-				int update_animation_every_n_frames, frames_count;
+      int update_animation_every_n_frames, frames_count;
 				
 				
-		};
+    };
 
-	}
+  }
 
 }
 
