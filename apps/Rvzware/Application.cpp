@@ -438,6 +438,9 @@ bool Application::Close()
       if (navigator_manager)
 	delete navigator_manager;
       navigator_manager = NULL;
+
+      if (main_frame)
+	delete main_frame;
       
       application_time->Off();
       
@@ -452,11 +455,6 @@ bool Application::Close()
       ApplicationTime::ReleaseInstance();
 
       wmsFinalize();
-
-      
-      //BUG: TODO: MPM: FIX DELETE MAIN_FRAME
-      /*      if (main_frame)
-	      delete main_frame;*/
 
     }
   return flag;

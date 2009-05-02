@@ -1173,7 +1173,8 @@ void UIApplicationMainFrame::OnSize(wxSizeEvent& event)
 UIApplicationMainFrame::~UIApplicationMainFrame(void)
 {
   m_mgr.UnInit();
-  delete viewport_manager;
+  if (viewport_manager)
+    delete viewport_manager;
 }
 
 void UIApplicationMainFrame::OnNoteBookPageChanged(wxNotebookEvent& WXUNUSED(event))

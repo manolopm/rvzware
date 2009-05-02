@@ -151,7 +151,8 @@ cpw::IWindow *OsgNavigatorManager::AddNavigator(cpw::IWindow *parent_frame, int 
 
   //((osgViewer::Viewer *) new_navigator->GetViewer())->getUpdateVisitor()->setTraversalMode(osg::NodeVisitor::TRAVERSE_ACTIVE_CHILDREN);
   //osg_composite_viewer->getUpdateVisitor()->setTraversalMode(osg::NodeVisitor::TRAVERSE_ACTIVE_CHILDREN);
-  osg_composite_viewer->addView((osgViewer::Viewer *) new_navigator->GetViewer());
+  osg_composite_viewer->addView
+    ((osgViewer::Viewer *) new_navigator->GetViewer());
 
   new_navigator->SetNavigatorManager(this);
 
@@ -170,7 +171,8 @@ cpw::IWindow *OsgNavigatorManager::AddNavigator(cpw::IWindow *parent_frame, int 
 
   //dbp->clear();
 
-  osgDB::DatabasePager *dbp = osg_composite_viewer->getView(0)->getDatabasePager();
+  osgDB::DatabasePager *dbp =
+    osg_composite_viewer->getView(0)->getDatabasePager();
 
   //if (dbp != NULL)
   //	dbp->setUnrefImageDataAfterApplyPolicy(true, false);
@@ -197,11 +199,15 @@ void OsgNavigatorManager::DeleteNavigator(unsigned int navigator_id)
       if (n->GetId() == navigator_id)
 	{
 				
-	  osg_composite_viewer->removeView((osgViewer::Viewer *)n->GetViewer());
+	  if (n)
+	    {
+	      osg_composite_viewer->removeView
+		((osgViewer::Viewer *)n->GetViewer());
 	  //	osg_composite_viewer->en
 	  //osg_composite_viewer->removeView(n->GetHudView());
-	  if (n)
-	    delete n;
+
+	      delete n;
+	    }
 	  navigator_vector.erase(i);
 
 	  //assing our copy of the dbp to the rest of the viewers
