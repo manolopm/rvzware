@@ -44,12 +44,11 @@ RemoteEntityController::RemoteEntityController(): ui_dialog(NULL)
 
 RemoteEntityController::RemoteEntityController(wxWindow* parent): parent_(parent)
 {
-	ui_dialog = new cpw::gui::UIRemoteImportation(parent_, wxID_ANY);
+  ui_dialog = new cpw::gui::UIRemoteImportation(parent_, wxID_ANY);
 }
 
 RemoteEntityController::~RemoteEntityController(void)
 {
-
 }
 
 void RemoteEntityController::CreateRemoteEntity(wxWindow* parent)

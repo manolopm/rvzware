@@ -119,7 +119,7 @@ Application::Application(void): main_frame(),
 
 Application::~Application(void)
 {
-	
+
   std::map<int, DynamicLibrary*>::iterator mi = plugin_map.begin();
   for( ; mi!=plugin_map.end() ; mi++)
     if ((*mi).second)           delete (*mi).second;
@@ -129,7 +129,8 @@ Application::~Application(void)
   if (graphic_factory)          delete graphic_factory;
   if (remote_controller)        delete remote_controller;
   if (remote_entity_controller) delete remote_entity_controller;
-	
+
+
 }
 
 void Application::EnableSunConfiguration(const bool &value)
