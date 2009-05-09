@@ -16,7 +16,7 @@ clean:
 
 libcpwutils.so: $(LIBOFILES)
 	rm -f $@
-	g++ -shared -Wl,-soname, $(LIBOFILES) -o $@
+	g++ -shared -Wl $(LIBOFILES) -o $@
 
 install:
 	cp libcpwutils.so /usr/lib
