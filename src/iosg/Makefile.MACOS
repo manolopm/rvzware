@@ -1,34 +1,34 @@
 LIB_FILES =  OsgCamera.cpp OsgIconSizeUpdaterVisitor.cpp OsgNavigator.cpp OsgNavigatorWxGLCanvas.cpp OsgOverlayImage.cpp OsgSceneLoader.cpp OsgVisitorFirstGeode.cpp OsgDrawableCullCallback.cpp OsgImgMixer.cpp OsgNavigatorManager.cpp OsgNodeFinderVisitor.cpp OsgPetitionManager.cpp  OsgSenoidalInterpolator.cpp stdafx.cpp OsgDrawableData.cpp OsgIntersectorHeightCalculator.cpp OsgNavigatorPostDrawCallback.cpp  OsgObjectLoader.cpp OsgPSCallback.cpp OsgSun.cpp OsgFactory.cpp OsgLine2Callback.cpp OsgNavigatorPreDrawCallback.cpp OsgObjectRegistry.cpp OsgSceneBuilder.cpp OsgValidator.cpp OsgHUDWidget.cpp OsgLineCallback.cpp OsgNavigatorWxFrame.cpp OsgObjectRegistrySingleton.cpp  OsgScene.cpp OsgVisitor.cpp gui/OsgArrow.cpp gui/OsgCompass.cpp gui/OsgDummy.cpp gui/OsgHUD.cpp gui/OsgLabel.cpp gui/OsgNavigationPanel.cpp gui/OsgUTMLabel.cpp gui/OsgWidget.cpp gui/OsgButton.cpp gui/OsgContainer.cpp gui/OsgHUDController.cpp  gui/OsgImage.cpp gui/OsgMinimap.cpp  gui/OsgPanel.cpp gui/OsgVerticalButtonPanel.cpp
 
 
-INCLUDE = -I/usr/include -I/usr/include/postgresql/ -I/usr -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__  -I../
+INCLUDE = -I/usr/include -I/usr/include/postgresql/ -I../ $(shell wx-config --cflags)
 
-LFLAGS = -fPIC -lcurl -lpq -lOpenThreads -lboost_filesystem -lexpat -losg
+LFLAGS = -fPIC -lcurl -lpq -framework OpenThreads -lboost_filesystem-mt -lboost_system-mt -lexpat -losg $(shell wx-config --libs)
 CFLAGS = -fPIC -g
 CC = g++
 LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
 
-all: libiosg.so
+all: libiosg.dylib
 
 clean:
-	rm -f $(LIBOFILES) libiosg.so
+	rm -f $(LIBOFILES) libiosg.dylib
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
-libiosg.so: $(LIBOFILES)
+libiosg.dylib: $(LIBOFILES)
 	rm -f $@
-	g++ -shared -Wl,-soname, $(LIBOFILES) -o $@
+	g++ -dynamiclib -shared -Wl $(LIBOFILES) -o $@
 
 install:
-	cp libiosg.so /usr/lib
+	cp libiosg.dylib /usr/lib
 	mkdir /usr/include/iosg
 	cp *.h /usr/include/iosg/
 	mkdir /usr/include/iosg/gui
 	cp gui/*.h /usr/include/iosg/gui/
 
 uninstall:
-	rm  /usr/lib/libiosg.so
+	rm  /usr/lib/libiosg.dylib
 	rm -rf /usr/include/iosg
 
 

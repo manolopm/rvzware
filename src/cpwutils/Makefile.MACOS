@@ -1,0 +1,32 @@
+LIB_FILES = cpwutils.cpp FireAnimation.cpp Fire.cpp GraphicFireCallBack.cpp
+
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I../
+LFLAGS = -fPIC -lcurl -lpq -framework OpenThreads -lboost_filesystem-mt -lboost_system-mt -lcpw
+CFLAGS = -fPIC
+CC = g++
+LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
+
+all: libcpwutils.dylib
+
+clean:
+	rm -f $(LIBOFILES) libcpwutils.dylib
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+libcpwutils.dylib: $(LIBOFILES)
+	rm -f $@
+	g++ -dynamiclib -shared -Wl $(LFLAGS) $(LIBOFILES) -o $@
+
+install:
+	cp libcpwutils.dylib /usr/lib
+	mkdir /usr/include/cpwutils
+	cp *.h /usr/include/cpwutils/
+
+uninstall:
+	rm  /usr/lib/libcpwutils.dylib
+	rm -rf /usr/include/cpwutils
+
+
+
+
