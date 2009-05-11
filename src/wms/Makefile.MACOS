@@ -1,0 +1,34 @@
+LIB_FILES =   wmsCapabilitiesParser.cpp  wmsCapabilitiesState.cpp  wms.cpp wmsMemoryStream.cpp  wmsReferenced.cpp  wmsUrl.cpp iso8601.cpp  wmsCapabilitiesRoot.cpp wmsClient.cpp wmsCurlMemoryStream.cpp  wmsNotify.cpp wmsStyle.cpp
+
+
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I/usr -I../
+LFLAGS = -fPIC -lcurl -lpq -framework OpenThreads -lboost_filesystem-mt -lexpat
+CFLAGS = -fPIC
+CC = g++
+LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
+
+all: libwms.dylib
+
+clean:
+	rm -f $(LIBOFILES) libwms.dylib
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+libwms.dylib: $(LIBOFILES)
+	rm -f $@
+	g++ -shared -dynamiclib -Wl $(LFLAGS) $(LIBOFILES) -o $@
+
+install:
+	cp libwms.dylib /usr/lib
+	mkdir /usr/include/wms
+	cp *.h /usr/include/wms/
+
+uninstall:
+	rm  /usr/lib/libwms.dylib
+	rm -rf /usr/include/wms
+
+
+
+
+

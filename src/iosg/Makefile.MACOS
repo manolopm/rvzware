@@ -3,7 +3,7 @@ LIB_FILES =  OsgCamera.cpp OsgIconSizeUpdaterVisitor.cpp OsgNavigator.cpp OsgNav
 
 INCLUDE = -I/usr/include -I/usr/include/postgresql/ -I../ $(shell wx-config --cflags)
 
-LFLAGS = -fPIC -lcurl -lpq -framework OpenThreads -lboost_filesystem-mt -lboost_system-mt -lexpat -losg $(shell wx-config --libs)
+LFLAGS = -fPIC -lcurl -lcpw -lpq -framework osgDB -framework osgUtil -framework osgGA -framework osgText -framework osgParticle -framework osgViewer -framework OpenThreads -lboost_filesystem-mt -lboost_system-mt -lexpat -framework osg $(shell wx-config --libs) $(shell wx-config --gl-libs) -logc
 CFLAGS = -fPIC -g
 CC = g++
 LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
@@ -18,7 +18,7 @@ clean:
 
 libiosg.dylib: $(LIBOFILES)
 	rm -f $@
-	g++ -dynamiclib -shared -Wl $(LIBOFILES) -o $@
+	g++ -dynamiclib -shared -Wl $(LFLAGS) $(LIBOFILES) -o $@
 
 install:
 	cp libiosg.dylib /usr/lib

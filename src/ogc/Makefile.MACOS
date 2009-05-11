@@ -1,0 +1,34 @@
+LIB_FILES = ogc.cpp wms/WindowsDisk.cpp  wms/WmsDiskManager.cpp  wms/WmsLayerController.cpp  wms/WmsLayer.cpp  wms/WmsLayerManager.cpp  wms/WmsNetManager.cpp
+
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I/usr -I ../
+LFLAGS = -fPIC -lboost_filesystem-mt -lboost_system-mt -framework OpenThreads -lwms -lcpw 
+CFLAGS = -fPIC
+CC = g++
+LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
+
+all: libogc.dylib
+
+clean:
+	rm -f $(LIBOFILES) libogc.dylib
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+libogc.dylib: $(LIBOFILES)
+	rm -f $@
+	g++ -shared -dynamiclib -Wl $(LIBOFILES) $(LFLAGS) -o $@
+
+install:
+	cp libogc.dylib /usr/lib
+	mkdir /usr/include/ogc
+	cp *.h /usr/include/ogc/
+	mkdir /usr/include/ogc/wms
+	cp wms/*.h /usr/include/ogc/wms/
+
+uninstall:
+	rm  /usr/lib/libogc.dylib
+	rm -rf /usr/include/ogc
+
+
+
+

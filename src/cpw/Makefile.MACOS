@@ -41,7 +41,7 @@ install:
 	cp thread/*.h /usr/include/cpw/thread/
 
 uninstall:
-	rm  /usr/lib/libcpw.so
+	rm  /usr/lib/libcpw.dylib
 	rm -rf /usr/include/cpw
 
 

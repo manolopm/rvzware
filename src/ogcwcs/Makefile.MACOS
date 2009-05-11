@@ -1,0 +1,34 @@
+LIB_FILES =  ogc_wcs.cpp wcs/WcsDiskManager.cpp  wcs/WcsLayerController.cpp wcs/WcsLayer.cpp  wcs/WcsLayerManager.cpp  wcs/WcsNetManager.cpp  wcs/WindowsDisk.cpp
+
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I/usr -I../
+LFLAGS = -fPIC -framework OpenThreads -lcpw -lwcs -lboost_filesystem-mt -lboost_system-mt
+CFLAGS = -fPIC
+CC = g++
+LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
+
+all: libogc_wcs.dylib
+
+clean:
+	rm -f $(LIBOFILES) libogc_wcs.dylib
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+libogc_wcs.dylib: $(LIBOFILES)
+	rm -f $@
+	g++ -shared -Wl -dynamiclib $(LIBOFILES)  $(LFLAGS) -o $@
+
+install:
+	cp libogc_wcs.dylib /usr/lib
+	mkdir /usr/include/ogcwcs
+	cp *.h /usr/include/ogcwcs/
+
+uninstall:
+	rm  /usr/lib/libogc_wcs.dylib
+	rm -rf /usr/include/ogcwcs
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+LIB_FILES = stdafx.cpp  WxClientSocketThread.cpp  WxResolver.cpp  WxSocket.cpp  WxSocketEvent.cpp  WxSocketFactory.cpp  WxSocketHandler.cpp
+
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I/usr -I ../ $(shell wx-config --cflags)
+
+LFLAGS = -fPIC $(shell wx-config --libs) -lremote -lcpw
+CFLAGS = -fPIC
+CC = g++
+LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
+
+all: libwxremote.dylib
+
+clean:
+	rm -f $(LIBOFILES) libwxremote.dylib
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+libwxremote.dylib: $(LIBOFILES)
+	rm -f $@
+	g++ -shared -Wl -dynamiclib $(LIBOFILES) $(LFLAGS) -o $@
+
+install:
+	cp libwxremote.dylib /usr/lib
+	mkdir /usr/include/wxremote
+	cp *.h /usr/include/wxremote/
+
+uninstall:
+	rm  /usr/lib/libwxremote.dylib
+	rm -rf /usr/include/wxremote
+

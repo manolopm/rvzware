@@ -1,0 +1,34 @@
+LIB_FILES = iso8601.cpp wcsCapabilitiesRoot.cpp wcsClient.cpp wcsCurlMemoryStream.cpp wcsNotify.cpp wcsStyle.cpp wcsCapabilitiesParser.cpp wcsCapabilitiesState.cpp wcs.cpp wcsMemoryStream.cpp wcsReferenced.cpp wcsUrl.cpp
+
+
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I/usr -I../
+LFLAGS = -fPIC -lcurl -lexpat
+CFLAGS = -fPIC
+CC = g++
+LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
+
+all: libwcs.dylib
+
+clean:
+	rm -f $(LIBOFILES) libwcs.dylib
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+libwcs.dylib: $(LIBOFILES)
+	rm -f $@
+	g++ -shared -dynamiclib -Wl $(LIBOFILES) $(LFLAGS) -o $@
+
+install:
+	cp libwcs.dylib /usr/lib
+	mkdir /usr/include/wcs
+	cp *.h /usr/include/wcs/
+
+uninstall:
+	rm  /usr/lib/libwcs.dylib
+	rm -rf /usr/include/wcs
+
+
+
+
+

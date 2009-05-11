@@ -1,0 +1,34 @@
+LIB_FILES = Connection.cpp  ConnectionManager.cpp  DisconnectEntityData.cpp  GetEntityRequestData.cpp   GetPublishedRequestData.cpp   MessageData.cpp     RemoteProtocol.cpp      SendChangesData.cpp  stdafx.cpp ConnectionData.cpp  DataStream.cpp         DisconnectionData.cpp     GetEntityResponseData.cpp  GetPublishedResponseData.cpp  RemoteModifier.cpp  RequestSynchroData.cpp  SetValueData.cpp     xmlParser.cpp
+
+INCLUDE = -I/usr/include -I/usr/include/postgresql/ -I/usr -I../
+LFLAGS = -fPIC -lcpw 
+CFLAGS = -fPIC
+CC = g++
+LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
+
+all: libremote.dylib
+
+clean:
+	rm -f $(LIBOFILES) libremote.dylib
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+libremote.dylib: $(LIBOFILES)
+	rm -f $@
+	g++ -shared -Wl -dynamiclib $(LIBOFILES) $(LFLAGS) -o $@
+
+install:
+	cp libremote.dylib /usr/lib
+	mkdir /usr/include/remote
+	cp *.h /usr/include/remote/
+
+uninstall:
+	rm  /usr/lib/libremote.dylib
+	rm -rf /usr/include/remote
+
+
+
+
+
+
