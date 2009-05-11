@@ -376,12 +376,18 @@ void UIApplicationMainFrame::Update()
 {
   wxSizeEvent tmp = wxSizeEvent();
   OnSize(tmp); 
-  wxFrame::Update(); 
-  ui_layer_tree_tb->Update();
-  ui_entity_properties_grid->Update(); 
-  ui_layer_tree->Update();
-  ui_animation_scheme_window->Update();
-  connection_frame->Update();
+  wxFrame::Update();
+  if (ui_layer_tree_tb != NULL)
+    ui_layer_tree_tb->Update();
+  std::cout<<"hola2"<<std::endl;
+  if (ui_entity_properties_grid != NULL)
+    ui_entity_properties_grid->Update();
+  if (ui_layer_tree != NULL)
+    ui_layer_tree->Update();
+  if (ui_animation_scheme_window != NULL)
+    ui_animation_scheme_window->Update();
+  if (connection_frame != NULL)
+    connection_frame->Update();
 }
 
 void UIApplicationMainFrame::InitGUI () {

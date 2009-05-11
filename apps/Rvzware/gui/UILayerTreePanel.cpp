@@ -128,15 +128,18 @@ UILayerTreePanel::~UILayerTreePanel(void)
 
 void UILayerTreePanel::Clear()
 {
-  img_list->RemoveAll();
+  if (img_list)
+    img_list->RemoveAll();
   entity_tree_relation.clear();
   //tree_ctrl->DeleteChildren(root_id);
-  tree_ctrl->DeleteRoot();
+  if (tree_ctrl)
+    tree_ctrl->DeleteRoot();
   CleanEntityPropertiesGrid();
 }
 
 void UILayerTreePanel::FillTree()
-{Clear();
+{
+  Clear();
   if (layer_tree->GetTopLayer() == NULL)
     {
 		
