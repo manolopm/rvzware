@@ -155,7 +155,7 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
   if (keycode >= 48 && keycode <= 57 && pos < 8)
     {
       char ch = keycode;
-      wxString temp = buffer + ch;
+      wxString temp = buffer + (wxChar)ch;
 
       long value;
       temp.Right(2).ToLong(&value);
@@ -163,7 +163,7 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
       if (value < min || value > max)
 	{
 	  //			buffer = wxString(wxT("0") ) + (wchar_t) ch;
-	  buffer = wxString(wxT("0") ) + ch;
+	  buffer = wxString(wxT("0") ) + (wxChar)ch;
 	}
       else 
 	{

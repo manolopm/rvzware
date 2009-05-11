@@ -225,7 +225,8 @@ void UIElementPrimitive::OnButtonFont(wxCommandEvent& WXUNUSED(event))
 	wxFont font;
 	wxColour colour;
 	std::string strfont;
-	wxFontDialog fontdialog(this);
+	//FIXME: MAYBE THE NEXT LINE IS A BUG
+	wxFontDialog fontdialog((wxWindow *)this, wxFontData());
 	if (fontdialog.ShowModal() == wxID_OK)
 	{
 		fontdata = fontdialog.GetFontData();

@@ -1,0 +1,27 @@
+SRC =  main.cpp Application.cpp  ApplicationTime.cpp  DynamicLibrary.cpp stdafx.cpp  UIApplicationMainFrame.cpp controllers/FireController.cpp controllers/PersistentController.cpp controllers/WCSServerConnectionController.cpp controllers/HandlerController.cpp controllers/ElementController.cpp controllers/ElementVectorialController.cpp controllers/DistanceController.cpp controllers/EntityController.cpp controllers/RemoteController.cpp controllers/LayerController.cpp controllers/ProjectController.cpp  controllers/ServerConnectionController.cpp controllers/VideoController.cpp controllers/LayerPrimitiveController.cpp controllers/ElementPrimitiveController.cpp controllers/DataBaseController.cpp controllers/KeyboardControl.cpp controllers/RemoteEntityController.cpp controllers/SunController.cpp controllers/ConfigurationController.cpp controllers/StatusController.cpp controllers/GraphicObjectController.cpp controllers/CwsLoader.cpp controllers/RelativeDirectory.cpp gui/MyTimeCtrl.cpp gui/UICalculateDistance.cpp gui/UIElement.cpp gui/UIFire.cpp gui/UILayerTreePanel.cpp gui/UIProgressionModalDialog.cpp gui/UISceneTree.cpp gui/UISunConfiguration.cpp gui/UIElementPrimitive.cpp gui/UIHelp.cpp gui/UILoadSplash.cpp gui/UIRemoteConnection.cpp gui/UIServerConnection.cpp gui/UIVideoController.cpp gui/UIAnimableList.cpp gui/UIConnectionTreePanel.cpp gui/UIElementVectorial.cpp gui/UILayer.cpp gui/UILogWindow.cpp gui/UIRemoteImportation.cpp gui/UISplitterCanvas.cpp gui/UIWCSServerConnection.cpp gui/UIAttributes.cpp gui/UIEAttributes.cpp gui/UIEntityPropertiesGrid.cpp gui/UILayerPrimitive.cpp gui/UIMovieScheme.cpp gui/UIRemotePublished.cpp gui/UIStatusBar.cpp gui/treelistctrl.cpp 
+
+
+INCLUDE = -I/usr/include/postgresql $(shell wx-config --cflags) -I /usr/include/ -I . 
+LFLAGS = -ldl -framework OpenThreads $(shell wx-config --libs) -lcpw -lcpwutils  -lboost_filesystem-mt -lboost_system-mt  -lwms -logc -lremote  -lwxremote -liosg -logc_wcs  -lwcs -framework osg -lcurl -framework osgGA -framework osgDB -framework osgText -framework osgParticle -framework osgViewer -lpq  
+OFILES = $(SRC:%.cpp=%.o)
+CFLAGS = -rdynamic -pthread -g
+
+CC = g++
+
+all: Rvzware
+
+clean:
+	rm -f Rvzware
+	rm *.o
+
+mrpropper:
+	rm $(OFILES)
+	make clean
+
+%.o: %.cpp
+	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+Rvzware: $(OFILES)
+	$(CC) -Wl $(INCLUDE) $(LFLAGS) $(OFILES) -o $@
+
+

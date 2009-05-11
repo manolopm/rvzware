@@ -20,6 +20,16 @@ uninstall:
         echo "Uninstalling $$i..."; \
 	(cd $$i; make uninstall); done
 
+dest-macos:
+	@for i in $(SUBDIRS); do \
+        echo "Change to MacOS in $$i..."; \
+	(cd $$i; rm Makefile; ln -s Makefile.MACOS Makefile); done
+
+dest-linux:
+	@for i in $(SUBDIRS); do \
+        echo "Change to Linux in $$i..."; \
+	(cd $$i; rm Makefile; ln -s Makefile.LINUX Makefile); done
+
 clean:
 	rm $(LIB)
 
