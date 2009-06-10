@@ -51,9 +51,9 @@ void OsgILabel::SetObject(const std::string &filename)
 	std::vector<osg::MatrixTransform *> mt_vec;
 	object = new osg::Geode;
 	debug_text = new  osgText::Text;
-	osgText::Font* arial = osgText::readFontFile(this->GetDefaultPath() + "arial.ttf");
+	osgText::Font* arial = osgText::readFontFile(this->GetDefaultPath() + "/arial.ttf");
 
-	osgText::Font *mifont = OsgObjectRegistrySingleton::GetInstance()->GetObjReg()->GetFontFromFile(this->GetDefaultPath() + "arial.ttf");
+	osgText::Font *mifont = OsgObjectRegistrySingleton::GetInstance()->GetObjReg()->GetFontFromFile(this->GetDefaultPath() + "/arial.ttf");
 		
 	debug_text->setFont(arial);
 	debug_text->setFontResolution(GetSize().x,GetSize().y);
