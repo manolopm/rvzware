@@ -452,6 +452,7 @@
 
 #if !defined (stdint_int64_defined)
 # if defined(__GNUC__)
+# if defined(__GNUC__)&& (__GNUC__<4) && (__GNUC_MINOR__<4)
 #  define stdint_int64_defined
    __extension__ typedef long long int64_t;
    __extension__ typedef unsigned long long uint64_t;
@@ -460,6 +461,16 @@
 #  ifndef PRINTF_INT64_MODIFIER
 #   define PRINTF_INT64_MODIFIER "ll"
 #  endif
+# else
+#  define stdint_int64_defined
+   __extension__ typedef long int int64_t;
+   __extension__ typedef unsigned long long uint64_t;
+#  define UINT64_C(v) v ## ULL
+#  define  INT64_C(v) v ## LL
+#  ifndef PRINTF_INT64_MODIFIER
+#   define PRINTF_INT64_MODIFIER "ll"
+#  endif
+# endif
 # elif defined(__MWERKS__) || defined (__SUNPRO_C) || defined (__SUNPRO_CC) || defined (__APPLE_CC__) || defined (_LONG_LONG) || defined (_CRAYC) || defined (S_SPLINT_S)
 #  define stdint_int64_defined
    typedef long long int64_t;
@@ -708,7 +719,9 @@ typedef uint_least32_t uint_fast32_t;
 #    define UINTPTR_C(x)                stdint_intptr_glue3(UINT,stdint_intptr_bits,_C)(x)
 #  endif
   typedef stdint_intptr_glue3(uint,stdint_intptr_bits,_t) uintptr_t;
-  typedef stdint_intptr_glue3( int,stdint_intptr_bits,_t)  intptr_t;
+# if defined(__GNUC__)&& (__GNUC__<4) && (__GNUC_MINOR__<4)
+   typedef stdint_intptr_glue3( int,stdint_intptr_bits,_t)  intptr_t;
+#endif
 # else
 /* TODO -- This following is likely wrong for some platforms, and does
    nothing for the definition of uintptr_t. */
@@ -726,3 +739,6 @@ typedef uint_least32_t uint_fast32_t;
 #endif
 
 #endif
+							  
+
+
