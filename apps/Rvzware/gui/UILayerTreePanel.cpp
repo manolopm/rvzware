@@ -68,27 +68,25 @@ END_EVENT_TABLE()
 
 
 UILayerTreePanel::UILayerTreePanel(UIApplicationMainFrame* main_frame,
+				   wxWindowID id,
+				   const wxString& name,
 				   cpw::INavigatorManager *navigator_manager,
 				   cpw::LayerTree &_layer_tree,
 				   wxWindow *parent,
 				   int xpos, int ypos, int width, int height,
 				   wxString &title, long style)
-: wxPanel(parent, wxID_ANY), mainframe(main_frame),nm(navigator_manager),
+: wxPanel(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, name),
+  mainframe(main_frame),nm(navigator_manager),
   layer_tree(&_layer_tree), paren(parent), dragging(false), escape(false),
   cut(false), copy(false), duplicate(false)
-  //wxMiniFrame(parent, wxID_ANY, _T(""),wxDefaultPosition, wxDefaultSize, wxBORDER_NONE),
-  //layer_tree(&_layer_tree)//layer_tree(&_layer_tree), wxPanel(parent, wxID_ANY,
-  //wxDefaultPosition, wxDefaultSize, wxCAPTION)//wxMiniFrame(parent, wxID_ANY,
-  //_T("Properties"), wxDefaultPosition, wxDefaultSize,
-  //wxCAPTION /*| wxSTAY_ON_TOP*/ | wxFRAME_SHAPED)
-  //wxPanel(parent, wxID_ANY), layer_tree(&_layer_tree)
 {
   entity_properties_grid = NULL;
   SetMinSize(wxSize(128, 50));
   wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
   SetSizer(top_sizer);
 
-  tree_ctrl = new wxTreeListCtrl(this, LAYER_TREE_PANEL, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS | wxTR_HAS_VARIABLE_ROW_HEIGHT | wxTR_FULL_ROW_HIGHLIGHT | wxTR_EDIT_LABELS);//wxTR_SINGLE| wxTR_HAS_BUTTONS /*| wxTR_HIDE_ROOT*/ );
+  tree_ctrl = new wxTreeListCtrl(this, LAYER_TREE_PANEL, wxDefaultPosition, wxDefaultSize, wxTR_HAS_BUTTONS | wxTR_HAS_VARIABLE_ROW_HEIGHT | wxTR_FULL_ROW_HIGHLIGHT | wxTR_EDIT_LABELS);
+  
   icondefault = new wxIcon(wxString((cpw::ApplicationConfiguration::GetInstance()->GetUIIconDirectory()+"default.png").c_str(),wxConvUTF8), wxBITMAP_TYPE_ANY);
 	
   if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))

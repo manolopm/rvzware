@@ -234,14 +234,14 @@ bool Application::OnInit()
      remote_controller->GetRemoteProtocol(), navigator_manager);
 
 
-  InitHandlers();
+  //  InitHandlers();
 
   main_frame->Show(true);	
   main_frame->EnableGUI(file_error);
   main_frame->HideSplash();
 
   //TestDependencies("WmsLayer");
-  navigator_manager->GetFocusedOrFirstNavigator()->ShowHUD(file_error);
+  // navigator_manager->GetFocusedOrFirstNavigator()->ShowHUD(file_error);
 
   return true;
 }

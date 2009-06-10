@@ -92,10 +92,14 @@ END_EVENT_TABLE()
  *  \param style Style of panel
  */
 UIConnectionTreePanel::UIConnectionTreePanel(cpw::remote::RemoteProtocol *protocol,
-					     wxWindow *parent, int xpos, int ypos, int width, int height, wxString &title, long style)
-: wxPanel(parent, wxID_ANY), parent_window(parent), connection_manager(protocol->GetConnectionManager()),
-  protocol(protocol)
+					     wxWindow *parent,
+					     wxWindowID id, const wxString &name,
+					     int xpos, int ypos, int width, int height, wxString &title,
+					     long style)
+: wxPanel(parent, id), parent_window(parent), connection_manager(protocol->GetConnectionManager()),
+  protocol(protocol), name_(name)
 {
+  SetName(name_);
   SetMinSize(wxSize(128, 50));
   wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
   SetSizer(top_sizer);

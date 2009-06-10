@@ -32,31 +32,33 @@
 namespace cpw 
 { 
 	
-	namespace gui
-	{
+  namespace gui
+  {
 
-		/** 
-			\brief Log Window that shows debug info
-			\ingroup cpw
-		*/
-		class UIApplicationMainFrame;
+    /** 
+	\brief Log Window that shows debug info
+	\ingroup cpw
+    */
+    class UIApplicationMainFrame;
 
-		class UILogWindow : public wxPanel, public cpw::Logger
-		{
-			public:
-				UILogWindow(wxWindow *parent, const int &sizex=256, const int &sizey=256, const int &posx=0, const int &posy=0);
-				~UILogWindow(void);
+    class UILogWindow : public wxPanel, public cpw::Logger
+      {
+      public:
+	UILogWindow(wxWindow *parent,wxWindowID id, const wxString &name,
+		    const int &sizex=256, const int &sizey=256,
+		    const int &posx=0, const int &posy=0);
+	~UILogWindow(void);
 
-				virtual void NewLogMessage(const std::string &new_message);
-				virtual void ClearLog();
-				virtual void printf (const char *format, ...);
+	virtual void NewLogMessage(const std::string &new_message);
+	virtual void ClearLog();
+	virtual void printf (const char *format, ...);
 
-			private:
+      private:
 
-				wxTextCtrl *log_text;
-				OpenThreads::Mutex mutex;
-		};
-	}
+	wxTextCtrl *log_text;
+	OpenThreads::Mutex mutex;
+      };
+  }
 
 }
 

@@ -35,33 +35,33 @@
 
 namespace cpw
 {
-	namespace gui
-	{
+  namespace gui
+  {
 
-		/** 
-			\brief Window panel that shows the entity properties
-			\ingroup cpw
-		*/
-		class UIEntityPropertiesGrid : public wxPanel
-		{
-			public:
+    /** 
+	\brief Window panel that shows the entity properties
+	\ingroup cpw
+    */
+    class UIEntityPropertiesGrid : public wxPanel
+    {
+    public:
 
-				UIEntityPropertiesGrid(wxWindow *parent, wxWindowID id);
-				~UIEntityPropertiesGrid(void);
-				void ShowEntity(cpw::Entity *entity = NULL);
-				void Clear();
+      UIEntityPropertiesGrid(wxWindow *parent, wxWindowID id, const wxString &name);
+      ~UIEntityPropertiesGrid(void);
+      void ShowEntity(cpw::Entity *entity = NULL);
+      void Clear();
 
-			private:
+    private:
 				
-				wxGrid *grid;
-				wxTreeListCtrl *properties_tree;
+      wxGrid *grid;
+      wxTreeListCtrl *properties_tree;
 				
-				void ShowEntity(cpw::Node *root_node, cpw::Node *node, wxTreeItemId t_parent);
-				void OnSize(wxSizeEvent& event);
+      void ShowEntity(cpw::Node *root_node, cpw::Node *node, wxTreeItemId t_parent);
+      void OnSize(wxSizeEvent& event);
 
-				DECLARE_EVENT_TABLE()
-		};
-	}
+      DECLARE_EVENT_TABLE()
+	};
+  }
 }
 
 #endif

@@ -30,13 +30,13 @@ using namespace cpw::gui;
 
 
 #define ROW_LABEL_SIZE 80
-#define ENTITY_PROPERTIES_GRID_ID 2001
 
 BEGIN_EVENT_TABLE(UIEntityPropertiesGrid, wxPanel)
 EVT_SIZE(UIEntityPropertiesGrid::OnSize)
 END_EVENT_TABLE()
 
-UIEntityPropertiesGrid::UIEntityPropertiesGrid(wxWindow *parent, wxWindowID id) : wxPanel(parent, ENTITY_PROPERTIES_GRID_ID)//wxMiniFrame(parent, ENTITY_PROPERTIES_GRID_ID, _T("Properties"), wxDefaultPosition, wxDefaultSize, wxFRAME_TOOL_WINDOW)//, wxCAPTION /*| wxSTAY_ON_TOP*/ | wxFRAME_SHAPED | wxNO_BORDER) //wxPanel(parent, ENTITY_PROPERTIES_GRID_ID)
+UIEntityPropertiesGrid::UIEntityPropertiesGrid(wxWindow *parent, wxWindowID id, const wxString& name) :
+wxPanel(parent, id, wxDefaultPosition, wxDefaultSize,wxTAB_TRAVERSAL, name)
 {
 
   this->SetMinSize(wxSize(128, 128));
@@ -65,9 +65,13 @@ UIEntityPropertiesGrid::~UIEntityPropertiesGrid(void)
 void UIEntityPropertiesGrid::OnSize(wxSizeEvent& event)
 {
   int width, height;
-  GetClientSize(&width, &height);
-	
-  properties_tree->SetSize(width, height);
+
+  //EPYME caso extraño con size cuando esta desacoplado
+  if (GetParent())
+    GetParent()->GetSize(&width, &height);
+  
+  if (properties_tree)
+    properties_tree->SetSize(width, height);
 	
   Refresh();
 }

@@ -58,7 +58,9 @@ namespace cpw
 		{
 		public:
 			UIConnectionTreePanel(cpw::remote::RemoteProtocol *protocol, wxWindow *parent,
-				int xpos, int ypos, int width, int height, wxString &title, long style = wxTAB_TRAVERSAL);
+					      wxWindowID id, const wxString& name,
+					      int xpos, int ypos, int width, int height, wxString &title,
+					      long style = wxTAB_TRAVERSAL);
 			~UIConnectionTreePanel(void);
 
 			void InitializeTree();
@@ -92,7 +94,8 @@ namespace cpw
 			wxTreeCtrl *tree_ctrl;
 			wxTreeItemId root_id;
 			wxImageList *img_list;
-
+			wxString name_;
+			
 			cpw::LayerTree *layer_tree;
 
 			std::map<cpw::RemoteNode, wxTreeItemId> connection_tree_relation;

@@ -32,7 +32,8 @@ cpw::ApplicationConfiguration* ApplicationConfiguration::instance = NULL;
 OpenThreads::Mutex ApplicationConfiguration::appmutex;
 
 
-ApplicationConfiguration::ApplicationConfiguration(): root_path(), listen_port(3000), is_themed(false), icon_size(16), big_icon_size(16)
+ApplicationConfiguration::ApplicationConfiguration(): root_path(), listen_port(3000), is_themed(true),
+						      icon_size(16), big_icon_size(16)
 {
   /*	char *root = getenv("CAPAVIEWER_ROOT");
 

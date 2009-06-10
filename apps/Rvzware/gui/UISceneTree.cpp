@@ -40,7 +40,9 @@ BEGIN_EVENT_TABLE(UISceneTree, wxPanel)
 	EVT_BUTTON   (REFRESH_BUTTON,   UISceneTree::Refresh)
 END_EVENT_TABLE()
 
-UISceneTree::UISceneTree(wxWindow *parent) : wxPanel(parent, wxID_ANY), osg_scene(NULL)
+UISceneTree::UISceneTree(wxWindow *parent, wxWindowID id, const wxString& name)
+: wxPanel(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, name),
+  osg_scene(NULL)
 {
 	SetMinSize(wxSize(128, 50));
 	wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);

@@ -34,38 +34,38 @@
 
 namespace cpw 
 { 
-	namespace gui
-	{
+  namespace gui
+  {
 
-		/** 
-			\brief OSG Tree Debug Panel...
-			\ingroup cpw
-		*/
-		class UISceneTree : public wxPanel
-		{
-			public:
+    /** 
+	\brief OSG Tree Debug Panel...
+	\ingroup cpw
+    */
+    class UISceneTree : public wxPanel
+    {
+    public:
 				
-				UISceneTree(wxWindow *parent);
-				~UISceneTree(void);
+      UISceneTree(wxWindow *parent, wxWindowID id, const wxString& name);
+      ~UISceneTree(void);
 
-				void Refresh(wxCommandEvent &event);
+      void Refresh(wxCommandEvent &event);
 
-			private:
-
-
-				void AddNode(wxTreeItemId &parent_id, osg::Node *osg_node);
-				std::string GetTreeText(osg::Node *node);
-
-				wxTreeCtrl *tree_ctrl;
-				wxStaticText *node_count;
-				iosg::OsgScene *osg_scene;
-				cpw::EntityRegistry *entity_registry;
-				unsigned int total_nodes;
+    private:
 
 
-				DECLARE_EVENT_TABLE()
-		};
-	}
+      void AddNode(wxTreeItemId &parent_id, osg::Node *osg_node);
+      std::string GetTreeText(osg::Node *node);
+
+      wxTreeCtrl *tree_ctrl;
+      wxStaticText *node_count;
+      iosg::OsgScene *osg_scene;
+      cpw::EntityRegistry *entity_registry;
+      unsigned int total_nodes;
+
+
+      DECLARE_EVENT_TABLE()
+	};
+  }
 }
 
 #endif

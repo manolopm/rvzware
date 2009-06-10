@@ -44,9 +44,10 @@ using namespace cpw::gui;
 #define PANE_ELEMENT 2210
 #define PANE_PROJECT 2211
 #define PANE_TOOLS 2212
-#define PANE_CONNECTIONTREE 2213
+#define PANE_CONNECTION_TREE 2213
 #define PANE_LOG 2214
-#define LAST_PANE 2214 //used as last pane
+#define PANE_SCENE_TREE 2215
+#define LAST_PANE 2215 //used as last pane
 
 //Put debug panes here
 //#define PANE_LOG 2301
@@ -97,6 +98,7 @@ EVT_MENU	 ( VIEW_CONNECTIONTREE, UIApplicationMainFrame::ViewConnectionTree )
 EVT_MENU	 ( VIEW_ANIMATION_SCHEME, UIApplicationMainFrame::ViewAnimationScheme )
 EVT_MENU	 ( VIEW_APPLICATION_STATUS, UIApplicationMainFrame::ViewApplicationStatus )
 EVT_MENU	 ( VIEW_LOG, UIApplicationMainFrame::ViewLog )
+EVT_MENU         ( VIEW_SCENE_TREE, UIApplicationMainFrame::ViewSceneTree )
 EVT_MENU	 ( VIEW_HELP, UIApplicationMainFrame::ViewHelp )
 EVT_MENU	 ( VIEW_LAYERTREE, UIApplicationMainFrame::ViewLayerTree )
 EVT_MENU	 ( VIEW_PROPERTIES, UIApplicationMainFrame::ViewProperties )
@@ -206,8 +208,10 @@ UIApplicationMainFrame::UIApplicationMainFrame(Application *app, const wxChar *t
 					  .c_str(),wxConvUTF8));
  
   
-  //  load_splash->Show(true);
-
+  load_splash->Refresh();
+  load_splash->Update();
+  load_splash->Show(true);
+  
   InitMenus();
 
   InitGUI();
@@ -239,10 +243,11 @@ void UIApplicationMainFrame::InitShortCuts()
   entries[15].Set(wxACCEL_CTRL,  (int) 'P',     ELEMENT_PROPERTIES);
   wxAcceleratorTable accel(16, entries);
   this->SetAcceleratorTable(accel);
-  layer_frame->SetAcceleratorTable(accel);
-  properties_frame->SetAcceleratorTable(accel);
-  animation_scheme_frame->SetAcceleratorTable(accel);
-  connection_frame->SetAcceleratorTable(accel);
+  ui_layer_tree->SetAcceleratorTable(accel);
+  ui_entity_properties_grid->SetAcceleratorTable(accel);
+  ui_animation_scheme_window->SetAcceleratorTable(accel);
+  ui_connection_tree->SetAcceleratorTable(accel);
+  
 }
 
 std::map<int, std::string> UIApplicationMainFrame::menus = std::map<int, std::string>();
@@ -289,6 +294,7 @@ void UIApplicationMainFrame::InitMenus()
   //RegisterMenu(STATUS_MENU_ID, "Status");
   RegisterMenu(VIEW_NAVIGATION_MODE, "Change Navigation Mode");	
   RegisterMenu(VIEW_LOG, "Log");
+  RegisterMenu(VIEW_SCENE_TREE, "Scene Tree");
   RegisterMenu(THREE_DIMENSION_NAVIGATION_MODE, "3D");
   RegisterMenu(TWO_DIMENSION_NAVIGATION_MODE, "2D");
 	
@@ -379,15 +385,14 @@ void UIApplicationMainFrame::Update()
   wxFrame::Update();
   if (ui_layer_tree_tb != NULL)
     ui_layer_tree_tb->Update();
-  std::cout<<"hola2"<<std::endl;
   if (ui_entity_properties_grid != NULL)
     ui_entity_properties_grid->Update();
   if (ui_layer_tree != NULL)
     ui_layer_tree->Update();
   if (ui_animation_scheme_window != NULL)
     ui_animation_scheme_window->Update();
-  if (connection_frame != NULL)
-    connection_frame->Update();
+  if (ui_connection_tree != NULL)
+    ui_connection_tree->Update();
 }
 
 void UIApplicationMainFrame::InitGUI () {
@@ -495,9 +500,9 @@ view_menu->Append(GetMenuItem(VIEW_WIREFRAME, view_menu,
   view_menu->AppendCheckItem(VIEW_APPLICATION_STATUS, wxT("Application Status"))->Check();
 
   if (SHOW_ADDITIONAL_WINDOWS)
-    view_menu->AppendCheckItem(VIEW_LOG, wxT("Log"))->Check();
+    view_menu->AppendCheckItem(VIEW_SCENE_TREE, wxT("Scene Tree"))->Check();
   else
-    view_menu->AppendCheckItem(VIEW_LOG, wxT("Log"))->Check(false);
+    view_menu->AppendCheckItem(VIEW_SCENE_TREE, wxT("Scene Tree"))->Check(false);
 
   view_menu->AppendCheckItem(VIEW_HELP, wxT("Help"))->Check();
 
@@ -973,27 +978,20 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree,
   help_window->Show(false);
 
   //Layer Tree
-  layer_frame = new wxMiniFrame(this, PANE_LAYERTREE, _T("Layer Tree"),
-				wxDefaultPosition, wxDefaultSize,
-				wxBORDER_NONE | wxTRANSPARENT_WINDOW,
-				_T("Layer Tree"));
-
-    
   wxString tmp2(((std::string)("Layer Tree")).c_str(),wxConvUTF8);
-  ui_layer_tree = new cpw::gui::UILayerTreePanel(this,navigator_manager,
-						 layer_tree,
-						 layer_frame, 0, 0, 200, 512,
+  ui_layer_tree = new cpw::gui::UILayerTreePanel(this,PANE_LAYERTREE,
+						 _T("Layer Tree"),
+						 navigator_manager,
+						 layer_tree,this, 0, 0, 200, 512,
 						 tmp2);
-  
-
-
+ 
   layer_tree.Attach((cpw::Observer *)ui_layer_tree);
   ui_layer_tree->FillTree();
-  layer_frame->SetSize(wxSize(200,200));
+  ui_layer_tree->SetSize(wxSize(200,200));
 
 
   //Layer Tree toolbar
-  ui_layer_tree_tb = layer_frame->CreateToolBar(wxNO_BORDER | wxHORIZONTAL | wxTB_FLAT);
+  ui_layer_tree_tb = this->CreateToolBar(wxNO_BORDER | wxHORIZONTAL | wxTB_FLAT);
   ui_layer_tree_tb->SetToolBitmapSize(wxSize(ic_size,ic_size));
 
   ui_layer_tree_tb->AddTool(ADD_ENTITY, _("Import"),
@@ -1025,19 +1023,17 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree,
 
   ////Connection Tree
   cpw::remote::ConnectionManager * connection_manager = protocol->GetConnectionManager();
-  connection_frame = new wxMiniFrame(this, PANE_CONNECTIONTREE, _("Connection Tree"), wxDefaultPosition,
-				     wxDefaultSize, wxBORDER_NONE | wxTRANSPARENT_WINDOW,_("Connection Tree"));
-	
   wxString tmp(((std::string)"Connection Tree").c_str(),wxConvUTF8);
   ui_connection_tree = new cpw::gui::UIConnectionTreePanel(protocol,
-							   connection_frame,
+							   this, PANE_CONNECTION_TREE,
+							   _T("Connection Tree"),
 							   0, 0, 200, 512,
 							   tmp);
 
 	
   connection_manager->Attach((cpw::Observer *)ui_connection_tree);
   ui_connection_tree->InitializeTree();
-  connection_frame->SetSize(wxSize(200,200));
+  ui_connection_tree->SetSize(wxSize(200,200));
 
   //toolbars backgroundcolour
   wxAuiDockArt* auiArtProvider = m_mgr.GetArtProvider();
@@ -1045,27 +1041,24 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree,
   ui_layer_tree_tb->SetBackgroundColour(backgroundColor);
 
   //Properties
-  properties_frame = new wxMiniFrame(this, PANE_PROPERTIES, _T("Properties"),wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxTRANSPARENT_WINDOW,_T("Properties"));
-  ui_entity_properties_grid = new UIEntityPropertiesGrid (properties_frame, wxID_ANY);
+  ui_entity_properties_grid = new UIEntityPropertiesGrid (this,PANE_PROPERTIES, _T("Properties"));
   ui_layer_tree->SetEntityPropertiesGrid(ui_entity_properties_grid);
   ui_entity_properties_grid->SetSize(ui_entity_properties_grid->GetBestSize());
-  properties_frame->SetSize(wxSize(200,200));
+  ui_entity_properties_grid->SetSize(wxSize(200,200));
 
   //Animation Entity Scheme
-  animation_scheme_frame = new wxMiniFrame(this, PANE_ANIMATION_SCHEME,_T("Animation Entity Scheme"), wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxTRANSPARENT_WINDOW,_T("Animation Entity Scheme"));
-  ui_animation_scheme_window = new UIMovieScheme(animation_scheme_frame, wxID_ANY);
+  ui_animation_scheme_window = new UIMovieScheme(this,PANE_ANIMATION_SCHEME,_T("Animation Entity Scheme"));
   ApplicationTime::GetInstance()->Attach((cpw::Observer*)ui_animation_scheme_window);
 	
   //log_frame
-  log_frame = new wxMiniFrame(this, PANE_LOG, _T("Log"), wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxTRANSPARENT_WINDOW,_T("Log"));
-  ui_log_window = new UILogWindow(log_frame);
-  log_frame->SetSize(wxSize(200, 200));
+  ui_log_window = new UILogWindow(this, PANE_LOG, _T("Log"));
+  ui_log_window->SetSize(wxSize(200, 200));
   cpw::ApplicationLog::GetInstance()->SetLogger((cpw::Logger *) ui_log_window);
-
+  ui_log_window->NewLogMessage("icon_path:"+icon_path);
+  
   //scene tree frame
-  scene_tree_frame = new wxMiniFrame(this, PANE_LOG, _T("Scene tree"), wxDefaultPosition, wxDefaultSize, wxBORDER_NONE | wxTRANSPARENT_WINDOW,_T("Properties"));;
-  ui_scene_tree = new UISceneTree(scene_tree_frame);
-  scene_tree_frame->SetSize(wxSize(200, 200));
+  ui_scene_tree = new UISceneTree(this, PANE_SCENE_TREE, _T("Scene Tree"));
+  ui_scene_tree->SetSize(wxSize(200, 200));
 
   //splitter canvas
   splitter = new wxSplitterWindow(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D | wxSP_LIVE_UPDATE);
@@ -1076,80 +1069,88 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree,
   splitter->SetSize(wxSize(width, height));
   splitter->SetSashGravity(0.1);
   splitter->SetMinimumPaneSize(240);
-
-  viewport_field = viewport_manager->PresetOnlyView(wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
-  //viewport_field = viewport_manager->Preset4ViewsB(wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
+  
+  //EPYME comentado presetonlyview
+  // viewport_field = viewport_manager->PresetOnlyView(wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
+  viewport_field = viewport_manager->Preset4ViewsB(wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
 	
-  splitter->Initialize(viewport_field);
-	
+  //splitter->Initialize(viewport_field);
+  
+  //AutoLayout
+   ui_layer_tree->SetAutoLayout(true);
+   ui_entity_properties_grid->SetAutoLayout(true);
+   ui_log_window->SetAutoLayout(true);
+   ui_animation_scheme_window->SetAutoLayout(true);
+   ui_scene_tree->SetAutoLayout(true);
+   ui_connection_tree->SetAutoLayout(true);
 
   //wxAUI 
-  m_mgr.AddPane(layer_frame, wxLEFT, wxT("Layer Tree"));
-  m_mgr.AddPane(properties_frame, wxLEFT, wxT("Properties"));
+  m_mgr.AddPane(ui_layer_tree, wxLEFT, wxT("Layer Tree"));
+  m_mgr.AddPane(ui_entity_properties_grid, wxLEFT, wxT("Properties"));
   m_mgr.AddPane(splitter, wxCENTRE, wxT("Viewport"));
-  m_mgr.AddPane(log_frame, wxLEFT, wxT("Log")); 
-  m_mgr.AddPane(scene_tree_frame, wxRIGHT, wxT("Scene tree"));
+  m_mgr.AddPane(ui_log_window, wxLEFT, wxT("Log")); 
+  m_mgr.AddPane(ui_scene_tree, wxRIGHT, wxT("Scene tree"));
   if (SHOW_ADDITIONAL_WINDOWS)
-    m_mgr.AddPane(connection_frame, wxRIGHT, wxT("Connection Tree"));
+    m_mgr.AddPane(ui_connection_tree, wxRIGHT, wxT("Connection Tree"));
   else
-    m_mgr.AddPane(connection_frame, wxLEFT, wxT("Connection Tree"));
-	
-  m_mgr.AddPane(animation_scheme_frame, wxBOTTOM, wxT("Animation Entity Scheme")); 
+    m_mgr.AddPane(ui_connection_tree, wxLEFT, wxT("Connection Tree"));
+  
+  m_mgr.AddPane(ui_animation_scheme_window, wxBOTTOM, wxT("Animation Entity Scheme"));
 
-  m_mgr.GetPane(layer_frame).MinSize(wxSize(100,100)).
+  m_mgr.GetPane(ui_layer_tree).MinSize(wxSize(100,100)).
     Name(wxString(((std::string)NAME_LAYER_FRAME).c_str(),wxConvUTF8));
-  m_mgr.GetPane(properties_frame).MinSize(wxSize(100,100)).
+  m_mgr.GetPane(ui_entity_properties_grid).MinSize(wxSize(100,100)).
     Name(wxString(((std::string)NAME_PROPERTIES_FRAME).c_str(),wxConvUTF8));
   m_mgr.GetPane(splitter).MinSize(wxSize(240,240)).
     Name(wxString(((std::string)NAME_SPLITTER).c_str(),wxConvUTF8));
-  m_mgr.GetPane(log_frame).MinSize(wxSize(100, 100)).
+  m_mgr.GetPane(ui_log_window).MinSize(wxSize(100, 100)).
     Name(wxString(((std::string)NAME_LOG_FRAME).c_str(),wxConvUTF8));
-  m_mgr.GetPane(scene_tree_frame).MinSize(wxSize(100, 100)).
+  m_mgr.GetPane(ui_scene_tree).MinSize(wxSize(100, 100)).
     Name(wxString(((std::string)NAME_SCENE_TREE_FRAME).c_str(),wxConvUTF8));
-  m_mgr.GetPane(connection_frame).MinSize(wxSize(100,100)).
+  m_mgr.GetPane(ui_connection_tree).MinSize(wxSize(100,100)).
     Name(wxString(((std::string)NAME_CONNECTION_FRAME).c_str(),wxConvUTF8));
-  m_mgr.GetPane(animation_scheme_frame).MinSize(wxSize(100, 50)).
+  m_mgr.GetPane(ui_animation_scheme_window).MinSize(wxSize(100, 50)).
     Name(wxString(((std::string)NAME_ANIMATION_SCHEME_FRAME).c_str(),wxConvUTF8));
 	
   m_mgr.Update();
 
 
   //trick
-  /*m_mgr.GetPane(layer_frame).Float().Hide();
-  m_mgr.GetPane(properties_frame).Float().Hide();
-  m_mgr.GetPane(log_frame).Float().Hide(); 
-  m_mgr.GetPane(scene_tree_frame).Float().Hide();
-  m_mgr.GetPane(connection_frame).Float().Hide();
-  m_mgr.GetPane(animation_scheme_frame).Float().Hide(); 
-  */
+  m_mgr.GetPane(ui_layer_tree).Float().Hide();
+  m_mgr.GetPane(ui_entity_properties_grid).Float().Hide();
+  m_mgr.GetPane(ui_log_window).Float().Hide(); 
+  m_mgr.GetPane(ui_scene_tree).Float().Hide();
+  m_mgr.GetPane(ui_connection_tree).Float().Hide();
+  m_mgr.GetPane(ui_animation_scheme_window).Float().Hide(); 
+  
   
   //MPM
-  m_mgr.GetPane(layer_frame).Hide();
-  m_mgr.GetPane(properties_frame).Hide();
-  m_mgr.GetPane(log_frame).Hide(); 
-  m_mgr.GetPane(scene_tree_frame).Hide();
-  m_mgr.GetPane(connection_frame).Hide();
-  m_mgr.GetPane(animation_scheme_frame).Hide(); 
+  m_mgr.GetPane(ui_layer_tree).Hide();
+  m_mgr.GetPane(ui_entity_properties_grid).Hide();
+  m_mgr.GetPane(ui_log_window).Hide(); 
+  m_mgr.GetPane(ui_scene_tree).Hide();
+  m_mgr.GetPane(ui_connection_tree).Hide();
+  m_mgr.GetPane(ui_animation_scheme_window).Hide(); 
   
   m_mgr.Update();
 
-  m_mgr.GetPane(layer_frame).Dock().Show();
-  m_mgr.GetPane(properties_frame).Dock().Show();
-  m_mgr.GetPane(animation_scheme_frame).Dock().Show();
-  //m_mgr.GetPane(animation_scheme_frame).Dock().Hide();
+  m_mgr.GetPane(ui_layer_tree).Dock().Show();
+  m_mgr.GetPane(ui_entity_properties_grid).Dock().Show();
+  m_mgr.GetPane(ui_animation_scheme_window).Dock().Show();
+
 	
   if (SHOW_ADDITIONAL_WINDOWS)
     {
-      m_mgr.GetPane(log_frame).Dock().Show(); 
+      m_mgr.GetPane(ui_log_window).Dock().Show(); 
       ui_log_window->NewLogMessage("debug log");	
 
-      m_mgr.GetPane(scene_tree_frame).Dock().Show(); 
+      m_mgr.GetPane(ui_scene_tree).Dock().Show(); 
       ui_log_window->NewLogMessage("debug log");	
 
-      m_mgr.GetPane(connection_frame).Dock().Show();
+      m_mgr.GetPane(ui_connection_tree).Dock().Show();
     }
   else
-    m_mgr.GetPane(connection_frame).Dock().Hide();		
+    m_mgr.GetPane(ui_connection_tree).Dock().Hide();		
 	
 	
   m_mgr.Update();
@@ -1173,6 +1174,7 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree,
 void UIApplicationMainFrame::OnSize(wxSizeEvent& event)
 {
   wxFrame::OnSize(event);
+  m_mgr.Update();
   application->Draw();
 }
 
@@ -1380,13 +1382,17 @@ void UIApplicationMainFrame::ViewLog(wxCommandEvent& WXUNUSED(event))
 {
   TogglePaneVisibility(PANE_LOG, _T("Log"));
 }
+void UIApplicationMainFrame::ViewSceneTree(wxCommandEvent& WXUNUSED(event))
+{
+  TogglePaneVisibility(PANE_SCENE_TREE, _T("Scene Tree"));
+}
 void UIApplicationMainFrame::ViewLayerTree(wxCommandEvent& WXUNUSED(event))
 {
   TogglePaneVisibility(PANE_LAYERTREE, _T("Layer Tree"));
 }
 void UIApplicationMainFrame::ViewConnectionTree(wxCommandEvent& WXUNUSED(event))
 {
-  TogglePaneVisibility(PANE_CONNECTIONTREE, _T("Connection Tree"));
+  TogglePaneVisibility(PANE_CONNECTION_TREE, _T("Connection Tree"));
 }
 void UIApplicationMainFrame::ViewProperties(wxCommandEvent& WXUNUSED(event))
 {

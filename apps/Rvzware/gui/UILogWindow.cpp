@@ -28,16 +28,22 @@ using namespace cpw::gui;
 
 
 
-UILogWindow::UILogWindow(wxWindow *parent, const int &sizex, const int &sizey, const int &posx, const int &posy)
-						: wxPanel(parent, wxID_ANY, wxPoint(posx, posy), wxSize(sizex, sizey))
+UILogWindow::UILogWindow(wxWindow *parent,
+			 wxWindowID id, const wxString &name,
+			 const int &sizex, const int &sizey,
+			 const int &posx, const int &posy)
+  : wxPanel(parent, wxID_ANY, wxPoint(posx, posy), wxSize(sizex, sizey), wxTAB_TRAVERSAL, name)
 {
-	
-	wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
-	SetSizer(top_sizer);
-
-	log_text = new wxTextCtrl(this, wxID_ANY, wxString(std::string("").c_str(),wxConvUTF8), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY | wxHSCROLL);
-
-	top_sizer->Add(log_text,1,wxGROW);
+  
+  wxBoxSizer *top_sizer = new wxBoxSizer(wxVERTICAL);
+  SetSizer(top_sizer);
+  
+  log_text = new wxTextCtrl(this, wxID_ANY, wxString(std::string("").c_str(),wxConvUTF8),
+			    wxDefaultPosition, wxDefaultSize,
+			    wxTE_MULTILINE | wxTE_READONLY | wxHSCROLL);
+  
+  if (top_sizer)
+    top_sizer->Add(log_text,1,wxGROW);
 
 }
 
@@ -47,31 +53,31 @@ UILogWindow::~UILogWindow(void)
 
 void UILogWindow::NewLogMessage(const std::string &new_message)
 {
-	if (SHOW_ADDITIONAL_WINDOWS)
-	{
-	  log_text->AppendText(wxT("\n"));
-	  log_text->AppendText(wxString(new_message.c_str(),wxConvUTF8));
-	}
+  if ((SHOW_ADDITIONAL_WINDOWS)&&(log_text))
+    {
+      log_text->AppendText(wxT("\n"));
+      log_text->AppendText(wxString(new_message.c_str(),wxConvUTF8));
+    }
 }
 
 
 
 void UILogWindow::ClearLog()
 {
-	if (SHOW_ADDITIONAL_WINDOWS)
-		log_text->Clear();
+  if ((SHOW_ADDITIONAL_WINDOWS) && (log_text))
+    log_text->Clear();
 }
 
 void UILogWindow::printf (const char *format, ...)
 {
-	va_list params;
-	char linea[300];
-
-	// creamos la string
-	va_start(params, format);
-	vsprintf (linea, format, params);
-	va_end(params);
-
-	// lanzamos el mensaje
-	NewLogMessage (linea);
+  va_list params;
+  char linea[300];
+  
+  // creamos la string
+  va_start(params, format);
+  vsprintf (linea, format, params);
+  va_end(params);
+  
+  // lanzamos el mensaje
+  NewLogMessage (linea);
 }

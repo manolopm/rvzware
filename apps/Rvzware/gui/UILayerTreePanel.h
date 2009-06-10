@@ -60,6 +60,8 @@ namespace cpw
 		{
 			public:
 		  UILayerTreePanel(UIApplicationMainFrame* main_frame,
+				   wxWindowID id,
+				   const wxString& name,
 				   cpw::INavigatorManager *navigator_manager,
 				   cpw::LayerTree &_layer_tree, wxWindow *parent,
 				   int xpos, int ypos, int width, int height,

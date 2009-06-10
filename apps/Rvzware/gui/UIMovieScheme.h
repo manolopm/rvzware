@@ -105,7 +105,8 @@ namespace cpw
       {
       public:
 
-	UIMovieScheme(wxWindow *parent, wxWindowID id = -1, const wxPoint& pos = wxDefaultPosition, 
+	UIMovieScheme(wxWindow *parent, wxWindowID id, const wxString& name,
+		      const wxPoint& pos = wxDefaultPosition, 
 		      const wxSize& size = wxDefaultSize, 
 		      long style = 0 );
 	~UIMovieScheme();

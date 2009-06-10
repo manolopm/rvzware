@@ -168,6 +168,7 @@
 #define VIEW_TOOLS 7020
 #define VIEW_DEFAULT_CONFIG 7021
 #define VIEW_LOG 7022
+#define VIEW_SCENE_TREE 7023
 
 #define PLUGINS_MENUS_ID 8000
 
@@ -277,6 +278,7 @@ namespace cpw
 				void ViewProject(wxCommandEvent& WXUNUSED(event));
 				void ViewElement(wxCommandEvent& WXUNUSED(event));
 				void ViewTools(wxCommandEvent& WXUNUSED(event));
+				void ViewSceneTree(wxCommandEvent& WXUNUSED(event));
 				void NewElementPrimitive(wxCommandEvent& WXUNUSED(event));
 				void NewLayerPrimitive(wxCommandEvent& WXUNUSED(event));
 				void NewElement(wxCommandEvent& WXUNUSED(event));
@@ -364,9 +366,6 @@ namespace cpw
 
 				cpw::gui::UISplitterCanvas *viewport_manager;
 				wxSplitterWindow *splitter, *sub_splitter, *viewport_field;
-				wxMiniFrame *layer_frame, *properties_frame, *log_frame,
-				  *animation_scheme_frame, *scene_tree_frame,
-				  *connection_frame;
 				UIEntityPropertiesGrid *ui_entity_properties_grid;
 				UILogWindow *ui_log_window;
 				UISceneTree *ui_scene_tree;

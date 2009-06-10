@@ -43,9 +43,9 @@ EVT_SPIN_DOWN   (ID_SPIN_ZOOM,				UIMovieScheme::OnZoomSpinDown)
 EVT_ERASE_BACKGROUND(						UIMovieScheme::OnEraseBackground) 
 END_EVENT_TABLE()
 
-UIMovieScheme::UIMovieScheme(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
-			     const wxSize& size, long style)
-: cpw::Observer(), wxWindow(parent,id,pos,size,style), zoomEdit(NULL)
+UIMovieScheme::UIMovieScheme(wxWindow *parent, wxWindowID id, const wxString& name,
+			     const wxPoint& pos, const wxSize& size, long style)
+: cpw::Observer(), wxWindow(parent,id,pos,size,style,name), zoomEdit(NULL)
 {
   zoom = 3;
   InitGUI();
@@ -110,7 +110,7 @@ void UIMovieScheme::InitGUI()
   gotocurrent_Button->SetBitmapHover(wxBitmap(wxImage(wxString((icon_path + "gotocurrent_hover.png").c_str(),wxConvUTF8))));
   gotocurrent_Button->SetBitmapSelected(wxBitmap(wxImage(wxString((icon_path + "gotocurrent_pressed.png").c_str(),wxConvUTF8))));
 
-  //SetScrollbar(position of thumb,size of thumb:how many units can be seen at a time, total size in units, size(for Avgpág movement))
+  //SetScrollbar(position of thumb,size of thumb:how many units can be seen at a time, total size in units, size(for Avgpag movement))
   scrollBarH = new wxScrollBar(this, ID_SBH, wxPoint(0,h-(wxDefaultSize.y)), wxSize(w,wxDefaultSize.y), wxSB_HORIZONTAL);
   scrollBarV = new wxScrollBar(this, ID_SBV, wxPoint(w-(wxDefaultSize.x),0), wxSize(wxDefaultSize.x,h), wxSB_VERTICAL);
 
