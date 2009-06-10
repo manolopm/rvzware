@@ -17,6 +17,8 @@
 #include <string>
 #include <math.h>
 #include <wms/iso8601.h>
+#include <stdio.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 
