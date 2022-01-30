@@ -52,7 +52,7 @@ void OsgDrawableData::SetTextureRect (std::vector <TextureRect> Q)
 	// si no hay quemadas reseteamos el flag del data y del dcc
 	if (Q.empty()) {
 		ResetTexRect();
-		OsgDrawableCullCallback *dcc = (OsgDrawableCullCallback *) drawable->getCullCallback();
+		OsgDrawableCullCallback *dcc = dynamic_cast <OsgDrawableCullCallback *> (drawable->getCullCallback());
 		dcc->SetTexRect (false);
 		return;
 	}
@@ -119,7 +119,7 @@ void OsgDrawableData::SetTextureRect (std::vector <TextureRect> Q)
 	ss->setTextureAttributeAndModes (2, texmat, osg::StateAttribute::ON);	
 
 	// ponemos el flag del data y el del cullcallback a true
-	OsgDrawableCullCallback *dcc = (OsgDrawableCullCallback *) drawable->getCullCallback();
+	OsgDrawableCullCallback *dcc = dynamic_cast <OsgDrawableCullCallback *> (drawable->getCullCallback());
 	dcc->SetTexRect (true);
 	texRect = 2;
 }
@@ -171,7 +171,7 @@ void OsgDrawableData::Process (osg::NodeVisitor* nv)
 	if (!ss) return;
 
 	// obtenemos el objeto CullCallback donde están las coordenadas del ojo
-	OsgDrawableCullCallback *dcc = (OsgDrawableCullCallback *) drawable->getCullCallback();
+	OsgDrawableCullCallback *dcc = dynamic_cast <OsgDrawableCullCallback *> (drawable->getCullCallback());
 
 	// obtenemos el userdata del padre
 	OsgDrawableData *data2 = (OsgDrawableData *) padre->getUserData();
