@@ -18,7 +18,7 @@
  * The Rvzware development team
  */
 
-#include <osgUtil/IntersectVisitor>
+#include <osgUtil/IntersectionVisitor>
 #include <osgDB/ReadFile>
 
 #include <iosg/stdafx.h>
