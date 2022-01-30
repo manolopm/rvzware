@@ -85,7 +85,7 @@
 #include <osgParticle/RadialShooter>
 #include <osgText/FadeText>
 #include <osgText/Font>
-#include <osgUtil/IntersectVisitor>
+#include <osgUtil/IntersectionVisitor>
 #include <osgUtil/LineSegmentIntersector>
 #include <osgUtil/Optimizer>
 
