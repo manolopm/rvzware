@@ -29,8 +29,6 @@
 #define KEY_CURSOR_UP 315
 #define KEY_CURSOR_LEFT 314
 #define KEY_CURSOR_RIGHT 316
-#define KEY_A 65
-#define KEY_Z 90
 #define KEY_LCTRL 308
 #define KEY_LEFT_SHIFT 306
 
