@@ -56,7 +56,7 @@ OsgNavigatorWxGLCanvas::OsgNavigatorWxGLCanvas(wxWindow *parent, wxWindowID id,
 										 const wxPoint& pos, const wxSize& size,
 										 int *param, long style, const wxString& name)
         
-	               : wxGLCanvas(parent, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE | wxWANTS_CHARS, name, param), mouse_event_callback(NULL),
+: wxGLCanvas(parent, id, NULL, pos, size, style|wxFULL_REPAINT_ON_RESIZE | wxWANTS_CHARS, name, wxNullPalette), mouse_event_callback(NULL),
 				     coords_flag(false), last_x(0), last_y(0), rotate_view_left(false), rotate_view_right(false), dragging(false), keep_mouse_inside_canvas(true)
 {
 		
