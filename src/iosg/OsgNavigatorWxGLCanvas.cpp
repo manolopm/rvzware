@@ -90,7 +90,7 @@ void OsgNavigatorWxGLCanvas::init()
 		setState( new osg::State );
         getState()->setGraphicsContext(this);
 
-        if (_traits.valid() && _traits->sharedContext)
+        if (_traits.valid() && _traits->sharedContext!=NULL)
         {
             getState()->setContextID( _traits->sharedContext->getState()->getContextID() );
             incrementContextIDUsageCount( getState()->getContextID() );   
