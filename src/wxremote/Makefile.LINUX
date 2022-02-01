@@ -1,9 +1,9 @@
 LIB_FILES = stdafx.cpp  WxClientSocketThread.cpp  WxResolver.cpp  WxSocket.cpp  WxSocketEvent.cpp  WxSocketFactory.cpp  WxSocketHandler.cpp
 
 
-INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I/usr -I/usr/lib/wx/include/gtk2-unicode-release-2.8 -I/usr/include/wx-2.8 -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__ -I ../
+INCLUDE = -I/usr/include  -I/usr/include/postgresql/ -I/usr -I/usr/lib/wx/include/gtk2-unicode-release-2.8 `wx-config --cflags` -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES -D__WXGTK__ -I ../
 
-LFLAGS = -fPIC `curl-config --libs --cflags` -lpq -lOpenThreads -lboost_filesystem -lexpat 
+LFLAGS = -fPIC `curl-config --libs --cflags` -lpq -lOpenThreads -lboost_filesystem -lexpat `wx-config --libs`
 CFLAGS = -fPIC
 CC = g++
 LIBOFILES		= $(LIB_FILES:%.cpp=%.o)
@@ -18,7 +18,7 @@ clean:
 
 libwxremote.so: $(LIBOFILES)
 	rm -f $@
-	g++ -shared -Wl,-soname, $(LIBOFILES) -o $@
+	g++ -shared  $(LIBOFILES) -o $@
 
 install:
 	cp libwxremote.so /usr/lib
