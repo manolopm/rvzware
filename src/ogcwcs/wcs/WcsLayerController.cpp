@@ -425,6 +425,6 @@ void WcsLayerController::ProcessDescribeCoverage(const std::string &folder, std:
 		ss = ss.substr(pos2, ss.size());
 		pos0 = ss.find("EPSG:");
 	}
-	wcs_crs.insert(std::make_pair<std::string, std::vector<std::string> >(folder, v));
+        wcs_crs.insert(std::make_pair<std::string, std::vector<std::string> >((std::string)folder,(std::vector<std::string>) v));
 
 }
