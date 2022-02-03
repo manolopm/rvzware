@@ -107,7 +107,7 @@ UIElement::UIElement(cpw::controllers::ElementController *ec, wxWindow* parent, 
   Center();
 
   std::string &primitive_path = ApplicationConfiguration::GetInstance()->GetPrimitiveDirectory();
-  open_primitive =  new wxFileDialog(this, wxT("Choose a file"), wxString(primitive_path.c_str(),wxConvUTF8), wxT(""), wxT("Element Primitive(*.cel)|*.cel"), wxOPEN);
+  open_primitive =  new wxFileDialog(this, wxT("Choose a file"), wxString(primitive_path.c_str(),wxConvUTF8), wxT(""), wxT("Element Primitive(*.cel)|*.cel"), wxFD_OPEN);
 
   //Choice
   primitiveChoice = new wxChoice(this, ID_PRIMITIVE_CHOICE, wxDefaultPosition, wxSize(270,19), arrayStringFor_formatChoice, 0, wxDefaultValidator, wxT("WxChoice1"));
