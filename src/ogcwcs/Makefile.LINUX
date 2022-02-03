@@ -17,7 +17,7 @@ clean:
 
 libogc_wcs.so: $(LIBOFILES)
 	rm -f $@
-	g++ -shared -Wl,-soname, $(LIBOFILES) -o $@
+	g++ -shared $(LIBOFILES) -o $@
 
 install:
 	cp libogc_wcs.so /usr/lib
