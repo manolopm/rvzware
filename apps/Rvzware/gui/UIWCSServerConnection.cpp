@@ -412,7 +412,7 @@ std::vector<std::string> UIWCSServerConnection::GetSelectedLayers()
 {	
 	std::vector<std::string> v;
 	wxTreeItemId TreeElementId = Layer_tree_TreeCtrl->GetSelection();
-	wxString TreeElementString = wxString(Layer_tree_TreeCtrl->GetItemText(TreeElementId).c_str(),wxConvUTF8);
+	wxString TreeElementString = wxString(Layer_tree_TreeCtrl->GetItemText(TreeElementId).To8BitData(),wxConvUTF8);
 	std::string name = (std::string)TreeElementString.mb_str();
 	v.push_back(node_title_name[name]);
 	return v;
