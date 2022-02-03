@@ -46,7 +46,7 @@ bool RotationGizmo::MouseDrag(const int &x0, const int &y0, const int &x1, const
   float rotation_mult = 0.05f;
   int rotation = 0;
 
-  if ((GetEntityTarget() == NULL) || (scene == false))
+  if ((GetEntityTarget() == NULL) || (scene == NULL))
     return false;
 
   int rotation_x = x1 - x0;

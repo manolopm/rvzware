@@ -101,7 +101,7 @@ bool ScaleGizmo::MouseDrag(const int &x0, const int &y0, const int &x1, const in
 
   IHandler::AdaptHandlerAndBrothersToModel();
 
-  if (scene == false)
+  if (scene == NULL)
     return false;
 
   return true;
