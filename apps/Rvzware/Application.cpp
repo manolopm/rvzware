@@ -779,7 +779,7 @@ void Application::AddEntity(wxWindow *parent)
     {
       boost::filesystem::path directory(layer_tree.GetLastEntity()->GetUrl());
 	
-      std::string filename = cpw::ApplicationConfiguration::GetInstance()->GetEntityDirectory() + directory.leaf();////
+      std::string filename = cpw::ApplicationConfiguration::GetInstance()->GetEntityDirectory() + directory.leaf().string();////
       layer_tree.GetLastEntity()->SetUrl(filename);
 
       cpw::controllers::PersistentController persistent;
