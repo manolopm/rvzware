@@ -65,7 +65,7 @@ BEGIN_EVENT_TABLE(UIHelp,wxDialog)
 
  void UIHelp::CreateGUIControls()
  {
-   SetTitle(wxString(application_title.c_str(),wxConvUTF8));
+         SetTitle(wxString(application_title.To8BitData(),wxConvUTF8));
 	 SetIcon(wxNullIcon);
 	 SetSize(8,8,463,TIMELINE_CORNERY+TIMELINE_HEIGHT+45);
 	 Center();
@@ -73,12 +73,13 @@ BEGIN_EVENT_TABLE(UIHelp,wxDialog)
 	 int _col = 10;
 	 int _row = 10;
 
-	 m_bmp = wxBitmap(wxImage(wxString(background_image.c_str(),wxConvUTF8)));
+	 m_bmp = wxBitmap(wxImage(wxString(background_image.To8BitData(),wxConvUTF8)));
 
-	wxHyperlinkCtrl *link = new wxHyperlinkCtrl(this, wxID_ANY, wxString(application_url.c_str(),wxConvUTF8), wxString(application_url.c_str(),wxConvUTF8), wxPoint(TIMELINE_CORNERX+TIMELINE_WIDTH+40,TIMELINE_CORNERY+50+10+20));
+         wxHyperlinkCtrl *link = new wxHyperlinkCtrl(this, wxID_ANY, wxString(application_url.To8BitData(),wxConvUTF8),
+                                                     wxString(application_url.To8BitData(),wxConvUTF8), wxPoint(TIMELINE_CORNERX+TIMELINE_WIDTH+40,TIMELINE_CORNERY+50+10+20));
 	if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
-	  wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8);
+                wxColour c_pen   = wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8);
 		link->SetBackgroundColour(c_pen);
 	}
 
@@ -137,9 +138,9 @@ void UIHelp::render(wxDC& dc)
 	//wxPoint box1_last(463,455);
 	dc.DrawRoundedRectangle(box1_first.x, box1_first.y, box1_last.x-box1_first.x, box1_last.y-box1_first.y,3.1f);
 
-	dc.DrawRotatedText(wxString(application_version.c_str(),wxConvUTF8), TIMELINE_CORNERX+TIMELINE_WIDTH+40,TIMELINE_CORNERY+45+15, 0);
+	dc.DrawRotatedText(wxString(application_version.To8BitData(),wxConvUTF8), TIMELINE_CORNERX+TIMELINE_WIDTH+40,TIMELINE_CORNERY+45+15, 0);
 	dc.SetFont(wxFont(12,wxDEFAULT,wxFONTSTYLE_NORMAL,wxBOLD,true));
-	dc.DrawRotatedText(wxString(application_name.c_str(),wxConvUTF8),TIMELINE_CORNERX+TIMELINE_WIDTH+40,TIMELINE_CORNERY+30, 0);
+	dc.DrawRotatedText(wxString(application_name.To8BitData(),wxConvUTF8),TIMELINE_CORNERX+TIMELINE_WIDTH+40,TIMELINE_CORNERY+30, 0);
 }
 
 
