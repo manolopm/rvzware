@@ -27,7 +27,7 @@ using namespace cpw::iosg;
 OsgINavigationPanel::OsgINavigationPanel(const std::string &url, cpw::Point3d<float> _position, cpw::Point3d<float> _size, cpw::Point3d<float> _rotation, const TAnchor &_anchor, bool lite_version_) : OsgIPanel(url, _position, _size, _rotation, _anchor), camera(NULL), lite_version(lite_version_)
 {
 	SetDefaultPath(url);
-	OsgIWidget::OsgIWidget(url, _position, _size, _rotation, _anchor);
+	widget = new OsgIWidget(url, _position, _size, _rotation, _anchor);
 	preset_position = GetPosition();
 	is_hidden = false;
 	being_animated = false;
@@ -59,6 +59,8 @@ OsgINavigationPanel::OsgINavigationPanel(const std::string &url, cpw::Point3d<fl
 
 OsgINavigationPanel::~OsgINavigationPanel(void)
 {
+        delete widget;
+        widget = NULL;
 }
 
 void OsgINavigationPanel::SetCamera(OsgCamera *_camera) 

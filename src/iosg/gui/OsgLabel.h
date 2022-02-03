@@ -39,6 +39,8 @@ namespace cpw
 		*/
 		class IOSGEXPORT OsgILabel : public OsgIWidget
 		{
+                        private:
+                                OsgIWidget * widget;
 			public:	
 
 				OsgILabel(const std::string &url, cpw::Point3d<float> _position, cpw::Point3d<float> _size, cpw::Point3d<float> _rotation, const TAnchor &_anchor, const std::string &label_ = "");

@@ -28,7 +28,7 @@ using namespace cpw::iosg;
 
 OsgICompass::OsgICompass(const std::string &url, cpw::Point3d<float> _position, cpw::Point3d<float> _size, cpw::Point3d<float> _rotation, const TAnchor &_anchor) : OsgIContainer(url, _position, _size, _rotation, _anchor), camera(NULL)
 {
-	OsgIWidget::OsgIWidget(url, _position, _size, _rotation, _anchor);
+	widget = new OsgIWidget(url, _position, _size, _rotation, _anchor);
 	
 	SetObject(url + "compass.osg");
 
@@ -40,6 +40,8 @@ OsgICompass::OsgICompass(const std::string &url, cpw::Point3d<float> _position, 
 
 OsgICompass::~OsgICompass(void)
 {
+        delete widget;
+        widget = NULL;
 }
 
 void OsgICompass::Update(osg::Matrix *mp)

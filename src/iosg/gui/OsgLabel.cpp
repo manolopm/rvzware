@@ -32,7 +32,7 @@ OsgILabel::OsgILabel(const std::string &url, cpw::Point3d<float> _position, cpw:
 	rotation.y = 0.0f;
 	rotation.z = 0.0f;
 	
-	OsgIWidget::OsgIWidget(url, _position, _size, _rotation,_anchor);
+	widget = new OsgIWidget(url, _position, _size, _rotation,_anchor);
 	if (label != "")
 	{
 		SetObject(label);
@@ -42,6 +42,8 @@ OsgILabel::OsgILabel(const std::string &url, cpw::Point3d<float> _position, cpw:
 
 OsgILabel::~OsgILabel(void)
 {
+        delete widget;
+        widget = NULL;
 }
 
 

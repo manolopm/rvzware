@@ -50,7 +50,7 @@ OsgIMinimap::OsgIMinimap(const std::string &url, cpw::Point3d<float> _position, 
 	being_animated = animated = false;
 	status = -1;
 
-	OsgIWidget::OsgIWidget(url, _position, _size, _rotation, _anchor);
+	widget = new OsgIWidget(url, _position, _size, _rotation, _anchor);
 	
 	SetObject(this->GetDefaultPath() + "minimap.osg");
 
@@ -74,6 +74,8 @@ OsgIMinimap::OsgIMinimap(const std::string &url, cpw::Point3d<float> _position, 
 
 OsgIMinimap::~OsgIMinimap(void)
 {
+        delete widget;
+        widget = NULL;
 }
 
 void OsgIMinimap::Update(osg::Matrix *mp)

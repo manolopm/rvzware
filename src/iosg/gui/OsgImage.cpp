@@ -26,7 +26,7 @@ using namespace cpw::iosg;
 
 OsgIImage::OsgIImage(const std::string &url, cpw::Point3d<float> _position, cpw::Point3d<float> _size, cpw::Point3d<float> _rotation, const TAnchor &_anchor, const std::string &filename) : OsgIWidget(url, _position, _size, _rotation, _anchor)
 {
-	OsgIWidget::OsgIWidget(url, _position, _size, _rotation,_anchor);
+	widget = new OsgIWidget(url, _position, _size, _rotation,_anchor);
 	if (filename != "")
 	{
 		SetObject(filename);
@@ -36,4 +36,6 @@ OsgIImage::OsgIImage(const std::string &url, cpw::Point3d<float> _position, cpw:
 
 OsgIImage::~OsgIImage(void)
 {
+        delete widget;
+        widget = NULL;
 }

@@ -35,4 +35,5 @@ OsgIArrow::OsgIArrow(const std::string &url, cpw::Point3d<float> _position, cpw:
 OsgIArrow::~OsgIArrow(void)
 {
         delete widget;
+        widget = NULL;
 }

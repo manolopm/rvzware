@@ -193,12 +193,12 @@ bool OsgIHUDController::MouseWheel(const int &wheel_rotation, const int &wheel_d
 
 bool OsgIHUDController::MouseLeaveWindow(const int &x0, const int &y0)
 {
-  active_widget = false;
+  active_widget = NULL;
   return false; 
 }
 bool OsgIHUDController::MouseEnterWindow(const int &x0, const int &y0)
 {
-  active_widget = false;
+  active_widget = NULL;
   return false; 
 }
 					

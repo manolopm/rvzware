@@ -37,6 +37,8 @@ namespace cpw
 		*/
 		class IOSGEXPORT OsgIImage : public OsgIWidget
 		{
+                        private:
+                                OsgIWidget *widget;
 			public:	
 
 				OsgIImage(const std::string &url, cpw::Point3d<float> _position, cpw::Point3d<float> _size, cpw::Point3d<float> _rotation, const TAnchor &_anchor, const std::string &filename = "");

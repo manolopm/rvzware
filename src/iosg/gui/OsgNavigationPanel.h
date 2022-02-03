@@ -52,6 +52,8 @@ namespace cpw
 		*/
 		class IOSGEXPORT OsgINavigationPanel : public OsgIPanel
 		{
+                        private:
+                                OsgIWidget *widget;
 			public:	
 
 				OsgINavigationPanel(const std::string &url, cpw::Point3d<float> _position, cpw::Point3d<float> _size, cpw::Point3d<float> _rotation, const TAnchor &_anchor, bool lite_version_ = false);
