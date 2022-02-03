@@ -23,7 +23,6 @@
 #include <fcntl.h>
 #include <fstream>
 #include <curl/curl.h>
-#include <curl/types.h>
 #include <curl/easy.h>
 #include <string.h>
 //#include <stdafx.h>
