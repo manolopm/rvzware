@@ -996,25 +996,25 @@ void UIApplicationMainFrame::InitGUIContents(cpw::LayerTree &layer_tree,
 
   ui_layer_tree_tb->AddTool(ADD_ENTITY, _("Import"),
 			    wxString((icon_path + "import.png").c_str(),wxConvUTF8),
-			    _("Import"));	
+			    _("Import"), wxITEM_NORMAL);	
   ui_layer_tree_tb->AddSeparator();
 
   ui_layer_tree_tb->AddTool(NEW_CONTAINER_LAYER_PRIMITIVE, _("New container layer template"),
 			    wxString((icon_path + "folder_brick_template.png").c_str(),wxConvUTF8),
-			    _("Create container layer template"));
+			    _("Create container layer template"), wxITEM_NORMAL);
 
   ui_layer_tree_tb->AddTool(NEW_ELEMPRIMITIVE, _("New element template"),
 			    wxString((icon_path + "brick_p.png").c_str(),wxConvUTF8),
-			    _("Create element template"));
+			    _("Create element template"), wxITEM_NORMAL);
   ui_layer_tree_tb->AddSeparator();
 
   ui_layer_tree_tb->AddTool(NEW_LAYER, _("New Layer"),
 			    wxString((icon_path + "folder_brick.png").c_str(),wxConvUTF8),
-			    _("Add container layer"));
+			    _("Add container layer"), wxITEM_NORMAL);
 
   ui_layer_tree_tb->AddTool(NEW_ELEMENT, _("New Element"),
 			    wxString((icon_path + "brick.png").c_str(),wxConvUTF8),
-			    _("Add element"));
+			    _("Add element"), wxITEM_NORMAL);
   alphaSlider = new wxSlider(ui_layer_tree_tb, ALPHA_SLIDER, 0 , 0, 255, wxDefaultPosition, wxSize(70,19), wxSL_HORIZONTAL);
   alphaSlider->SetLineSize(2);
   alphaSlider->SetValue(255);
