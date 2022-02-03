@@ -347,8 +347,10 @@ void OsgDrawableData::TransformTexCoords (osg::Drawable *dr2, int unit)
 	osg::Vec3d cen2 = m2->getMatrix().getTrans();
 	
 	// calculamos la relación de escala y posición entre el drawable y su padre
-	const osg::BoundingBox bb = drawable->getBound();
-	const osg::BoundingBox bb2 = dr2->getBound();
+	osg::BoundingBox bb;
+        bb.expandBy(drawable->getBound());
+	osg::BoundingBox bb2;
+        bb2.expandBy(dr2->getBound());
 	float dim2x = bb2.xMax() - bb2.xMin();
 	float dim2y = bb2.yMax() - bb2.yMin();
 	float tx = ((bb.xMin()+cen1.x()) - (bb2.xMin()+cen2.x())) / dim2x;
@@ -378,7 +380,7 @@ void OsgDrawableData::MakePetition (int text_size)
 	cpw::Point2d<float> P1 (centro_UTM.y()+dy, centro_UTM.x()+dx);
 
 	// lanzamos la petición
-	OsgDrawableCullCallback *dcc = (OsgDrawableCullCallback *) drawable->getCullCallback();
+	OsgDrawableCullCallback *dcc = dynamic_cast<OsgDrawableCullCallback *> (drawable->getCullCallback());
 	id_wms = dcc->NewPetition (P0, P1, text_size, drawable->getName(), nivelLOD);
 
 	/*
@@ -405,7 +407,7 @@ void OsgDrawableData::Init()
 	if (!ss) return;
 
 	// obtenemos el objeto CullCallback donde están las coordenadas del ojo
-	OsgDrawableCullCallback *dcc = (OsgDrawableCullCallback *) drawable->getCullCallback();
+	OsgDrawableCullCallback *dcc = dynamic_cast<OsgDrawableCullCallback *> (drawable->getCullCallback());
 
 	// leemos el plod padre para leer el rango de distancias
 	osg::MatrixTransform *mt = (osg::MatrixTransform *) drawable->getParent(0)->getParent(0);
@@ -465,7 +467,8 @@ void OsgDrawableData::Init()
 	*/
 
 	// calculamos el centro y las dimensiones UTM
-	const osg::BoundingBox bb = drawable->getBound();
+	osg::BoundingBox bb;
+        bb.expandBy(drawable->getBound());
 	osg::Vec3d centro = mt->getMatrix().getTrans();
 	cpw::Point3d<double> out = ((OsgScene *)cpw::ApplicationScene::GetInstance()->GetScene())->SceneCoordsToUTM(
 			cpw::Point3d<double>(dcc->traslation.x()+centro.x()+bb.center().x(), 
