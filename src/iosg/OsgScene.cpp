@@ -967,11 +967,11 @@
 	 osg::Node *found_node = node_finder_visitor.GetNode();
 
 	 if (found_node == NULL)
-		 return false;
+		 return NULL;
 
 	 //check if the node is a switch node
 	 if (found_node->className() != std::string("Switch"))
-		 return false;
+		 return NULL;
 
 
 
