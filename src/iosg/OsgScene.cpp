@@ -1080,7 +1080,7 @@
 		 //link the callbacks
 		 if (i>0)
 		 {
-			 OsgPSCallback *temp = (OsgPSCallback *)(groups[i-1].get()->getCullCallback());
+			 OsgPSCallback *temp = dynamic_cast<OsgPSCallback *>(groups[i-1].get()->getCullCallback());
 			 temp->SetRightBrother(callback.get());
 			 callback->SetLeftBrother(temp);
 		 }
@@ -1594,7 +1594,7 @@
 	 for (unsigned int i=0; i<MAX_PS_LODS; i++)
 	 {
 		 //osg::Node *child = (OsgPSCallback *) lod->getChild(i)->getCullCallback();
-		 OsgPSCallback *ps_callback = (OsgPSCallback *) lod->getChild(i)->getCullCallback();
+		 OsgPSCallback *ps_callback = dynamic_cast<OsgPSCallback *>(lod->getChild(i)->getCullCallback());
 
 		 if (i+1 == MAX_PS_LODS)
 			 ps_callback->SetNewParticlesPerSecond(cpw::Range<int>(0, 0));
@@ -2539,7 +2539,7 @@
 		 //link the callbacks
 		 if (i>0)
 		 {
-			 OsgLineCallback *temp = (OsgLineCallback *)(groups[i-1].get()->getCullCallback());
+			 OsgLineCallback *temp = dynamic_cast<OsgLineCallback *>(groups[i-1].get()->getCullCallback());
 			 temp->SetRightBrother(callback.get());
 			 callback->SetLeftBrother(temp);
 		 }
@@ -2676,9 +2676,9 @@
 		 float step=100;
 		 for (unsigned int i=0; i<MAX_LINE_LODS; i++)
 		 {
-			 ((OsgLineCallback *) (((osg::LOD*)found_node)->getChild(i)->getCullCallback()))->SetNewInitialVertex(aux1);
-			 if (((OsgLineCallback *) (((osg::LOD*)found_node)->getChild(i)->getCullCallback()))->IsActive())
-				 step = ((OsgLineCallback *) (((osg::LOD*)found_node)->getChild(i)->getCullCallback()))->GetCurveAdapterStepDistance();
+			 (dynamic_cast<OsgLineCallback *> (((osg::LOD*)found_node)->getChild(i)->getCullCallback()))->SetNewInitialVertex(aux1);
+			 if ((dynamic_cast<OsgLineCallback *> (((osg::LOD*)found_node)->getChild(i)->getCullCallback()))->IsActive())
+				 step = (dynamic_cast<OsgLineCallback *> (((osg::LOD*)found_node)->getChild(i)->getCullCallback()))->GetCurveAdapterStepDistance();
 		 }
 
 		 float step_aux = curve_adapter.GetStepDistance();
@@ -2969,7 +2969,7 @@
 		 //link the callbacks
 		 if (i>0)
 		 {
-			 OsgLine2Callback *temp = (OsgLine2Callback *)(groups[i-1].get()->getCullCallback());
+			 OsgLine2Callback *temp = dynamic_cast<OsgLine2Callback *>(groups[i-1].get()->getCullCallback());
 			 temp->SetRightBrother(callback.get());
 			 callback->SetLeftBrother(temp);
 		 }
