@@ -42,7 +42,8 @@ namespace cpw
 		*/
 		class IOSGEXPORT OsgIArrow : public OsgIImage
 		{
-
+                        private:
+                                OsgIWidget *widget;
 			public:
 				OsgIArrow(const std::string &url, cpw::Point3d<float> _position, cpw::Point3d<float> _size, cpw::Point3d<float> _rotation, const TAnchor &_anchor);
 				~OsgIArrow(void);
