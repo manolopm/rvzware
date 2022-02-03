@@ -24,6 +24,9 @@
 #include <cpw/graphic/ICameraController.h>
 #include <cpw/graphic/INavigatorManager.h>
 
+#define KEY_A 65
+#define KEY_Z 90
+
 namespace cpw
 {
 	/** 
