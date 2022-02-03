@@ -89,7 +89,7 @@ void UILayer::CreateGUIControls()
   Center();
 	
   std::string &primitive_path = ApplicationConfiguration::GetInstance()->GetPrimitiveDirectory();
-  open_primitive =  new wxFileDialog(this, wxT("Choose a file"), wxString(primitive_path.c_str(),wxConvUTF8), wxT(""), wxT("*.cla"), wxOPEN);
+  open_primitive =  new wxFileDialog(this, wxT("Choose a file"), wxString(primitive_path.c_str(),wxConvUTF8), wxT(""), wxT("*.cla"), wxFC_OPEN);
 
   int col_= 20;int row_ = 20;
 	
