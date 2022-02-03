@@ -16,7 +16,7 @@ clean:
 
 libcpw.so: $(LIBOFILES)
 	rm -f libcpw.so
-	g++ -shared -Wl $(LFLAGS) $(LIBOFILES) -o $@
+	g++ -shared  $(LFLAGS) $(LIBOFILES) -o $@
 
 
 install:
