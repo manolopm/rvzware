@@ -182,7 +182,7 @@ void Persistent::SetCompoundDirectory(const std::string &str)
 
 	compound_directory = actual_path.string();
 
-	filename = path.leaf();
+	filename = path.leaf().string();
 }
 
 
@@ -381,7 +381,7 @@ const std::string Persistent::RelativeDirectory(const std::string &url) const
 	boost_path::const_iterator j = path2.begin();
 
 	while(i != actual_path.end() && j != path2.end() && 
-		  ToLower(*i) == ToLower(*j) )
+              ToLower((*i).string()) == ToLower((*j).string()) )
 	{
 		i++;
 		j++;
