@@ -638,8 +638,8 @@ void OsgSceneBuilder::SetRequestMap(std::map<int, std::vector<unsigned long int>
 	{
 		std::vector<std::string> sv(it->second.size(),"");
 
-		request_file_map.insert(std::make_pair<int, std::vector<std::string> >(it->first,sv));
-		request_mapp.insert(std::make_pair<int, std::vector<cpw::Request> >(it->first,std::vector<cpw::Request>(it->second.size())));
+		request_file_map.insert(std::make_pair<int, std::vector<std::string> >((int)it->first,(std::vector<std::string>)sv));
+		request_mapp.insert(std::make_pair<int, std::vector<cpw::Request> >((int)it->first,(std::vector<cpw::Request>)it->second.size()));
 	}
 }
 
