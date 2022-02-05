@@ -26,7 +26,8 @@
 #include <sstream>
 #include <wx/wx.h>
 #include <wx/menu.h>
-#include <gui/treelistctrl.h>
+//#include <gui/treelistctrl.h>
+#include <wx/treelist.h>
 #include <wx/imaglist.h>
 #include <wx/bitmap.h>
 

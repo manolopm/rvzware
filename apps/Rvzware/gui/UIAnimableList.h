@@ -31,7 +31,8 @@
 #include <wx/button.h>
 #include <wx/image.h>
 
-#include <gui/treelistctrl.h>
+//#include <gui/treelistctrl.h>
+#include <wx/treelist.h>
 
 #undef UIAnimableList_STYLE
 #define UIAnimableList_STYLE wxCAPTION | wxSYSTEM_MENU | wxDIALOG_NO_PARENT | wxCLOSE_BOX

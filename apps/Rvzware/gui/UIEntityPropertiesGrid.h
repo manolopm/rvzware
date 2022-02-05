@@ -30,8 +30,8 @@
 
 #include <gui/GUItypes.h>
 
-#include <gui/treelistctrl.h>
-
+//#include <gui/treelistctrl.h>
+#include <wx/treelist.h>
 
 namespace cpw
 {
