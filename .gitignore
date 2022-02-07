@@ -1,2 +1,6 @@
 *.o
 *.so
+Makefile
+OpenSceneGraph
+apps/Rvzware/config.ini
+apps/Rvzware/Rvzware
