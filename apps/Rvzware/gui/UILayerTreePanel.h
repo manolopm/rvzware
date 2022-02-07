@@ -89,7 +89,7 @@ namespace cpw
 			private:
 
 				wxGenericDragImage *img;
-				wxTreeItemId ItemID;
+				wxTreeListItem ItemID;
 				wxIcon *icondefault;
 				void OnMouseMotion(wxMouseEvent& wxevent);
 				void OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event));
@@ -102,14 +102,15 @@ namespace cpw
 				cpw::INavigatorManager *nm;
 				UIApplicationMainFrame* mainframe;
 
-				void AddIcon(const std::string &primitive_url, wxTreeItemId id);
+				void AddIcon(const std::string &primitive_url, wxTreeListItem id);
 
 				void EvtTreeItemSelChanged(wxTreeEvent& WXUNUSED(event));
 				void EvtTreeItemExpanded(wxTreeEvent& wxevent);
 				void EvtTreeItemCollapsed(wxTreeEvent& wxevent);
 				
-				void OnRightClick(wxTreeEvent& exevent);
-				void OnStartDragAndDrop(wxTreeEvent& wxevent);
+      void OnRightClick(wxTreeEvent& exevent);
+      void OnStartDragAndDrop(wxTreeEvent& wxevent);
+      wxTreeListItem GetItem(wxTreeItemId itemId);
 				void OnEndDragAndDrop(wxTreeEvent& wxevent);
 				void OnMove(wxMoveEvent& event);
 
@@ -117,7 +118,7 @@ namespace cpw
 				void VisualizeMenu (wxCommandEvent& event);
 				void AnimateMenu   (wxCommandEvent& WXUNUSED(event));
 				void PublishMenu   (wxCommandEvent& WXUNUSED(event));
-				void VisualizeRecursively (const wxTreeItemId& id, bool value);
+				void VisualizeRecursively (const wxTreeListItem& id, bool value);
 				void SendBack(wxCommandEvent& event);
 				void SendFront(wxCommandEvent& event);
 				void Copy(wxCommandEvent& event);  // not a real copy, it's a link
@@ -128,26 +129,26 @@ namespace cpw
 				void GoTo(wxCommandEvent& event);
 				void ModifyProperties(wxCommandEvent& event);
 
-				void CheckAllInstancesOf(const wxTreeItemId& id, const bool &value);
-				void DeleteAllChildren(const wxTreeItemId& id);
+				void CheckAllInstancesOf(const wxTreeListItem& id, const bool &value);
+				void DeleteAllChildren(const wxTreeListItem& id);
 
 
 				wxWindow *paren;
 				wxTreeListCtrl *tree_ctrl;
-				wxTreeItemId root_id;
+				wxTreeListItem root_id;
 				cpw::TypeId last_selected;
 				wxImageList *img_list;
 				UIEntityPropertiesGrid *entity_properties_grid;
 				
 				cpw::LayerTree *layer_tree;
 
-				std::multimap<cpw::TypeId, wxTreeItemId> entity_tree_relation;
+				std::multimap<cpw::TypeId, wxTreeListItem> entity_tree_relation;
 				std::map<cpw::TypeId, bool> items_expanded;
 
 				wxBitmap frame_shape;
 				
 				void DoLayOut();
-				void FillTree(cpw::Entity *entity, wxTreeItemId parent_id); //show the layer tree on the interface
+				void FillTree(cpw::Entity *entity, wxTreeListItem parent_id); //show the layer tree on the interface
 				cpw::TypeId GetItemId(wxTreeItemId item_id);
 				
 				DECLARE_EVENT_TABLE()

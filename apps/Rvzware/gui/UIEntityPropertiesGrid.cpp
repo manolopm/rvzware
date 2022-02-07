@@ -24,7 +24,7 @@
 
 #include <gui/UIEntityPropertiesGrid.h>
 #include <cpw/common/Composite.h>
-
+#include <cpw/ApplicationConfiguration.h>
 
 using namespace cpw::gui;
 
@@ -40,9 +40,9 @@ wxPanel(parent, id, wxDefaultPosition, wxDefaultSize,wxTAB_TRAVERSAL, name)
 {
 
   this->SetMinSize(wxSize(128, 128));
-  properties_tree = new wxTreeListCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_ROW_LINES | wxTR_HAS_BUTTONS | wxTR_HAS_VARIABLE_ROW_HEIGHT | wxTR_FULL_ROW_HIGHLIGHT | wxTR_EDIT_LABELS| wxTR_TWIST_BUTTONS| wxTR_HIDE_ROOT | wxTR_NO_LINES | wxTR_SHOW_ROOT_LABEL_ONLY);//wxTR_SINGLE| wxTR_HAS_BUTTONS /*| wxTR_HIDE_ROOT*/ ););
-  properties_tree->SetIndent(0);
-  if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
+  properties_tree = new wxTreeListCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTR_ROW_LINES | wxTR_HAS_BUTTONS | wxTR_HAS_VARIABLE_ROW_HEIGHT | wxTR_FULL_ROW_HIGHLIGHT | wxTR_EDIT_LABELS| wxTR_TWIST_BUTTONS| wxTR_HIDE_ROOT | wxTR_NO_LINES );//wxTR_SINGLE| wxTR_HAS_BUTTONS /*| wxTR_HIDE_ROOT*/ ););
+  //  properties_tree->SetIndent(0);
+  if (!(cpw::ApplicationConfiguration::GetInstance()->IsThemed()))
     {
       wxColour c_foreg = wxString(ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8);
       wxColour c_backg = wxString(ApplicationConfiguration::GetInstance()->GetPageColour().c_str(),wxConvUTF8);	
@@ -51,9 +51,9 @@ wxPanel(parent, id, wxDefaultPosition, wxDefaultSize,wxTAB_TRAVERSAL, name)
     }
 
   properties_tree->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxNORMAL, false, wxT("Tahoma")));                                 
-  properties_tree->AddColumn(wxT("Property"),110 ,wxLIST_FORMAT_LEFT); 
-  properties_tree->AddColumn(wxT("Value"),500 ,wxLIST_FORMAT_LEFT); 
-  properties_tree->SetColumnPickType(1,wxTR_COLUMN_FLOAT_TEXT);
+  properties_tree->AppendColumn(wxT("Property"),110 ,wxALIGN_LEFT); 
+  properties_tree->AppendColumn(wxT("Value"),500 ,wxALIGN_LEFT); 
+  //  properties_tree->SetColumnPickType(1,wxTR_COLUMN_FLOAT_TEXT);
 
 }
 
@@ -78,10 +78,10 @@ void UIEntityPropertiesGrid::OnSize(wxSizeEvent& event)
 
 void UIEntityPropertiesGrid::ShowEntity(cpw::Node *root_node, cpw::Node *node, wxTreeItemId t_parent)
 {
-  wxTreeItemId t_root = properties_tree->GetRootItem();
+  wxTreeItemId t_root = properties_tree->GetRootItem().GetID();
   wxTreeItemId t_id1;
   if (node != root_node)
-    t_id1 = properties_tree->AppendItem(t_parent,wxString(node->GetName().c_str(),wxConvUTF8));
+    t_id1 = properties_tree->AppendItem(GetItem(t_parent),wxString(node->GetName().c_str(),wxConvUTF8)).GetID();
   else
     t_id1 = t_root;
 
@@ -89,24 +89,24 @@ void UIEntityPropertiesGrid::ShowEntity(cpw::Node *root_node, cpw::Node *node, w
   wxTreeItemId t_aux;
   if(node->GetNumAttributes() != 0)
     {
-      properties_tree->SetItemBold(t_id1,true);	
+      //      properties_tree->SetItemBold(t_id1,true);	
       std::map<std::string, std::string> *attr = node->GetAttributes();
       std::map<std::string, std::string>::iterator attr_iter = attr->begin();
       for( ; attr_iter != attr->end(); attr_iter++)
 	{
-	  t_aux = properties_tree->AppendItem(t_id1,wxString(attr_iter->first.c_str(),wxConvUTF8));
-	  properties_tree->SetItemText(t_aux,1,wxString(attr_iter->second.c_str(),wxConvUTF8));
+	  t_aux = properties_tree->AppendItem(GetItem(t_id1),wxString(attr_iter->first.c_str(),wxConvUTF8)).GetID();
+	  properties_tree->SetItemText(GetItem(t_aux),1,wxString(attr_iter->second.c_str(),wxConvUTF8));
 	}
     }
   else
     {
-      properties_tree->SetItemText(t_id1,1,wxString(node->GetValue().c_str(),wxConvUTF8));
+      properties_tree->SetItemText(GetItem(t_id1),1,wxString(node->GetValue().c_str(),wxConvUTF8));
     }
-  properties_tree->Expand(t_root);
+  properties_tree->Expand(GetItem(t_root));
 
   if (node->isContainer())
     {
-      properties_tree->SetItemBold(t_id1,true);
+      //      properties_tree->SetItemBold(t_id1,true);
       std::vector<cpw::Node *> children_vec = node->GetChildren();
       std::vector<cpw::Node *>::iterator i = children_vec.begin();
 
@@ -128,12 +128,12 @@ void UIEntityPropertiesGrid::ShowEntity(cpw::Entity *entity)
 
   cpw::Node *root = entity->GetProperties();
 
-  properties_tree->DeleteRoot();
+  properties_tree->DeleteAllItems();
 	
-  wxTreeItemId t_root  = properties_tree->AddRoot(wxString(root->GetName().c_str(),wxConvUTF8));
-  properties_tree->Expand(t_root);
+  wxTreeItemId t_root  = properties_tree->AppendItem(properties_tree->GetRootItem(),wxString(root->GetName().c_str(),wxConvUTF8)).GetID();
+  properties_tree->Expand(GetItem(t_root));
   ShowEntity(root, root, t_root);
-  properties_tree->ExpandAll(t_root);
+  //  properties_tree->ExpandAll(t_root);
 	
   wxSizeEvent tmp = wxSizeEvent();
   this->OnSize((wxSizeEvent &)tmp);
@@ -146,5 +146,14 @@ void UIEntityPropertiesGrid::ShowEntity(cpw::Entity *entity)
 
 void UIEntityPropertiesGrid::Clear()
 {
-  properties_tree->DeleteRoot();
+  properties_tree->DeleteAllItems();
+}
+
+wxTreeListItem UIEntityPropertiesGrid::GetItem(wxTreeItemId itemId)
+{
+  wxTreeListItem actual = properties_tree->GetFirstItem();
+  while (actual=properties_tree->GetNextItem(actual)) {
+    if (actual.GetID()==itemId) return actual;
+  }
+  return NULL;
 }

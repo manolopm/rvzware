@@ -49,7 +49,6 @@ void UIStatusBar::InitGUI()
 	std::string &icon_path = ApplicationConfiguration::GetInstance()->GetUIIconDirectory();
 
 	statusLabel = new wxStaticText(this,ID_MEDIACTRL, wxT("Ready"), wxPoint(200,0), wxSize(150,16),wxST_NO_AUTORESIZE);
-
 	animationGauge.LoadFile(wxString(( icon_path + "loader.gif" ).c_str(),wxConvUTF8));
 	frameImage = animationGauge.GetFrame(0);
 	animGauge = new wxStaticBitmap(this, wxID_ANY, wxBitmap(frameImage));

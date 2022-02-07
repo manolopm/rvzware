@@ -60,7 +60,7 @@ namespace cpw
 				void Clear();
 				void Append(const std::vector<cpw::Entity*> &animated_entities);
 				void Quit(const wxTreeItemId& id);
-
+      wxTreeListItem GetItem(wxTreeItemId itemId);
 			private:
 				wxListBox *WxListBox1;
 				wxButton *Finish_button;

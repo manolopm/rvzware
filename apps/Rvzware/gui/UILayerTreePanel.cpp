@@ -96,9 +96,9 @@ UILayerTreePanel::UILayerTreePanel(UIApplicationMainFrame* main_frame,
       tree_ctrl->SetBackgroundColour(c_backg);
       tree_ctrl->SetForegroundColour(c_foreg);
     }
-  tree_ctrl->AddColumn(wxT("Layers"),600 ,wxLIST_FORMAT_LEFT);
+  tree_ctrl->AppendColumn(wxT("Layers"),600 ,wxALIGN_LEFT);
   tree_ctrl->SetSize(this->GetSize());
-  this->Connect(LAYER_TREE_PANEL, MyEVT_CHECKBOXCHANGE, (wxObjectEventFunction)(wxEventFunction)(wxCommandEventFunction) &UILayerTreePanel::OnCheckBoxEvent);
+  //  this->Connect(LAYER_TREE_PANEL, MyEVT_CHECKBOXCHANGE, (wxObjectEventFunction)(wxEventFunction)(wxCommandEventFunction) &UILayerTreePanel::OnCheckBoxEvent);
 
   //	root_id = tree_ctrl->AddRoot(wxT("root node"));
   last_selected = cpw::TypeId();
@@ -131,7 +131,7 @@ void UILayerTreePanel::Clear()
   entity_tree_relation.clear();
   //tree_ctrl->DeleteChildren(root_id);
   if (tree_ctrl)
-    tree_ctrl->DeleteRoot();
+    tree_ctrl->DeleteAllItems();
   CleanEntityPropertiesGrid();
 }
 
@@ -139,13 +139,10 @@ void UILayerTreePanel::FillTree()
 {
   Clear();
   if (layer_tree->GetTopLayer() == NULL)
-    {
-		
       return;
-    }
 	
   if(!tree_ctrl->GetRootItem().IsOk())
-    tree_ctrl->AddRoot(wxT("root node"));
+          tree_ctrl->AppendItem(tree_ctrl->GetRootItem(),wxT("root node"));
 
   root_id = tree_ctrl->GetRootItem();
 
@@ -153,9 +150,9 @@ void UILayerTreePanel::FillTree()
   tree_ctrl->SetItemText(root_id, wxString(layer_tree->GetTopLayer()->GetName().c_str(),wxConvUTF8));
   entity_tree_relation.insert(std::make_pair(layer_tree->GetTopLayer()->GetId(), root_id));
 
-  AddIcon(layer_tree->GetTopLayer()->GetIcon(), root_id);
-  tree_ctrl->SetItemType(root_id,0,wxCheckboxItemType);
-  tree_ctrl->SetItemChecked(root_id,0,layer_tree->GetTopLayer()->isVisible());
+  //  AddIcon(layer_tree->GetTopLayer()->GetIcon(), root_id); //MPM
+  //  tree_ctrl->SetItemType(root_id,0,wxCheckboxItemType); MPM
+  //  tree_ctrl->SetItemChecked(root_id,0,layer_tree->GetTopLayer()->isVisible()); MPM
 
   for (int i = 0; i < layer_tree->GetTopLayer()->GetNumChildren(); i++)
     FillTree(layer_tree->GetTopLayer()->GetChild(i), root_id);
@@ -168,15 +165,15 @@ void UILayerTreePanel::FillTree()
       if ((*i).second == true)
 	{
 	  //expand all the items
-	  std::multimap<cpw::TypeId, wxTreeItemId>::iterator j;
+	  std::multimap<cpw::TypeId, wxTreeListItem>::iterator j;
 	  j = entity_tree_relation.find((*i).first);
 	  if (j != entity_tree_relation.end())
 	    {
-	      std::multimap<cpw::TypeId, wxTreeItemId>::iterator last_element;
+	      std::multimap<cpw::TypeId, wxTreeListItem>::iterator last_element;
 	      last_element = entity_tree_relation.upper_bound((*i).first);
 
-	      for (; j != last_element; j++)
-		tree_ctrl->Expand(j->second);
+              //	      for (; j != last_element; j++) MPM
+              //		tree_ctrl->Expand(j->second); MPM
 	    }
 	}
     }
@@ -184,25 +181,24 @@ void UILayerTreePanel::FillTree()
   //select the last added entity
   if ((layer_tree->GetLastEntity() != NULL) && (last_selected != cpw::TypeId()))
     {
-      std::multimap<cpw::TypeId, wxTreeItemId>::iterator j;
+      std::multimap<cpw::TypeId, wxTreeListItem>::iterator j;
       j = entity_tree_relation.find(layer_tree->GetLastEntity()->GetId());
       if (j != entity_tree_relation.end())
-	{
-	  tree_ctrl->SelectItem(j->second);
-	}
+                tree_ctrl->Select(j->second);
 		
     }
 }
 
-void UILayerTreePanel::FillTree(cpw::Entity *entity, wxTreeItemId parent_id)
+void UILayerTreePanel::FillTree(cpw::Entity *entity, wxTreeListItem parent_id)
 {
   std::string debug = entity->GetName();
-  wxTreeItemId id = tree_ctrl->AppendItem(parent_id, wxString(entity->GetName().c_str(),wxConvUTF8));
-  tree_ctrl->SetItemType(id,0,wxCheckboxItemType);
+  wxTreeListItem id = tree_ctrl->AppendItem(parent_id, wxString(entity->GetName().c_str(),wxConvUTF8));
+  //  tree_ctrl->SetItemType(id,0,wxCheckboxItemType); MPM
   entity_tree_relation.insert(std::make_pair(entity->GetId(), id));
-  if (entity->isVisible()) 
-    tree_ctrl->SetItemChecked(id,0,true);
-	
+  if (entity->isVisible()) {
+          //    tree_ctrl->SetItemChecked(id,0,true); MPM
+  }
+  
   std::string url = entity->GetIcon();
   if (url == "")
     url = cpw::ApplicationConfiguration::GetInstance()->GetUIIconDirectory()+"default.png";
@@ -232,7 +228,7 @@ void UILayerTreePanel::EvtTreeItemExpanded(wxTreeEvent& wxevent)
   if (expanded_item_id.IsOk())
     {
       //Search for the URL of this item
-      cpw::TypeId id = GetItemId(expanded_item_id);
+      cpw::TypeId id =  GetItemId(expanded_item_id.GetID());
 
       if (id != cpw::TypeId())
 	items_expanded[id] = true;
@@ -248,7 +244,7 @@ void UILayerTreePanel::EvtTreeItemCollapsed(wxTreeEvent& wxevent)
   if (collapsed_item_id.IsOk())
     {
       //Search for the URL of this item
-      cpw::TypeId id = GetItemId(collapsed_item_id);
+      cpw::TypeId id = GetItemId(collapsed_item_id.GetID());
 
       if (id != cpw::TypeId())
 	items_expanded[id] = false;
@@ -259,7 +255,7 @@ void UILayerTreePanel::EvtTreeItemCollapsed(wxTreeEvent& wxevent)
 cpw::TypeId UILayerTreePanel::GetItemId(wxTreeItemId item_id)
 {
   //Search for the URL of this item
-  std::multimap<cpw::TypeId, wxTreeItemId>::iterator i;
+  std::multimap<cpw::TypeId, wxTreeListItem>::iterator i;
   cpw::TypeId id = cpw::TypeId();
 
   if (item_id.IsOk())
@@ -280,7 +276,7 @@ cpw::TypeId UILayerTreePanel::GetItemId(wxTreeItemId item_id)
 
 
 
-void UILayerTreePanel::AddIcon(const std::string &icon_filename, wxTreeItemId id)
+void UILayerTreePanel::AddIcon(const std::string &icon_filename, wxTreeListItem id)
 {
   if (id.IsOk())
     {
@@ -297,9 +293,9 @@ void UILayerTreePanel::AddIcon(const std::string &icon_filename, wxTreeItemId id
 
 void UILayerTreePanel::EvtTreeItemSelChanged(wxTreeEvent& WXUNUSED(event))
 {
-  wxTreeItemId item_selected = tree_ctrl->GetSelection();
+  wxTreeListItem item_selected = tree_ctrl->GetSelection();
   bool search_for_parent = true;
-  std::multimap<cpw::TypeId, wxTreeItemId>::iterator i;
+  std::multimap<cpw::TypeId, wxTreeListItem>::iterator i;
 
   if ((item_selected.IsOk()) && (!dragging) )
     {
@@ -326,7 +322,7 @@ void UILayerTreePanel::EvtTreeItemSelChanged(wxTreeEvent& WXUNUSED(event))
 
       if (search_for_parent)
 	{
-	  wxTreeItemId parent_item_selected = tree_ctrl->GetItemParent(item_selected);
+	  wxTreeListItem parent_item_selected = tree_ctrl->GetItemParent(item_selected);
 
 	  if (parent_item_selected.IsOk())
 	    {
@@ -340,21 +336,21 @@ void UILayerTreePanel::EvtTreeItemSelChanged(wxTreeEvent& WXUNUSED(event))
 		}
 	    }
 	}
-      last_selected = GetItemId(item_selected);
+      last_selected = GetItemId(item_selected.GetID());
     }
   Repaint();
 }
 
 void UILayerTreePanel::OnRightClick(wxTreeEvent& exevent)
 {
-  wxTreeItemId item_selected = tree_ctrl->GetSelection();
+  wxTreeListItem item_selected = tree_ctrl->GetSelection();
   if (item_selected.IsOk())
     {
-      bool _visible = tree_ctrl->GetItemChecked(item_selected,0);
+      bool _visible = tree_ctrl->GetCheckedState(item_selected);
       bool _animable = false;
       bool _publish = false;
       bool _container = false;
-      cpw::Entity* ent = layer_tree->GetEntity(GetItemId(item_selected));
+      cpw::Entity* ent = layer_tree->GetEntity(GetItemId(item_selected.GetID()));
       if (ent!=NULL)
 	{
 	  _visible  = ent->isVisible();
@@ -424,8 +420,8 @@ void UILayerTreePanel::OnStartDragAndDrop(wxTreeEvent& wxevent)
   escape = false;
   if(ItemID.IsOk())   
     {
-      tree_ctrl->SetDragItem(ItemID);
-      mainframe->Cut(GetItemId(ItemID));
+      //      tree_ctrl->SetDragItem(ItemID);
+      mainframe->Cut(GetItemId(ItemID.GetID()));
     }
 #endif
 }
@@ -436,6 +432,16 @@ void UILayerTreePanel::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(even
 	
 }
 
+
+wxTreeListItem UILayerTreePanel::GetItem(wxTreeItemId itemId)
+{
+  wxTreeListItem actual = tree_ctrl->GetFirstItem();
+  while (actual=tree_ctrl->GetNextItem(actual)) {
+    if (actual.GetID()==itemId) return actual;
+  }
+  return NULL;
+}
+
 void UILayerTreePanel::OnEndDragAndDrop(wxTreeEvent& wxevent)
 {
 #ifndef _CAPAVIEWER
@@ -443,26 +449,29 @@ void UILayerTreePanel::OnEndDragAndDrop(wxTreeEvent& wxevent)
 
   wxCursor cursorArrow(wxCURSOR_ARROW);
   SetCursor(cursorArrow);
-  tree_ctrl->SetDragItem();
+  //  tree_ctrl->SetDragItem();
   dragging = false;
-  wxTreeItemId item = wxevent.GetItem();
+  wxTreeListItem item = GetItem(wxevent.GetItem());
 
   if(!item.IsOk()) return;
 
   // COMPROBAMOS QUE EL DESTINO NO SEA UN HIJO DEL ORIGEN
-  wxTreeItemId aux = item;
+  wxTreeListItem aux = item;
   while((aux != tree_ctrl->GetRootItem()) && (aux != ItemID))
     aux = tree_ctrl->GetItemParent(aux);
   if(aux != tree_ctrl->GetRootItem()) return;
 
   // BUSCAMOS EL PADRE DEL ORIGEN 
-  wxTreeItemId parent_orig = tree_ctrl->GetItemParent(ItemID);
+  wxTreeListItem parent_orig = tree_ctrl->GetItemParent(ItemID);
   if(!parent_orig.IsOk()) return;
 
   // BUSCAMOS EL PADRE DE DESTINO 
-  wxTreeItemId parent_dest = tree_ctrl->GetItemParent(item);
+  wxTreeListItem parent_dest = tree_ctrl->GetItemParent(item);
   if((item != tree_ctrl->GetRootItem()) && (!parent_dest.IsOk())) return;
-  mainframe->Paste(GetItemId(ItemID), GetItemId(item), GetItemId(parent_orig), GetItemId(parent_dest), true, false, false);
+  mainframe->Paste(GetItemId(ItemID.GetID()),
+                   GetItemId(item.GetID()),
+                   GetItemId(parent_orig.GetID()),
+                   GetItemId(parent_dest.GetID()), true, false, false);
   Update();
 #endif
 	
@@ -475,7 +484,7 @@ void UILayerTreePanel::OnTreeKeyDown(wxTreeEvent& event)
     {
       wxCursor cursorArrow(wxCURSOR_ARROW);
       SetCursor(cursorArrow);
-      tree_ctrl->SetDragItem();
+      //      tree_ctrl->SetDragItem();
 
       dragging = false;
       cut = false;
@@ -495,28 +504,29 @@ void UILayerTreePanel::OnMove(wxMoveEvent& event)
 {
 }
 
-void UILayerTreePanel::VisualizeRecursively(const wxTreeItemId& id, bool value)
+void UILayerTreePanel::VisualizeRecursively(const wxTreeListItem& id, bool value)
 {
   if(id.IsOk())
     {
-      wxTreeListItemType item_type = tree_ctrl->GetItemType(id, 0);
-      if (item_type == wxCheckboxItemType)
+      //      wxTreeListItemType item_type = tree_ctrl->GetItemType(id, 0);
+      //      if (item_type == wxCheckboxItemType)
 	{
-	  tree_ctrl->SetItemChecked(id,0,value); 
+                //	  tree_ctrl->SetItemChecked(id,0,value); MPM
 	  CheckAllInstancesOf(id,value);
 	}
-      if (tree_ctrl->HasChildren(id))
+  if (tree_ctrl->GetFirstChild(id).IsOk())
 	{
-	  wxTreeItemIdValue cookie;
-	  wxTreeItemId child = tree_ctrl->GetFirstChild(id, cookie);
+    //	  wxTreeListItemValue cookie;
+	  wxTreeListItem child = tree_ctrl->GetFirstChild(id/*, cookie*/);
 	  if (child.IsOk())
 	    {
 	      VisualizeRecursively(child,value);
-	      for (int i = 1; i < (signed)tree_ctrl->GetChildrenCount(id); i++)
-		{
-		  if(child.IsOk()) child = tree_ctrl->GetNextSibling(child);
-		  if(child.IsOk()) VisualizeRecursively(child,value);
-		}
+        int childrenCount = 1; //(signed)tree_ctrl->GetChildrenCount(id)
+	      for (int i = 1; i < childrenCount; i++)
+          {
+            if(child.IsOk()) child = tree_ctrl->GetNextSibling(child);
+            if(child.IsOk()) VisualizeRecursively(child,value);
+          }
 	    }
 	}
     }
@@ -525,15 +535,15 @@ void UILayerTreePanel::VisualizeRecursively(const wxTreeItemId& id, bool value)
 
 void UILayerTreePanel::VisualizeMenu(wxCommandEvent& event)
 {
-  wxTreeItemId item_selected = tree_ctrl->GetSelection();
+  wxTreeListItem item_selected = tree_ctrl->GetSelection();
   if (item_selected.IsOk())
     {
-      wxTreeListItemType item_type = tree_ctrl->GetItemType(item_selected, 0);
-      if (item_type == wxCheckboxItemType)
+      //      wxTreeListItemType item_type = tree_ctrl->GetItemType(item_selected, 0);
+      //      if (item_type == wxCheckboxItemType)
 	{
-	  bool value = tree_ctrl->GetItemChecked(item_selected,0);
+	  bool value = tree_ctrl->GetCheckedState(item_selected);
 	  VisualizeRecursively(item_selected, !value);
-	  mainframe->Visualize(GetItemId(item_selected), !value);
+	  mainframe->Visualize(GetItemId(item_selected.GetID()), !value);
 	}
     }
 }
@@ -541,48 +551,50 @@ void UILayerTreePanel::VisualizeMenu(wxCommandEvent& event)
 void UILayerTreePanel::PublishMenu(wxCommandEvent& event)
 {
 #ifndef _CAPAVIEWER
-  wxTreeItemId item_selected = tree_ctrl->GetSelection();
+  wxTreeListItem item_selected = tree_ctrl->GetSelection();
   if (item_selected.IsOk())
     {
-      mainframe->Publish(GetItemId(item_selected));
+      mainframe->Publish(GetItemId(item_selected.GetID()));
     }
 #endif
 }
 
 void UILayerTreePanel::AnimateMenu(wxCommandEvent& WXUNUSED(event))
 {
-  wxTreeItemId item_selected = tree_ctrl->GetSelection();
+  wxTreeListItem item_selected = tree_ctrl->GetSelection();
   if (item_selected.IsOk())
     {
-      mainframe->Animate(GetItemId(item_selected));
+      mainframe->Animate(GetItemId(item_selected.GetID()));
     }
 }
 
 void UILayerTreePanel::OnCheckBoxEvent(wxCommandEvent& event)
 {
-  wxTreeItemId item_selected = tree_ctrl->GetSelection();
+  wxTreeListItem item_selected = tree_ctrl->GetSelection();
   if (item_selected.IsOk())
     {
-      wxTreeListItemType item_type = tree_ctrl->GetItemType(item_selected, 0);
-      if (item_type == wxCheckboxItemType)
+      //      wxTreeListItemType item_type = tree_ctrl->GetItemType(item_selected, 0);
+      //      if (item_type == wxCheckboxItemType)
 	{
-	  bool value = tree_ctrl->GetItemChecked(item_selected,0);
+	  bool value = tree_ctrl->GetCheckedState(item_selected);
 	  VisualizeRecursively(item_selected, value);
-	  mainframe->Visualize(GetItemId(item_selected), value);
+	  mainframe->Visualize(GetItemId(item_selected.GetID()), value);
 	}
     }
   event.StopPropagation();
   Repaint();
 }
 
-void UILayerTreePanel::CheckAllInstancesOf(const wxTreeItemId& id, const bool &value)
+void UILayerTreePanel::CheckAllInstancesOf(const wxTreeListItem& id, const bool &value)
 {
-  cpw::TypeId eid = GetItemId(id);
-  std::multimap<cpw::TypeId, wxTreeItemId>::iterator iter;
+  cpw::TypeId eid = GetItemId(id.GetID());
+  std::multimap<cpw::TypeId, wxTreeListItem>::iterator iter;
   for(iter = entity_tree_relation.begin(); iter != entity_tree_relation.end(); iter++)
     {
-      if(((*iter).first == eid) && (((*iter).second).IsOk()))
-	tree_ctrl->SetItemChecked((*iter).second,0,value);
+            if(((*iter).first == eid) && (((*iter).second).IsOk()))
+                    {
+                            //	tree_ctrl->SetItemChecked((*iter).second,0,value);MPM
+                    }
     }
 }
 
@@ -590,58 +602,60 @@ void UILayerTreePanel::CheckAllInstancesOf(const wxTreeItemId& id, const bool &v
 void UILayerTreePanel::SendFront(wxCommandEvent& event)
 {
 #ifndef _CAPAVIEWER
-  wxTreeItemId item_selected = tree_ctrl->GetSelection();
+  wxTreeListItem item_selected = tree_ctrl->GetSelection();
   if (item_selected.IsOk())
     {
-      mainframe->SendFront(GetItemId(item_selected));
+      mainframe->SendFront(GetItemId(item_selected.GetID()));
     }
 #endif
 }
 void UILayerTreePanel::SendBack(wxCommandEvent& event)
 {
 #ifndef _CAPAVIEWER
-  wxTreeItemId item_selected = tree_ctrl->GetSelection();
+  wxTreeListItem item_selected = tree_ctrl->GetSelection();
   if (item_selected.IsOk())
     {
-      mainframe->SendBack(GetItemId(item_selected));
+      mainframe->SendBack(GetItemId(item_selected.GetID()));
     }
 #endif
 }
 
-void UILayerTreePanel::DeleteAllChildren(const wxTreeItemId& id)
+void UILayerTreePanel::DeleteAllChildren(const wxTreeListItem& id)
 {
 #ifndef _CAPAVIEWER
   if(id.IsOk())
-    {
-      if (tree_ctrl->HasChildren(id))
+   {
+      wxTreeListItem child = tree_ctrl->GetFirstChild(id);
+      if(child.IsOk())
 	{
 	  wxTreeItemIdValue cookie;
-	  wxTreeItemId child = tree_ctrl->GetFirstChild(id, cookie);
-	  wxTreeItemId next;
+	  wxTreeListItem child = tree_ctrl->GetFirstChild(id/*, cookie*/);
+	  wxTreeListItem next;
 	  if (child.IsOk())
 	    {
 	      DeleteAllChildren(child);
-	      for (int i = 1; i < (signed)tree_ctrl->GetChildrenCount(id); i++)
+        int childrenCount = 1; //(signed)tree_ctrl->GetChildrenCount(id)
+	      for (int i = 1; i < childrenCount; i++)
 		{
 		  if(child.IsOk()) next = tree_ctrl->GetNextSibling(child);
 		  if(next.IsOk()) DeleteAllChildren(next);
 		  if(next.IsOk())
 		    {
-		      std::multimap<cpw::TypeId, wxTreeItemId>::iterator iter = entity_tree_relation.begin();
+		      std::multimap<cpw::TypeId, wxTreeListItem>::iterator iter = entity_tree_relation.begin();
 		      while((iter != entity_tree_relation.end()) && ((*iter).second != next)) 
 			iter++;
 		      entity_tree_relation.erase(iter);
-		      tree_ctrl->Delete(next);
+		      tree_ctrl->DeleteItem(next);
 		    }
 
 		}
 	      if(child.IsOk())
 		{
-		  std::multimap<cpw::TypeId, wxTreeItemId>::iterator iter = entity_tree_relation.begin();
+		  std::multimap<cpw::TypeId, wxTreeListItem>::iterator iter = entity_tree_relation.begin();
 		  while((iter != entity_tree_relation.end()) && ((*iter).second != child)) 
 		    iter++;
 		  entity_tree_relation.erase(iter);				
-		  tree_ctrl->Delete(child);
+		  tree_ctrl->DeleteItem(child);
 		}
 	    }
 	}		
@@ -653,29 +667,31 @@ void UILayerTreePanel::DeleteAllChildren(const wxTreeItemId& id)
 void UILayerTreePanel::Delete(wxCommandEvent& event)
 {
 #ifndef _CAPAVIEWER
-  wxTreeItemId item_selected = tree_ctrl->GetSelection();
+  wxTreeListItem item_selected = tree_ctrl->GetSelection();
   if ((item_selected.IsOk()) && (item_selected != tree_ctrl->GetRootItem()))
     {		
-      wxTreeItemId aux = tree_ctrl->GetItemParent(item_selected);
+      wxTreeListItem aux = tree_ctrl->GetItemParent(item_selected);
       if(aux.IsOk())
 	{
 
 	  wxMessageDialog message1(NULL,wxT("Are you sure you want to remove this item?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES |wxNO);
 	  if(message1.ShowModal() == wxID_YES)
 	    {
-	      mainframe->Delete(GetItemId(item_selected), GetItemId(aux));
+	      mainframe->Delete(GetItemId(item_selected.GetID()),
+                          GetItemId(aux.GetID()));
 
-	      if(tree_ctrl->HasChildren(item_selected))
+              wxTreeListItem child = tree_ctrl->GetFirstChild(item_selected);
+	      if(child.IsOk())
 		DeleteAllChildren(item_selected);
 
-	      std::multimap<cpw::TypeId, wxTreeItemId>::iterator itermm = entity_tree_relation.begin();
+	      std::multimap<cpw::TypeId, wxTreeListItem>::iterator itermm = entity_tree_relation.begin();
 	      while((itermm != entity_tree_relation.end()) && ((*itermm).second != (item_selected))) 
 		itermm++;
 
 	      if(itermm != entity_tree_relation.end())
 		{
 		  entity_tree_relation.erase(itermm);
-		  tree_ctrl->Delete(item_selected);
+		  tree_ctrl->DeleteItem(item_selected);
 		}
 	    }
 	}
@@ -687,8 +703,9 @@ void UILayerTreePanel::Delete(wxCommandEvent& event)
       wxMessageDialog message1(NULL,wxT("Are you sure you want to remove all items?"), wxT("Warning"),wxICON_EXCLAMATION |wxYES |wxNO);
       if(message1.ShowModal() == wxID_YES)
 	{
-	  tree_ctrl->DeleteChildren(tree_ctrl->GetRootItem());
-	  mainframe->Delete(GetItemId(tree_ctrl->GetRootItem()), GetItemId(tree_ctrl->GetRootItem()));
+          tree_ctrl->DeleteAllItems();
+          mainframe->Delete(GetItemId(tree_ctrl->GetRootItem().GetID()),
+                            GetItemId(tree_ctrl->GetRootItem().GetID()));
 	  entity_tree_relation.clear();
 	}
     }
@@ -705,8 +722,8 @@ void UILayerTreePanel::Copy(wxCommandEvent& event)
   copy = true;	
   if(ItemID.IsOk()) 
     {
-      tree_ctrl->SetDragItem(ItemID);
-      mainframe->Copy(GetItemId(ItemID));
+            //      tree_ctrl->SetDragItem(ItemID);
+      mainframe->Copy(GetItemId(ItemID.GetID()));
     }
 #endif
 }
@@ -720,8 +737,8 @@ void UILayerTreePanel::Duplicate(wxCommandEvent& event)
   duplicate = true;	
   if(ItemID.IsOk())   
     {
-      tree_ctrl->SetDragItem(ItemID);
-      mainframe->Duplicate(GetItemId(ItemID));
+            //      tree_ctrl->SetDragItem(ItemID);
+      mainframe->Duplicate(GetItemId(ItemID.GetID()));
     }
 #endif
 }
@@ -735,8 +752,8 @@ void UILayerTreePanel::Cut(wxCommandEvent& event)
   cut = true;
   if(ItemID.IsOk())   
     {
-      tree_ctrl->SetDragItem(ItemID);
-      mainframe->Cut(GetItemId(ItemID));
+            //      tree_ctrl->SetDragItem(ItemID);
+      mainframe->Cut(GetItemId(ItemID.GetID()));
     }
 #endif
 }
@@ -747,29 +764,31 @@ void UILayerTreePanel::Paste(wxCommandEvent& event)
 
   if(escape) return;
 
-  tree_ctrl->SetDragItem();
+  //  tree_ctrl->SetDragItem(); MPM
 
   if(!ItemID.IsOk()) return;
 
-  wxTreeItemId item = tree_ctrl->GetSelection();
+  wxTreeListItem item = tree_ctrl->GetSelection();
 
   if(!item.IsOk()) return;
 
   //// COMPROBAMOS QUE EL DESTINO NO SEA UN HIJO DEL ORIGEN
-  wxTreeItemId aux = item;
-  while((aux != tree_ctrl->GetRootItem()) && (aux != ItemID) && (GetItemId(aux) != GetItemId(ItemID)))
+  wxTreeListItem aux = item;
+  while((aux != tree_ctrl->GetRootItem()) && (aux != ItemID) && (GetItemId(aux.GetID()) != GetItemId(ItemID.GetID())))
     aux = tree_ctrl->GetItemParent(aux);
   if(aux != tree_ctrl->GetRootItem()) return;
 
 
   //// BUSCAMOS EL PADRE DEL ORIGEN
-  wxTreeItemId parent_orig = tree_ctrl->GetItemParent(ItemID);
+  wxTreeListItem parent_orig = tree_ctrl->GetItemParent(ItemID);
   if(!parent_orig.IsOk()) return;
 
   //// BUSCAMOS EL PADRE DE DESTINO, SI NO HAY COGEMOS AL ROOT
-  wxTreeItemId parent_dest = tree_ctrl->GetItemParent(item);
+  wxTreeListItem parent_dest = tree_ctrl->GetItemParent(item);
   if(!parent_dest.IsOk()) parent_dest = tree_ctrl->GetRootItem();
-  mainframe->Paste(GetItemId(ItemID), GetItemId(item), GetItemId(parent_orig), GetItemId(parent_dest), cut, copy, duplicate);
+  mainframe->Paste(GetItemId(ItemID.GetID()), GetItemId(item.GetID()),
+                   GetItemId(parent_orig.GetID()),
+                   GetItemId(parent_dest.GetID()), cut, copy, duplicate);
   copy = false;
   cut = false;
   duplicate = false;
@@ -780,20 +799,20 @@ void UILayerTreePanel::Paste(wxCommandEvent& event)
 
 void UILayerTreePanel::GoTo(wxCommandEvent& event)
 {
-  wxTreeItemId item_selected = tree_ctrl->GetSelection();	
+  wxTreeListItem item_selected = tree_ctrl->GetSelection();
   if (item_selected.IsOk())
-    mainframe->GoTo(GetItemId(item_selected));
+    mainframe->GoTo(GetItemId(item_selected.GetID()));
 }
 
 
 void UILayerTreePanel::ModifyProperties(wxCommandEvent& event)
 {
 #ifndef _CAPAVIEWER
-  wxTreeItemId item_selected = tree_ctrl->GetSelection();
+  wxTreeListItem item_selected = tree_ctrl->GetSelection();
   if (item_selected.IsOk())	
     {
-      mainframe->ModifyProperties(GetItemId(item_selected));
-      tree_ctrl->SelectItem(item_selected);
+      mainframe->ModifyProperties(GetItemId(item_selected.GetID()));
+      tree_ctrl->Select(item_selected);
     }
 
 #endif

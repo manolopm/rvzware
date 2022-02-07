@@ -82,7 +82,7 @@ void UIAnimableList::CreateGUIControls()
 	animableTree = new wxTreeListCtrl(this, ID_ANIMABLE_TREE, wxPoint(20,20), wxSize(345,265), wxTR_HAS_BUTTONS | wxTR_HAS_VARIABLE_ROW_HEIGHT | wxTR_FULL_ROW_HIGHLIGHT | wxTR_EDIT_LABELS| wxTR_HIDE_ROOT);//wxTR_SINGLE| wxTR_HAS_BUTTONS /**/ );
 	animableTree->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxNORMAL, false, wxT("Tahoma")));
 	animableTree->AssignImageList(img_list);
-	animableTree->AddColumn(wxT("Animable List"),345 ,wxLIST_FORMAT_LEFT);
+	animableTree->AppendColumn(wxT("Animable List"),345 ,wxALIGN_LEFT);
 	
 	if (!(ApplicationConfiguration::GetInstance()->IsThemed()))
 	{
@@ -90,11 +90,11 @@ void UIAnimableList::CreateGUIControls()
 	  animableTree->SetForegroundColour(wxColour(wxString(cpw::ApplicationConfiguration::GetInstance()->GetPageFontColour().c_str(),wxConvUTF8)));
 	}
 	
-	wxTreeItemId t_root  = animableTree->AddRoot(wxT("Top Layer"));
-	animableTree->SetItemImage(t_root, IM_TREE_ROOT);
-	animableTree->SetItemType(t_root,0,wxCheckboxItemType);
+	wxTreeItemId t_root  = animableTree->AppendItem(animableTree->GetRootItem(),wxT("Top Layer")).GetID();
+	animableTree->SetItemImage(GetItem(t_root), IM_TREE_ROOT);
+  //	animableTree->SetItemType(t_root,0,wxCheckboxItemType);
 
-	animableTree->Expand(t_root);
+	animableTree->Expand(GetItem(t_root));
 	animableTree->Refresh();
 	
 
@@ -104,7 +104,7 @@ void UIAnimableList::CreateGUIControls()
 	Cancel_button = new wxButton(this, ID_CANCEL_BUTTON, wxT("Cancel"), wxPoint(287,294), wxSize(75,23), 0, wxDefaultValidator, wxT("Cancel_button"));
 	Cancel_button->SetFont(wxFont(8, wxSWISS, wxNORMAL,wxNORMAL, false, wxT("Tahoma")));
 
-	this->Connect(ID_ANIMABLE_TREE, MyEVT_CHECKBOXCHANGE, (wxObjectEventFunction)(wxEventFunction)(wxCommandEventFunction) &UIAnimableList::OnCheckBoxChange);
+        //	this->Connect(ID_ANIMABLE_TREE, MyEVT_CHECKBOXCHANGE, (wxObjectEventFunction)(wxEventFunction)(wxCommandEventFunction) &UIAnimableList::OnCheckBoxChange);
 }
 
 void UIAnimableList::OnClose(wxCloseEvent& /*event*/)
@@ -123,7 +123,7 @@ void UIAnimableList::OnButtonFinish(wxCommandEvent& WXUNUSED(event))
 	std::map<cpw::Entity*, wxTreeItemId>::iterator iter_map = treeitem_entity_map.begin();
 	for(; iter_map != treeitem_entity_map.end(); iter_map++)
 	{
-		if(animableTree->GetItemChecked((*iter_map).second,0))
+		if(animableTree->GetSelection())
 			(*iter_map).first->SetAnimate(true);
 		else
 			(*iter_map).first->SetAnimate(false);
@@ -151,27 +151,27 @@ void UIAnimableList::AddIcon(const std::string &icon_filename, wxTreeItemId id)
 {
 	wxIcon icon(wxString(icon_filename.c_str(),wxConvUTF8), wxBITMAP_TYPE_ANY);
 	int img_index = img_list->Add(icon);
-	animableTree->SetItemImage(id, img_index);
+	animableTree->SetItemImage(GetItem(id), img_index);
 }
 
 void UIAnimableList::Append(const std::vector<cpw::Entity*> &animated_entities)
 {
 	std::vector<cpw::Entity*>::const_iterator iter = animated_entities.begin();
-	wxTreeItemId t_root = animableTree->GetRootItem();
+	wxTreeItemId t_root = animableTree->GetRootItem().GetID();
 	wxTreeItemId t_id1;
 	for(;iter != animated_entities.end(); iter++)
 	{
-	  t_id1 = animableTree->AppendItem(t_root,wxString((*iter)->GetName().c_str(),wxConvUTF8));
+	  t_id1 = animableTree->AppendItem(GetItem(t_root),wxString((*iter)->GetName().c_str(),wxConvUTF8)).GetID();
 		AddIcon((*iter)->GetIcon(), t_id1);
-		animableTree->SetItemType(t_id1,0,wxCheckboxItemType);
+    //		animableTree->SetItemType(t_id1,0,wxCheckboxItemType);
 		if ((*iter)->isAnimate())
-			animableTree->SetItemChecked(t_id1,0);
+			animableTree->CheckItem(GetItem(t_id1),wxCHK_UNCHECKED);
 
 		treeitem_entity_map[(*iter)] = t_id1;
 
 	}
 
-	animableTree->Expand(t_root);
+	animableTree->Expand(GetItem(t_root));
 	animableTree->Refresh();
 
 }
@@ -182,29 +182,40 @@ void UIAnimableList::Quit(const wxTreeItemId& id)
 
 void UIAnimableList::OnButtonSelectAll(wxCommandEvent& WXUNUSED(event))
 {
-	wxTreeItemId t_root  = animableTree->GetRootItem();
+	wxTreeItemId t_root  = animableTree->GetRootItem().GetID();
 	SetRecursively(t_root,true);
+}
+
+wxTreeListItem UIAnimableList::GetItem(wxTreeItemId itemId)
+{
+  wxTreeListItem actual = animableTree->GetFirstItem();
+  while (actual=animableTree->GetNextItem(actual)) {
+    if (actual.GetID()==itemId) return actual;
+  }
+  return NULL;
 }
 
 void UIAnimableList::SetRecursively(const wxTreeItemId& id, bool value)
 {
 	if(id.IsOk())
 	{
-		wxTreeListItemType item_type = animableTree->GetItemType(id, 0); 
-		if (item_type == wxCheckboxItemType) 
-			animableTree->SetItemChecked(id,0,value);
-		if (animableTree->HasChildren(id))
+    //		wxTreeListItemType item_type = animableTree->GetItemType(id, 0); 
+    //		if (item_type == wxCheckboxItemType) {
+      //			animableTree->SetItemChecked(id,0,value);
+    //    }
+		if (animableTree->GetFirstChild(GetItem(id)).IsOk())
 		{
-			wxTreeItemIdValue cookie;
-			wxTreeItemId child = animableTree->GetFirstChild(id, cookie);
+      //			wxTreeItemIdValue cookie;
+			wxTreeListItem child = animableTree->GetFirstChild(GetItem(id)/*, cookie*/);
 			if (child.IsOk()) 
 			{
-				SetRecursively(child,value);
-				for (int i = 1; i < (signed)animableTree->GetChildrenCount(id); i++)
-				{		
-					if(child.IsOk()) child = animableTree->GetNextSibling(child);
-					if(child.IsOk()) SetRecursively(child,value);
-				}
+				SetRecursively(child.GetID(),value);
+        int childCount = 1; //(signed)animableTree->GetChildrenCount(id)
+				for (int i = 1; i < childCount; i++)
+          {
+            if(child.IsOk()) child = animableTree->GetNextSibling(child);
+            if(child.IsOk()) SetRecursively(child.GetID(),value);
+          }
 			}
 		}
 	}
@@ -212,7 +223,7 @@ void UIAnimableList::SetRecursively(const wxTreeItemId& id, bool value)
 
 void UIAnimableList::OnButtonDeselectAll(wxCommandEvent& WXUNUSED(event))
 {
-	wxTreeItemId t_root  = animableTree->GetRootItem();
+	wxTreeItemId t_root  = animableTree->GetRootItem().GetID();
 	SetRecursively(t_root,false);
 }
 

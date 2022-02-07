@@ -50,7 +50,7 @@ namespace cpw
       ~UIEntityPropertiesGrid(void);
       void ShowEntity(cpw::Entity *entity = NULL);
       void Clear();
-
+      wxTreeListItem GetItem(wxTreeItemId itemId);
     private:
 				
       wxGrid *grid;
