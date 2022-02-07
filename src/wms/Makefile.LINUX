@@ -17,7 +17,7 @@ clean:
 
 libwms.so: $(LIBOFILES)
 	rm -f $@
-	g++ -shared -Wl,-soname, $(LIBOFILES) -o $@
+	g++ -shared  $(LIBOFILES) -o $@
 
 install:
 	cp libwms.so /usr/lib
